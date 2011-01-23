@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			
+              android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:padding="3dip"
+              android:orientation="vertical">
+<RelativeLayout
+android:orientation="vertical"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:paddingTop="10dip">
+
+<ImageView android:id="@+id/previous"
+android:layout_width="30dip" 
+android:layout_height="30dip" 
+android:layout_alignParentLeft="true"
+android:src="@drawable/previous_arrow"/>
+
+<TextView android:id="@+id/address"
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"
+android:layout_centerHorizontal="true"
+android:layout_centerVertical="true"
+android:text="Local Guide"
+android:textSize="25sp" />
+
+<ImageView android:id="@+id/next"
+android:layout_width="30dip" 
+android:layout_height="30dip"
+android:layout_alignParentRight="true" 
+android:src="@drawable/next_arrow"/>
+
+</RelativeLayout>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/myTableLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="*"
+    
+    >
+     <TableRow
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content">
+          
+          <Button android:text="Static Button"/>
+                    <Button android:text="Static Button"/>
+                              <Button android:text="Static Button"/>
+     </TableRow>
+        <View
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+     <TableRow
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content">
+          
+          <Button android:text="Static Button"/>
+                    <Button android:text="Static Button1"/>
+                              <Button android:text="Static Button2"/>
+     </TableRow>
+        <View
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+     <TableRow
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          >
+          
+                              <Button
+                              android:layout_width="fill_parent"
+                               android:text="Static Button"/>
+     </TableRow>
+        <View
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+</TableLayout>
+</LinearLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent" 
+    android:layout_height="match_parent"
+    android:background="#e4bebf"
+>
+<Button android:id="@+id/morebutton"
+android:layout_width="fill_parent"
+android:layout_height="50dip"
+android:background="#a22a2c"
+android:textColor="#ffffffff"
+android:textSize="20px"
+android:text="More" />          
+  
+<ListView android:id="@android:id/list"
+android:layout_marginTop="10px"
+android:layout_width="match_parent" 
+android:layout_height="fill_parent"
+android:background="#e4bebf"
+android:drawSelectorOnTop="true"
+android:fadeScrollbars="true"
+android:soundEffectsEnabled="true"
+android:paddingLeft="3px"
+android:paddingTop="2px"
+android:paddingBottom="2px"
+android:paddingRight="2px"
+android:layout_weight="1"
+android:transcriptMode="normal"/>
+        
+</LinearLayout>
