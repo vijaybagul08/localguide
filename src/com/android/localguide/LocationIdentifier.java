@@ -60,8 +60,6 @@ public class LocationIdentifier{
 
 	LocationListener locationListenerNetwork = new LocationListener() {
 		public void onLocationChanged(Location location) {
-			System.out.println("*********** Network Locatoin is :::"+location.toString());
-			Toast.makeText(mContext, location.toString(), 4000).show();
 			timer.cancel();
             mParent.gotLocation(location);
             locationManager.removeUpdates(this);

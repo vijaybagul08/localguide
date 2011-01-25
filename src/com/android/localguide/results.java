@@ -43,7 +43,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout.LayoutParams;
 
-public class results extends ListActivity  {
+public class results extends ListActivity implements SpinnerButton.SpinnerButtonCallback {
 
 	static String result="";
 	private ArrayList<String> title;
@@ -77,17 +77,9 @@ public class results extends ListActivity  {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 50);
         moreButton.setLayoutParams(params);
         moreButton.setTextSize(25);
+        moreButton.setParent(this);
         moreButton.start();
-        
-        moreButton.setOnClickListener(new OnClickListener()
-        {
-        	public void onClick(View v)
-        	{
-        		moreButton.start();
-        		mHandler.postDelayed(mDelayedTask, 2000);
-        	}
-        });
-        
+             
         ListView list =  getListView();
         list.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
@@ -101,6 +93,15 @@ public class results extends ListActivity  {
         	
         }); 
 	  }
+	
+	public void onButtonPress()
+	{
+		mHandler.postDelayed(mDelayedTask, 2000);
+	}
+	public void startMoreResults()
+	{
+		mHandler.postDelayed(mDelayedTask, 2000);
+	}
 	public  void sendSearchRequest(int count)
 	   {
 	  	HttpClient client = new DefaultHttpClient();
