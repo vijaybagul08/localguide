@@ -6,14 +6,12 @@
     android:layout_height="match_parent"
     android:background="#e4bebf"
 >
-<Button android:id="@+id/morebutton"
-android:layout_width="fill_parent"
-android:layout_height="50dip"
-android:background="#a22a2c"
-android:textColor="#ffffffff"
-android:textSize="20px"
-android:text="More" />          
-  
+<com.android.localguide.SpinnerButton
+    android:id="@+id/morebutton"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+/>
+ 
 <ListView android:id="@android:id/list"
 android:layout_marginTop="10px"
 android:layout_width="match_parent" 

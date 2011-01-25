@@ -19,9 +19,8 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.app.Dialog;
+
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,9 +37,11 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout.LayoutParams;
 
 public class results extends ListActivity  {
 
@@ -48,12 +49,12 @@ public class results extends ListActivity  {
 	private ArrayList<String> title;
 	private ArrayList<String> address;
 	String searchString;
-	private final int DIALOG = 1;
-	ProgressDialog dialog;
+
 	Handler mHandler = new Handler();
 	private int mCurrentResultCount = 0;
-	
-    private Runnable mDelayedTask = new Runnable() {
+	SpinnerButton moreButton;
+
+	private Runnable mDelayedTask = new Runnable() {
         public void run() {
         	sendSearchRequest(mCurrentResultCount);
         	mCurrentResultCount+= 8;
@@ -67,20 +68,22 @@ public class results extends ListActivity  {
         searchString = bundle.getString("categoryString");
         searchString += " ";
         searchString += bundle.getString("locationString");
-    
+
         title = new ArrayList<String>();
         address = new ArrayList<String>();
-        //Show the searching dialog
-        showDialog(DIALOG);
         mHandler.postDelayed(mDelayedTask, 2000);
         
-        Button moreButton = (Button)findViewById(R.id.morebutton);
+        moreButton = (SpinnerButton)findViewById(R.id.morebutton);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 50);
+        moreButton.setLayoutParams(params);
+        moreButton.setTextSize(25);
+        moreButton.start();
         
         moreButton.setOnClickListener(new OnClickListener()
         {
         	public void onClick(View v)
         	{
-        		showDialog(DIALOG);
+        		moreButton.start();
         		mHandler.postDelayed(mDelayedTask, 2000);
         	}
         });
@@ -98,20 +101,6 @@ public class results extends ListActivity  {
         	
         }); 
 	  }
-	@Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DIALOG: {
-                dialog = new ProgressDialog(this);
-               // dialog.setTitle(false);
-                dialog.setMessage("Searching...");
-                dialog.setIndeterminate(true);
-                dialog.setCancelable(true);
-                return dialog;
-            }
-        }
-        return null;
-    }	  
 	public  void sendSearchRequest(int count)
 	   {
 	  	HttpClient client = new DefaultHttpClient();
@@ -153,6 +142,7 @@ public class results extends ListActivity  {
 	    	        }
 	    	        in.close();
 	    	        result = str.toString();
+	    	        moreButton.stop();
 	    	        updateData(result);
 	    	   }catch(Exception ex){
 	    		   System.out.println("Neetworj error 2 ************8 ");
@@ -186,7 +176,6 @@ public class results extends ListActivity  {
 	           }
 	           address.add(addrr);
 	           }
-	         dialog.dismiss();
 	         setListAdapter(new EfficientAdapter(this));
 	         }
 	         catch(Exception e)
