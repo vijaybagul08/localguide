@@ -37,6 +37,7 @@ public class WelcomeScreen extends Activity  {
 	public final int LOCATION_ID =1;
 	public final int CATEGORY_ALERT = 2;
 	public final int INTERNET_ALERT = 3;
+	public final int LOCATION_ALERT = 4;
 	EditText categoryTextbox;
 	EditText locationTextbox;
 	Dialog dialog;
@@ -65,39 +66,26 @@ public class WelcomeScreen extends Activity  {
 	        
 	         search.setOnClickListener(new Button.OnClickListener(){
 	            public void onClick(View v) {
-	                      System.out.println("Activity called************************* "+categoryTextbox.getText());
 
                       if(categoryTextbox.getText().toString().length() >0)
                       {
-	                      // Check for internet connection
-	                      if(checkInternetConnection())
-	                      {
-		                      if(isLocationChkBoxChecked)
-		                      {
-			                      showDialog(LOCATION_ID);	                    	  
-			                      locationIdentifier.getLocation();
-		                      }
-		                      else
-		                      {
-		                    	  // Start the results activity with location from location text box.
-		               		   Intent intent = new Intent();
-		                       intent.putExtra("categoryString", category);
-		                       location = locationTextbox.getText().toString();
-		                       intent.putExtra("locationString", location);
-		                       Bundle bun = new Bundle();
-		                       bun.putString("categoryString", category); 
-		                       bun.putString("locationString", location);
-		                       intent.putExtras(bun);
-		                       intent.setClass(mContext, results.class);
-		                       startActivity(intent);
-		                    	  
-		                      }
-	                      }
-	                      else
-	                      {
-	                    	  showDialog(INTERNET_ALERT); 
-	                      
-	                      }
+                    	  //Check for location if location checkbox is enabled
+                    	  if(isLocationChkBoxChecked == false)
+                    	  {
+                    		  
+                    	     if(locationTextbox.getText().toString().length() > 0)
+                    	     { 
+		                    	  getLocation();
+		                     }
+  	                        else
+		                     {
+		                    	  showDialog(LOCATION_ALERT); 
+		                     }
+                    	  }
+                    	  else
+                    	  {
+                    		  getLocation();
+                    	  }
                       }
                       else
                       {
@@ -121,17 +109,14 @@ public class WelcomeScreen extends Activity  {
                     	   isLocationChkBoxChecked = true;
                     	   TextView text1 = (TextView)findViewById(R.id.text1);
                     	   text1.setVisibility(View.GONE);
-                    	   EditText locationbox = (EditText)findViewById(R.id.locationtextbox);
-                    	   locationbox.setVisibility(View.GONE);
+                    	   locationTextbox.setVisibility(View.GONE);
                        }
                        else
                        { 
-                    	   isLocationChkBoxChecked = false;
-                    	   TextView text1 = (TextView)findViewById(R.id.text1);
-                	   text1.setVisibility(View.VISIBLE);
-                	   EditText locationbox = (EditText)findViewById(R.id.locationtextbox);
-                	   locationbox.setVisibility(View.VISIBLE);
-                    	   
+	                   	   isLocationChkBoxChecked = false;
+	                       TextView text1 = (TextView)findViewById(R.id.text1);
+	                	   text1.setVisibility(View.VISIBLE);
+	                	   locationTextbox.setVisibility(View.VISIBLE);
                        }
 	        	 	}   
 	         });
@@ -144,6 +129,39 @@ public class WelcomeScreen extends Activity  {
 	         });   
 	      }   
 	
+	private void getLocation()
+	{
+		  // Check for internet connection
+        if(checkInternetConnection())
+        {
+      	
+        if(isLocationChkBoxChecked)
+        {
+            showDialog(LOCATION_ID);	                    	  
+            locationIdentifier.getLocation();
+        }
+        else
+        {
+      	  // Start the results activity with location from location text box.
+ 		   Intent intent = new Intent();
+         intent.putExtra("categoryString", category);
+         location = locationTextbox.getText().toString();
+         intent.putExtra("locationString", location);
+         Bundle bun = new Bundle();
+         bun.putString("categoryString", category); 
+         bun.putString("locationString", location);
+         intent.putExtras(bun);
+         intent.setClass(mContext, results.class);
+         startActivity(intent);
+      	  
+        }
+        }
+        	else
+            {
+          	  showDialog(INTERNET_ALERT); 
+            }
+           
+	}
 	private boolean checkInternetConnection() {
 
 		ConnectivityManager conMgr = (ConnectivityManager) mContext.getSystemService (mContext.CONNECTIVITY_SERVICE);
@@ -250,7 +268,17 @@ public class WelcomeScreen extends Activity  {
 	                }
 	            });
 	        	 dialog = builder2.create();
-	        	 
+	        	 return dialog;
+	         case LOCATION_ALERT:
+	        	 AlertDialog.Builder builder3 =  new AlertDialog.Builder(this);
+	        	 builder3.setMessage("Please enter a location");
+	        	 builder3.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	                 public void onClick(DialogInterface dialog, int id) {
+	                     //
+	                }
+	            });
+	        	 dialog = builder3.create();
+	        	 return dialog;	        	 
 	         default:   
 	             dialog = null;   
 	         }   
