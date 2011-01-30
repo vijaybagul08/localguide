@@ -19,7 +19,6 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,11 +30,9 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -76,7 +73,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         moreButton = (SpinnerButton)findViewById(R.id.morebutton);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 50);
         moreButton.setLayoutParams(params);
-        moreButton.setTextSize(25);
+        moreButton.setTextSize(30);
         moreButton.setParent(this);
         moreButton.start();
              
@@ -84,9 +81,12 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         list.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
         		Intent intent = new Intent();
-        		intent.setClass(results.this, information.class);
+        		//intent.setClass(results.this, information.class);
+        		intent.setClass(results.this, OptionsScreen.class);
+        		
         		  Bundle bun = new Bundle();
-                  bun.putString("resultString", result); 
+                  bun.putString("resultString", result);
+                  bun.putInt("position", position); 
                   intent.putExtras(bun);
         		startActivity(intent);
         	}

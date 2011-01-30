@@ -51,9 +51,9 @@ public class LocationIdentifier{
         else
         {
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListenerNetwork);
-		//locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGps);
-	       timer=new Timer();
-	      //  timer.schedule(new GetLastLocation(), 20000);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGps);
+	    timer=new Timer();
+	    timer.schedule(new GetLastLocation(), 20000);
         }
 	}
 	

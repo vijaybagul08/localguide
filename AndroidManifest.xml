@@ -29,9 +29,19 @@
 	</intent-filter>
 </activity>
 
-<activity android:name=".information"/>
-<activity android:name=".results"/>
-<activity android:name=".options2"/>
+<activity android:name=".Information">
+	<intent-filter>
+		<category android:name="android.intent.category.DEFAULT"/>
+	</intent-filter>
+</activity>
+
+<activity android:name=".OptionsScreen">
+	<intent-filter>
+		<category android:name="android.intent.category.DEFAULT"/>
+	</intent-filter>
+
+</activity>
+
 </application>
 	<uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

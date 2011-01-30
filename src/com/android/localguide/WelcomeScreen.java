@@ -97,7 +97,7 @@ public class WelcomeScreen extends Activity  {
 	         info.setOnClickListener(new Button.OnClickListener(){
 	            public void onClick(View v) {
 							Intent intent = new Intent();
-							intent.setClass(v.getContext(), information.class);
+							intent.setClass(v.getContext(), Information.class);
 							startActivity(intent);
 	            } 
 	         });
@@ -179,33 +179,39 @@ public class WelcomeScreen extends Activity  {
 	} 
 	   public void gotLocation(Location aLocation)
 	   {
-		   //Reverse Geo coding
-		   String currlocation=null;
-		   try
+		   if(aLocation != null)
 		   {
-		   mAddressList = mReverseGeoCoder.getFromLocation(aLocation.getLatitude(), aLocation.getLongitude(), 1);
-		   if (mAddressList.size()> 0){
-			   currlocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
-               System.out.println("Area identified as "+currlocation );
-               Toast.makeText(mContext, currlocation, 4000).show();
-		   }	
+			   //Reverse Geo coding
+			   String currlocation=null;
+			   try
+			   {
+			   mAddressList = mReverseGeoCoder.getFromLocation(aLocation.getLatitude(), aLocation.getLongitude(), 1);
+			   if (mAddressList.size()> 0){
+				   currlocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
+	               Toast.makeText(mContext, currlocation, 4000).show();
+			   }	
+			   }
+			   catch(Exception e)
+			   {
+				   
+			   }
+	
+			   Intent intent = new Intent();
+	           intent.putExtra("categoryString", category);
+	           location = locationTextbox.getText().toString();
+	           intent.putExtra("locationString", location);
+	           Bundle bun = new Bundle();
+	           bun.putString("categoryString", category); 
+	           bun.putString("locationString", currlocation);
+	           intent.putExtras(bun);
+	           intent.setClass(mContext, results.class);
+	           startActivity(intent);
+	           dialog1.dismiss();
 		   }
-		   catch(Exception e)
+		   else
 		   {
-			   
+			   Toast.makeText(mContext, "Sorry, Couldnt fetch the current location, due to unavailability of network or GPS provider", 4000).show();
 		   }
-		   dialog1.setMessage("Location identified: "+currlocation);	
-		   Intent intent = new Intent();
-           intent.putExtra("categoryString", category);
-           location = locationTextbox.getText().toString();
-           intent.putExtra("locationString", location);
-           Bundle bun = new Bundle();
-           bun.putString("categoryString", category); 
-           bun.putString("locationString", currlocation);
-           intent.putExtras(bun);
-           intent.setClass(mContext, results.class);
-           startActivity(intent);
-           dialog1.dismiss();
 	   }
 	     protected Dialog onCreateDialog(int id) {   
 	        
