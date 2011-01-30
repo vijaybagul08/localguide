@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -46,12 +47,13 @@ public class SpinnerButton extends View implements Runnable{
 		super(context,attrs);
 		mSpinnerBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.spinner_white_48);
 		mButtonPaint = new Paint();
-		mButtonPaint.setColor(0xFF0000FF);
-	    
+		mButtonPaint.setColor(Color.rgb(0Xa2,0x21,0x2c));
+		
 		mTextPaint = new Paint();
 	    mTextPaint.setColor(0xFFFFFFFF);
 	    mTextPaint.setTextSize(16);
-
+	    mTextPaint.setAntiAlias(true);
+	    
 	    Display display = ((WindowManager)context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();  
 		mButtonWidth = display.getWidth();  
 	}
@@ -93,13 +95,13 @@ public class SpinnerButton extends View implements Runnable{
 	{
 		int height =  MeasureSpec.getSize(heightMeasureSpec);
 		int width =  MeasureSpec.getSize(widthMeasureSpec);
-		mTextX = width/2 -40;
-		mTextY = height-5;
+		mTextX = width/2 -35;
+		mTextY = height-10;
 		mButtonHeight = height;
 		mSpinnerHeight = mSpinnerWidth = mButtonHeight;
 		mSpinnerPivotX = mSpinnerPivotY = mSpinnerWidth /2; 
 		mSpinnerX = (mButtonWidth-mButtonHeight);
-	    mSpinnerRect = new Rect(0,0,mSpinnerWidth,mSpinnerHeight);
+	    mSpinnerRect = new Rect(0,0,mSpinnerWidth-10,mSpinnerHeight-10);
 	    mButtonRect = new Rect(0,0,mButtonWidth,mButtonHeight);
 		setMeasuredDimension(width,height);
 	}
@@ -119,13 +121,13 @@ public class SpinnerButton extends View implements Runnable{
 		{
 			case MotionEvent.ACTION_DOWN:
 				//Change the background color
-				mButtonPaint.setColor(0xFF00FFFF);
+				mButtonPaint.setColor(Color.rgb(0Xe4,0xbe,0xbf));
 				mCallBack.onButtonPress();
 				start();
 				break;
 			case MotionEvent.ACTION_UP:
 				// Bring to button UP color
-				mButtonPaint.setColor(0xFF0000FF);
+				mButtonPaint.setColor(Color.rgb(0Xa2,0x21,0x2c));
 				
 				break;
 		}
