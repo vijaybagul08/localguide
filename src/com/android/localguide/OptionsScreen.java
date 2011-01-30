@@ -62,7 +62,7 @@ public class OptionsScreen extends Activity implements OptionsAddressLayout.Move
 	layout.setAddress(text);
 	layout1.startAnimation(animation);
     layout2.startAnimation(animation);
-    
+    previousArrow.setVisibility(View.INVISIBLE);
 	nextArrow.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
