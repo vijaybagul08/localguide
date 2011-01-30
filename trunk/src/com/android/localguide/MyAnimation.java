@@ -18,11 +18,8 @@ public class MyAnimation extends Animation{
 	super.initialize(width, height, parentWidth, parentHeight);
 	centerX = width /2 ;
 	centerY = height /2;
-	System.out.println("Width height of initialise animation is "+width+"::"+height);
-//	this.setd
-	setDuration(2000);
+	setDuration(1200);
 	this.setRepeatMode(INFINITE);
-	//setFillAfter(true);
 	setInterpolator(new LinearInterpolator());
 	}
 

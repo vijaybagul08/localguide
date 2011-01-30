@@ -80,22 +80,20 @@ public class OptionsAddressLayout extends LinearLayout{
 				
 				int deltaX = Math.abs(currX - pointerX);
 				System.out.println("Action move isss ****** "+currX+"::"+pointerX+":::"+deltaX);
+				if(!isMovementDetected)
+				{
 				if(deltaX > THRESHHOLD_MOVEMENT)
 				{
 					isMovementDetected = true;
-					
-					if(isMovementDetected)
-					{
 						if(currX > pointerX )
-						{
-							mCallBack.onMovementDetected(true);
-						}
-						else
 						{
 							mCallBack.onMovementDetected(false);
 						}
-						isMovementDetected = false;
-					}
+						else
+						{
+							mCallBack.onMovementDetected(true);
+						}
+				}
 					
 					break;
 				}
