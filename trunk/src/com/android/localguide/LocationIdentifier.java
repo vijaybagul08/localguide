@@ -77,7 +77,7 @@ public class LocationIdentifier{
 	LocationListener locationListenerGps = new LocationListener() {
         public void onLocationChanged(Location location) {
         	System.out.println(" ********** GPS Locatoin is :::"+location.toString());
-        	Toast.makeText(mContext, location.toString(), 4000).show();
+        	Toast.makeText(mContext, location.toString(), 5000).show();
         	timer.cancel();
             mParent.gotLocation(location);
             locationManager.removeUpdates(this);
