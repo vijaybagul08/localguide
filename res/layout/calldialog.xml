@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/layout_call"
+    android:orientation="vertical"
+    android:layout_width="match_parent" 
+    android:layout_height="match_parent"
+    android:background="#e4bebf"
+    android:padding="10dp">
+
+<RelativeLayout
+android:orientation="vertical"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:background="#a22a2c"
+android:paddingTop="3dip" >
+
+    <ImageView android:id="@+id/close"
+			   android:layout_width="30dip" 
+			   android:layout_height="30dip" 
+			   android:layout_centerHorizontal="true"
+               android:layout_alignParentRight="true"
+               android:layout_marginRight="3dp"
+               android:src="@drawable/exit"
+               />
+    <TextView android:id="@+id/text1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerHorizontal="true"
+              android:layout_alignParentLeft="true"
+              android:layout_marginLeft="3dp"
+              android:textColor="#FFF"
+              android:textSize="30dip"
+              android:text="Call"/>
+</RelativeLayout>
+ 
+<ListView 
+android:id="@+id/call_list"
+android:layout_marginTop="10px"
+android:layout_width="match_parent" 
+android:layout_height="fill_parent"
+android:drawSelectorOnTop="true"
+android:fadeScrollbars="true"
+android:soundEffectsEnabled="true"
+android:paddingLeft="3px"
+android:paddingTop="2px"
+android:paddingBottom="2px"
+android:paddingRight="2px"
+android:layout_weight="1"
+android:transcriptMode="normal"/>
+        
+</LinearLayout>

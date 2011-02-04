@@ -46,7 +46,8 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 	private ArrayList<String> title;
 	private ArrayList<String> address;
 	String searchString;
-
+    LinearLayout mScreenLayout;
+    MyAnimation animation;
 	Handler mHandler = new Handler();
 	private int mCurrentResultCount = 0;
 	SpinnerButton moreButton;
@@ -70,20 +71,21 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         address = new ArrayList<String>();
         mHandler.postDelayed(mDelayedTask, 2000);
         
+        mScreenLayout = (LinearLayout) findViewById(R.id.resultsLayout);
         moreButton = (SpinnerButton)findViewById(R.id.morebutton);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 50);
         moreButton.setLayoutParams(params);
         moreButton.setTextSize(30);
         moreButton.setParent(this);
         moreButton.start();
-             
+        animation = new MyAnimation();
+        mScreenLayout.startAnimation(animation);
         ListView list =  getListView();
         list.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
         		Intent intent = new Intent();
-        		//intent.setClass(results.this, information.class);
         		intent.setClass(results.this, OptionsScreen.class);
-        		
+       		
         		  Bundle bun = new Bundle();
                   bun.putString("resultString", result);
                   bun.putInt("position", position); 
@@ -186,29 +188,18 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 	         }
 	    }
 	 
-	 public void onItemClick(AdapterView<?> adaptview, View clickedview, int position,
-	                 long id) {
-	             //TODO: ACTIONS
-	             clickedview.setSelected(true);
-	 }
     private  class EfficientAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
-        private Bitmap mIcon1;
-        private Bitmap mIcon2;
 
         public EfficientAdapter(Context context) {
             // Cache the LayoutInflate to avoid asking for a new one each time.
             mInflater = LayoutInflater.from(context);
-
-            // Icons bound to the rows.
-            mIcon1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.next_arrow);
-            mIcon2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.next_arrow);
         }
 
         public int getCount() {
             return title.size();
-        	//return DATA.length;
         }
+        
         public Object getItem(int position) {
             return position;
         }
@@ -226,25 +217,23 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
                 holder = new ViewHolder();
                 holder.title = (TextView) convertView.findViewById(R.id.title);
                 holder.address = (TextView) convertView.findViewById(R.id.address);
-                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.title.setText(title.get(position));
             holder.title.setTextColor(Color.rgb(0xbf, 0x6e, 0x46));
+            holder.title.setTextSize(22);
+            
             holder.address.setText(address.get(position));
-            holder.address.setTextSize(20);
             holder.address.setTextColor(Color.rgb(0xbf, 0x6e, 0x46));
             holder.address.setTextSize(18);
-            holder.icon.setImageBitmap((position & 1) == 1 ? mIcon1 : mIcon2);
             
             return convertView;
         }
          class ViewHolder {
             TextView title;
             TextView address;
-            ImageView icon;
         }
     }
 }

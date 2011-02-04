@@ -99,9 +99,13 @@ public class SpinnerButton extends View implements Runnable{
 		mTextY = height-10;
 		mButtonHeight = height;
 		mSpinnerHeight = mSpinnerWidth = mButtonHeight;
-		mSpinnerPivotX = mSpinnerPivotY = mSpinnerWidth /2; 
+		mSpinnerWidth = mSpinnerHeight = mSpinnerWidth -10;
+		int padding = 5; 
+		mSpinnerPivotX = mSpinnerWidth /2; 
+		mSpinnerPivotY = mSpinnerHeight/2;
+
 		mSpinnerX = (mButtonWidth-mButtonHeight);
-	    mSpinnerRect = new Rect(0,0,mSpinnerWidth-10,mSpinnerHeight-10);
+	    mSpinnerRect = new Rect(0,0,mSpinnerWidth,mSpinnerHeight);
 	    mButtonRect = new Rect(0,0,mButtonWidth,mButtonHeight);
 		setMeasuredDimension(width,height);
 	}

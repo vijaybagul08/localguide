@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:background="#e4bebf"
+              android:orientation="vertical">
+
+<TextView android:id="@+id/text"
+android:layout_width="match_parent" 
+android:layout_height="50dip"
+android:layout_centerHorizontal="true"
+android:layout_centerVertical="true"
+android:textColor="#ffffffff"
+android:background="#a22a2c"
+android:text="Favorites List"
+android:textSize="25sp" />
+
+<ListView android:id="@android:id/list"
+android:layout_marginTop="10px"
+android:layout_width="match_parent" 
+android:layout_height="fill_parent"
+android:background="#e4bebf"
+android:drawSelectorOnTop="true"
+android:fadeScrollbars="true"
+android:soundEffectsEnabled="true"
+android:paddingLeft="3px"
+android:paddingTop="2px"
+android:paddingBottom="2px"
+android:paddingRight="2px"
+android:layout_weight="1"
+android:transcriptMode="normal"/>              
+</LinearLayout>              

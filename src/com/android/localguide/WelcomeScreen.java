@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -26,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -62,6 +64,7 @@ public class WelcomeScreen extends Activity  {
 	         locationTextbox = (EditText)findViewById(R.id.locationtextbox);
 	         ImageView search = (ImageView)findViewById(R.id.search);
 	         ImageView info = (ImageView) findViewById(R.id.info);
+	         ImageView favorites = (ImageView) findViewById(R.id.favorite);
 	         CheckBox locationCheckbox =(CheckBox)findViewById(R.id.checkbox);
 	        
 	         search.setOnClickListener(new Button.OnClickListener(){
@@ -101,7 +104,14 @@ public class WelcomeScreen extends Activity  {
 							startActivity(intent);
 	            } 
 	         });
-	         
+	         favorites.setOnClickListener(new Button.OnClickListener(){
+		            public void onClick(View v) {
+								Intent intent = new Intent();
+								intent.setClass(v.getContext(), FavoritesScreen.class);
+								startActivity(intent);
+		            } 
+		         });
+		         	         
 	         locationCheckbox.setOnClickListener(new CheckBox.OnClickListener(){
 	        	 public void onClick(View v) {   
                        if(((CheckBox)v).isChecked())
@@ -206,7 +216,7 @@ public class WelcomeScreen extends Activity  {
 	           intent.putExtras(bun);
 	           intent.setClass(mContext, results.class);
 	           startActivity(intent);
-	           dialog1.dismiss();
+	           dialog.dismiss();
 		   }
 		   else
 		   {
@@ -214,15 +224,14 @@ public class WelcomeScreen extends Activity  {
 		   }
 	   }
 	     protected Dialog onCreateDialog(int id) {   
-	        
+        	 AlertDialog.Builder builder;   
+             Context mContext = this;       	 
+             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+             View layout;
 	         switch(id) {   
 
 	         case CATEGORY_ID:   
-             
-	        	 AlertDialog.Builder builder;   
-                 Context mContext = this;   
-                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);   
-                 View layout = inflater.inflate(R.layout.categorydialog,(ViewGroup) findViewById(R.id.layout_root));   
+                 layout  = inflater.inflate(R.layout.categorydialog,(ViewGroup) findViewById(R.id.layout_root));   
                  GridView gridview = (GridView)layout.findViewById(R.id.gridview);   
                  gridview.setAdapter(new ImageAdapter(this));   
 	             
@@ -248,42 +257,58 @@ public class WelcomeScreen extends Activity  {
                  return dialog;
 	             //break;   
 	         case LOCATION_ID:
-	        	    dialog1 = new ProgressDialog(this);
-	                // dialog.setTitle(false);
+ 	        	     dialog1 = new ProgressDialog(this);
 	                 dialog1.setMessage("Location...");
 	                 dialog1.setIndeterminate(true);
 	                 dialog1.setCancelable(true);
+	              
+	                 layout  = inflater.inflate(R.layout.myprogressdialog,(ViewGroup) findViewById(R.id.layout_root));
+	                 
+	                 TextView text = (TextView)layout.findViewById(R.id.text);
+	                 text.setText("Location");
+	                 text.setTextSize(25);
+	                 
+	                 Spinner spinner = (Spinner)layout.findViewById(R.id.spinner);
+	                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(30, 30, 0.8f);
+	                 spinner.setLayoutParams(params);
+	                 spinner.start();
+	                 
+	                 builder = new AlertDialog.Builder(mContext);   
+	                 builder.setView(layout);   
+	                 dialog = builder.create(); 	
+	                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	                 
 	                 return dialog1;
 	        	// break;
 	         case INTERNET_ALERT:
-	        	 AlertDialog.Builder builder1 =  new AlertDialog.Builder(this);
-	        	 builder1.setMessage("Please enable the internet connection");
-	        	 builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	        	 builder =  new AlertDialog.Builder(this);
+	        	 builder.setMessage("Please enable the internet connection");
+	        	 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	                 public void onClick(DialogInterface dialog, int id) {
 	                     //
 	                }
 	            });
-	        	 dialog = builder1.create();
+	        	 dialog = builder.create();
 	        	 return dialog;
 	         case CATEGORY_ALERT:
-	        	 AlertDialog.Builder builder2 =  new AlertDialog.Builder(this);
-	        	 builder2.setMessage("Please enter a category");
-	        	 builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	        	 builder =  new AlertDialog.Builder(this);
+	        	 builder.setMessage("Please enter a category");
+	        	 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	                 public void onClick(DialogInterface dialog, int id) {
 	                     //
 	                }
 	            });
-	        	 dialog = builder2.create();
+	        	 dialog = builder.create();
 	        	 return dialog;
 	         case LOCATION_ALERT:
-	        	 AlertDialog.Builder builder3 =  new AlertDialog.Builder(this);
-	        	 builder3.setMessage("Please enter a location");
-	        	 builder3.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	        	 builder =  new AlertDialog.Builder(this);
+	        	 builder.setMessage("Please enter a location");
+	        	 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	                 public void onClick(DialogInterface dialog, int id) {
 	                     //
 	                }
 	            });
-	        	 dialog = builder3.create();
+	        	 dialog = builder.create();
 	        	 return dialog;	        	 
 	         default:   
 	             dialog = null;   

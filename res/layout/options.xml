@@ -57,9 +57,12 @@ android:background="#FFFFFFFF" />
           android:layout_width="fill_parent"
           android:layout_height="wrap_content">
           
-          <Button android:text="Static Button"/>
-                    <Button android:text="Static Button"/>
-                              <Button android:text="Static Button"/>
+          <Button  android:id="@+id/button1"
+          android:text="call"/>
+                    <Button  android:id="@+id/button2" 
+                    android:text="Message"/>
+                              <Button  android:id="@+id/button3"
+                               android:text="Save to Phonebook"/>
      </TableRow>
         <View
         android:layout_height="2dip"
@@ -68,9 +71,12 @@ android:background="#FFFFFFFF" />
           android:layout_width="fill_parent"
           android:layout_height="wrap_content">
           
-          <Button android:text="Static Button"/>
-                    <Button android:text="Static Button1"/>
-                              <Button android:text="Static Button2"/>
+          <Button android:id="@+id/button4" 
+          android:text="Twitter"/>
+                    <Button android:id="@+id/button5" 
+                    android:text="Facebook"/>
+                              <Button android:id="@+id/button6"
+                              android:text="Map"/>
      </TableRow>
         <View
         android:layout_height="2dip"
@@ -80,9 +86,9 @@ android:background="#FFFFFFFF" />
           android:layout_height="wrap_content"
           >
           
-                              <Button
+                              <Button android:id="@+id/button7"
                               android:layout_width="fill_parent"
-                               android:text="Static Button"/>
+                               android:text="Save to Favorties"/>
      </TableRow>
         <View
         android:layout_height="2dip"
