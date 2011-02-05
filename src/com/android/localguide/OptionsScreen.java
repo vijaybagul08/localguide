@@ -33,7 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator{
+public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,GetDirectionsList.SearchResultCallBack{
 	
 	Context mContext;
 	LocalGuideApplication app;
@@ -174,7 +174,9 @@ public class OptionsScreen extends Activity implements OptionsAddressLayout.Move
 	    {
 	    	Intent intent = new Intent();
 	    	intent.setClass(mContext, MapsActivity.class);
-	    	startActivity(intent);
+	    	//startActivity(intent);
+	    	GetDirectionsList obj = new GetDirectionsList("Hougang Avenue 8,Singapore",streetaddress.get(currentaddress),OptionsScreen.this);
+	    	obj.searchRoutes();
 	    }
      });
 	
@@ -232,6 +234,11 @@ public class OptionsScreen extends Activity implements OptionsAddressLayout.Move
     	else
     		nextArrow.setVisibility(View.INVISIBLE);
 	}
+	public void OnSearchCompleted(int result)
+	{
+		
+	}
+	
 	public void onMovementDetected(boolean isLeftMovement)
 	{
 		if(isLeftMovement)
