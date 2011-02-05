@@ -28,7 +28,7 @@ public class SplashScreen extends Activity{
 		                // do nothing
 		            } finally {
 		                finish();
-		                startActivity(new Intent("com.android.localguideMainScreen"));
+		                startActivity(new Intent("com.android.localguideTabScreen"));
 		                stop();
 		            }
 		        }

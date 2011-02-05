@@ -2,7 +2,7 @@ package com.android.localguide;
 
 import java.util.ArrayList;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,14 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+import   android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.localguide.LocalGuideApplication.favoriteItem;
 
-public class FavoritesScreen extends ListActivity{
+public class FavoritesScreen extends Activity{
 	
 	LocalGuideApplication app;
 	ArrayList<favoriteItem> mList;
@@ -31,9 +31,9 @@ public class FavoritesScreen extends ListActivity{
 		app = (LocalGuideApplication)this.getApplication();
 		
 		mList = app.getFavoritesList();
-		ListView list = getListView();//(ListView) findViewById(R.id.list);
-		setListAdapter(new ListAdapter(this));
-		//list.setAdapter(new EfficientAdapter(this));
+
+		ListView list = (ListView)findViewById(R.id.list);
+		list.setAdapter(new ListAdapter(this));
 		
         list.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {

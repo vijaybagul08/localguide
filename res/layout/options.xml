@@ -49,7 +49,7 @@ android:background="#FFFFFFFF" />
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/myTableLayout"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:stretchColumns="*"
     
     >
@@ -81,17 +81,12 @@ android:background="#FFFFFFFF" />
         <View
         android:layout_height="2dip"
         android:background="#FF909090" />
-     <TableRow
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          >
-          
-                              <Button android:id="@+id/button7"
-                              android:layout_width="fill_parent"
-                               android:text="Save to Favorties"/>
-     </TableRow>
         <View
         android:layout_height="2dip"
         android:background="#FF909090" />
 </TableLayout>
+                        <Button android:id="@+id/button7"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                         android:text="Save to Favorties"/>
 </LinearLayout>

@@ -40,6 +40,7 @@ public class WelcomeScreen extends Activity  {
 	public final int CATEGORY_ALERT = 2;
 	public final int INTERNET_ALERT = 3;
 	public final int LOCATION_ALERT = 4;
+	LocalGuideApplication app;
 	EditText categoryTextbox;
 	EditText locationTextbox;
 	Dialog dialog;
@@ -57,14 +58,16 @@ public class WelcomeScreen extends Activity  {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.welcome);
 	        
+	        app = (LocalGuideApplication) this.getApplication();
+	        app.loadFromDataBase();
+	        
 	        mContext = getApplicationContext();
 	        mReverseGeoCoder = new Geocoder(getApplicationContext());
 	        locationIdentifier = new LocationIdentifier(mContext,this);
 	         categoryTextbox = (EditText)findViewById(R.id.categotytextbox);
 	         locationTextbox = (EditText)findViewById(R.id.locationtextbox);
 	         ImageView search = (ImageView)findViewById(R.id.search);
-	         ImageView info = (ImageView) findViewById(R.id.info);
-	         ImageView favorites = (ImageView) findViewById(R.id.favorite);
+	         
 	         CheckBox locationCheckbox =(CheckBox)findViewById(R.id.checkbox);
 	        
 	         search.setOnClickListener(new Button.OnClickListener(){
@@ -97,21 +100,7 @@ public class WelcomeScreen extends Activity  {
 	            }
 	         });
 
-	         info.setOnClickListener(new Button.OnClickListener(){
-	            public void onClick(View v) {
-							Intent intent = new Intent();
-							intent.setClass(v.getContext(), Information.class);
-							startActivity(intent);
-	            } 
-	         });
-	         favorites.setOnClickListener(new Button.OnClickListener(){
-		            public void onClick(View v) {
-								Intent intent = new Intent();
-								intent.setClass(v.getContext(), FavoritesScreen.class);
-								startActivity(intent);
-		            } 
-		         });
-		         	         
+       	         
 	         locationCheckbox.setOnClickListener(new CheckBox.OnClickListener(){
 	        	 public void onClick(View v) {   
                        if(((CheckBox)v).isChecked())
@@ -138,7 +127,14 @@ public class WelcomeScreen extends Activity  {
 	             }   
 	         });   
 	      }   
-	
+	public void onBackPressed ()
+	{
+		System.out.println("On back key pressed ************* ");
+		 app.saveToDataBase();
+		 this.finish();
+		 
+	}
+	 
 	private void getLocation()
 	{
 		  // Check for internet connection
@@ -216,7 +212,7 @@ public class WelcomeScreen extends Activity  {
 	           intent.putExtras(bun);
 	           intent.setClass(mContext, results.class);
 	           startActivity(intent);
-	           dialog.dismiss();
+	           dialog1.dismiss();
 		   }
 		   else
 		   {
