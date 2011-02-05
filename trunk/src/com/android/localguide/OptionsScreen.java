@@ -172,7 +172,9 @@ public class OptionsScreen extends Activity implements OptionsAddressLayout.Move
 	button6.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
-	    	Toast.makeText(mContext, "button6", 4000).show();
+	    	Intent intent = new Intent();
+	    	intent.setClass(mContext, MapsActivity.class);
+	    	startActivity(intent);
 	    }
      });
 	

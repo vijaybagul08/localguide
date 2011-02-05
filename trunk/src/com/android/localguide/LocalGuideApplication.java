@@ -37,7 +37,11 @@ public class LocalGuideApplication extends Application {
         favoritesList = new ArrayList<favoriteItem>();
 	    loadFromDataBase();
 	}
-	
+	public void onTerminate()
+	{
+		super.onTerminate();
+		saveToDataBase();
+	}
 	public void updateTwitterUserName(String username)
 	{
 		mTwitterUserName = username;
@@ -106,7 +110,6 @@ public class LocalGuideApplication extends Application {
         mFacebookUserName = prefs.getString("facebookusername", "");
         
         int count = prefs.getInt("FavoritesCount", 0);
-
         
         for (int i = 0; i < count; i++) {
         	String title = prefs.getString("title" + i, "");
@@ -130,10 +133,9 @@ public class LocalGuideApplication extends Application {
         
         int count = favoritesList.size();
         editor.putInt("FavoritesCount", count);
-       
+
        for (int i = 0; i < count; i++) {
         	favoriteItem data = favoritesList.get(i);
-        	
         	if(count != 0) {
         		// TODO:
                 editor.putString("title" + i, data.title);
