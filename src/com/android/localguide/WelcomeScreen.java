@@ -4,6 +4,8 @@ package com.android.localguide;
 
 import java.util.List;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -73,6 +75,13 @@ public class WelcomeScreen extends Activity  {
 	         search.setOnClickListener(new Button.OnClickListener(){
 	            public void onClick(View v) {
 
+	    	    	Account[] account = AccountManager.get(mContext).getAccounts();
+	    	    	
+	    	    	for(int i=0;i<account.length;i++)
+	    	    	{
+	    	    		System.out.println("account is ::::::::::: "+account[i].describeContents());
+	    	    	}
+	    	    	
                       if(categoryTextbox.getText().toString().length() >0)
                       {
                     	  //Check for location if location checkbox is enabled

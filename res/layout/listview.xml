@@ -11,7 +11,7 @@ android:background="@drawable/rowselector">
 			  android:layout_width="fill_parent" 
               android:layout_height="fill_parent"
               android:layout_gravity="center_vertical" 
-              android:layout_weight="0.2" 
+              android:layout_weight="0.8" 
               android:padding="3dip"
               android:orientation="vertical">
               
@@ -27,7 +27,7 @@ android:background="@drawable/rowselector">
 
 <ImageView  
 android:layout_gravity="center_vertical"
-android:layout_weight="0.8"
+android:layout_weight="0.2"
 android:layout_width="30dip" 
 android:layout_height="30dip" 
 android:src="@drawable/next_arrow" /> 

@@ -1,14 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
   android:layout_width="fill_parent" 
   android:layout_height="fill_parent"
 >
-  
-  <TextView android:id="@+id/information"
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            >
+            
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/MainLayout"
+              android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:background="#e4bebf"
+              android:orientation="vertical">
+              
+ <TextView android:id="@+id/description"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:text="description"/>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/myTableLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#a22a2c">
+    
+    <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+				<ImageView android:id="@+id/previous"
+				android:layout_width="30dip" 
+				android:layout_height="30dip" 
+				android:layout_weight="0.2"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/previous_arrow"/>
+				
+				<TextView android:id="@+id/next"
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:layout_weight="0.8"
+				android:layout_gravity="center_vertical"
+				android:text="abcdefghijklmnopqestshshshshs"/>
+     </TableRow>
+     
+         
+    <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+				<ImageView android:id="@+id/previous"
+				android:layout_width="30dip" 
+				android:layout_height="30dip" 
+				android:layout_weight="0.2"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/previous_arrow"/>
+				<TextView android:id="@+id/next"
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:layout_weight="0.8"
+				android:layout_gravity="center_vertical"
+				android:text="abcdefghijklmnopqestshshshshs"/>
+
+     </TableRow>
+     
+         
+    <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+				<ImageView android:id="@+id/previous"
+				android:layout_width="30dip" 
+				android:layout_height="30dip" 
+				android:layout_weight="0.2"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/previous_arrow"/>
+				
+				<TextView android:id="@+id/next"
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:layout_weight="0.8"
+				android:layout_gravity="center_vertical"
+				android:text="abcdefghijklmnopqestshshshshs"/>
+
+     </TableRow>
+     
+         
+    <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+				<ImageView android:id="@+id/previous"
+				android:layout_width="30dip" 
+				android:layout_height="30dip" 
+				android:layout_weight="0.2"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/previous_arrow"/>
+				
+				<TextView android:id="@+id/next"
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:layout_weight="0.8"
+				android:layout_gravity="center_vertical"
+				android:text="abcdefghijklmnopqestshshshshs"/>
+>
+     </TableRow>
+     
+         
+    <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+				<ImageView android:id="@+id/previous"
+				android:layout_width="30dip" 
+				android:layout_height="30dip" 
+				android:layout_weight="0.2"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/previous_arrow"/>
+				
+				<TextView android:id="@+id/next"
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:layout_weight="0.8"
+				android:layout_gravity="center_vertical"
+				android:text="abcdefghijklmnopqestshshshshs"/>
+
+     </TableRow>
+     
+         
+    <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+				<ImageView android:id="@+id/previous"
+				android:layout_width="30dip" 
+				android:layout_height="30dip" 
+				android:layout_weight="0.2"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/previous_arrow"/>
+				
+				<TextView android:id="@+id/next"
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:layout_weight="0.8"
+				android:layout_gravity="center_vertical"
+				android:text="abcdefghijklmnopqestshshshshs"/>
+
+     </TableRow>
+     
+         
+    <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+				<ImageView android:id="@+id/previous"
+				android:layout_width="30dip" 
+				android:layout_height="30dip" 
+				android:layout_weight="0.2"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/previous_arrow"/>
+				<TextView android:id="@+id/next"
+				android:layout_width="fill_parent" 
+				android:layout_height="wrap_content"
+				android:layout_weight="0.8"
+				android:layout_gravity="center_vertical"
+				android:text="abcdefghijklmnopqestshshshshs"/>
+
+     </TableRow>
+<View
+ android:layout_height="2dip"
+ android:background="#FFFFFFFF" />
+</TableLayout>
+
+ <TextView android:id="@+id/information"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:text="Authentication"/>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/myTableLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#a22a2c">
+    
+    <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+ <TextView android:id="@+id/information"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:layout_weight="0.4"
+  android:text="Twitter"/>
+				
+<Button android:id="@+id/twitter"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content" 
+ android:layout_weight="0.6"
+ android:text="Sign In"/> 
+     </TableRow>  
+
+     <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+ <TextView android:id="@+id/information"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:layout_weight="0.4"
+  android:text="Facebook"/>
+				
+			<Button android:id="@+id/twitter"
+			 android:layout_width="wrap_content"
+			 android:layout_height="wrap_content" 
+			 android:layout_weight="0.6"
+			 android:text="Sign In"/> 
+     </TableRow>  
+     
+     </TableLayout>
+     
+ <TextView android:id="@+id/information"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
   android:text="information"/>
   
+  
+ </LinearLayout>
+</ScrollView>
   
 </LinearLayout>
