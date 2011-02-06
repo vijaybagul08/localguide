@@ -35,6 +35,7 @@ public class GetDirectionsList {
 		String distance;
 		String instructions;
 	}
+    
 
 	private ArrayList<DirectionItem> DirectionItemList;
 	private String result;
@@ -104,17 +105,31 @@ public class GetDirectionsList {
 		         JSONObject json=new JSONObject(result);
 		         JSONArray ja;
 		         ja = json.getJSONArray("routes");
-		         json = ja.getJSONObject(1);
-		         ja = json.getJSONArray("legs");
 		         json = ja.getJSONObject(0);
-		         ja = json.getJSONArray("steps");
+		         ja=json.getJSONArray("legs");   
+                 json = ja.getJSONObject(0);
+                 ja = json.getJSONArray("steps");
+		         	         
 		         int resultCount = ja.length();
-		         System.out.println("REsult steps is "+ja.toString());
 		         
 		         for (int i = 0; i < resultCount; i++)
 		           {
 		           JSONObject resultObject = ja.getJSONObject(i);
-		           System.out.println("REsult steps is "+resultObject.toString());
+		           DirectionItem item = new DirectionItem();
+		           
+		           // Get the distance
+		           item.distance = resultObject.getString("distance");
+		           
+		           // Get the duration
+		           
+		           // Get the lat,long
+		           
+		           // Get the instruction
+		           
+		           DirectionItemList.add(item);
+		           
+		           //System.out.println("REsult steps is "+resultObject.toString());
+		           
 		           }
 		        }
 		         catch(Exception e)

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,8 +14,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -158,7 +158,12 @@ public class OptionsScreen extends Activity implements OptionsAddressLayout.Move
 	button4.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
-	    	Toast.makeText(mContext, "button4", 4000).show();
+	    	Account[] account = AccountManager.get(mContext).getAccounts();
+	    	
+	    	for(int i=0;i<account.length;i++)
+	    	{
+	    		System.out.println("account is ::::::::::: "+account[i].describeContents());
+	    	}
 	    }
      });
 	
