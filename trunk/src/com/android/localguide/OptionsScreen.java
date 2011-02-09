@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
+import com.android.localguide.FaceBookClient.FaceBookPostMessageCallBack;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -33,7 +33,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,GetDirectionsList.SearchResultCallBack{
+public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,GetDirectionsList.SearchResultCallBack,
+FaceBookClient.FaceBookPostMessageCallBack{
 	
 	Context mContext;
 	LocalGuideApplication app;
@@ -44,6 +45,9 @@ public class OptionsScreen extends Activity implements OptionsAddressLayout.Move
 	private ArrayList<String> phonenumbers;
 	private ArrayList<String> latitude;
 	private ArrayList<String> longitude;
+	TwitterClient mTwitterClient;
+	FaceBookClient mFacebookClient;
+	
 	Button button1;
 	Button button2;
 	Button button3;
@@ -85,6 +89,9 @@ public class OptionsScreen extends Activity implements OptionsAddressLayout.Move
     button5 = (Button)findViewById(R.id.button5);
     button6 = (Button)findViewById(R.id.button6);
     button7 = (Button)findViewById(R.id.button7);
+    
+    mFacebookClient  = new FaceBookClient(this,this);
+    mFacebookClient.setAccessToken(app.getFacebookToken());
     
     layout.setParent(this);
     animation = new MyAnimation();
@@ -158,19 +165,14 @@ public class OptionsScreen extends Activity implements OptionsAddressLayout.Move
 	button4.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
-	    	Account[] account = AccountManager.get(mContext).getAccounts();
 	    	
-	    	for(int i=0;i<account.length;i++)
-	    	{
-	    		System.out.println("account is ::::::::::: "+account[i].describeContents());
-	    	}
 	    }
      });
 	
 	button5.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
-	    	Toast.makeText(mContext, "button5", 4000).show();
+	    	mFacebookClient.PostWallMessage("Test message from my application - development");
 	    }
      });
 	
@@ -206,6 +208,18 @@ public class OptionsScreen extends Activity implements OptionsAddressLayout.Move
 	
 	}
 	
+	public void onFaceBookmessagePostCompleted(int response)
+	{
+		switch(response)
+		{
+		case FaceBookPostMessageCallBack.POST_SUCCESSFULL:
+			 Toast.makeText(mContext, "Post to FB successful", 4000).show();
+			break;
+		case FaceBookPostMessageCallBack.POST_FAILURE:
+			Toast.makeText(mContext, "Post to FB failure", 4000).show();
+			break;
+		}
+	}
 	public void moveLeft()
 	{
 		if(currentaddress >0)
