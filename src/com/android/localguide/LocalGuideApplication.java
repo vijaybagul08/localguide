@@ -12,6 +12,10 @@ public class LocalGuideApplication extends Application {
 
 	String mTwitterUserName;
 	String mFacebookUserName;
+	String mTwitterAccessToken;
+	String mFacebookAccessToken;
+	boolean isTwitterAuthenticated;
+	boolean isFacebookAuthenticated;
 	ArrayList<favoriteItem> favoritesList;
 	
 	class favoriteItem
@@ -42,6 +46,28 @@ public class LocalGuideApplication extends Application {
 		super.onTerminate();
 		saveToDataBase();
 	}
+	
+	public void updateTwitterToken(String token)
+	{
+		mTwitterAccessToken = token;
+	}
+
+	public String getTwitterToken()
+	{
+		return mTwitterAccessToken;
+	}
+
+	
+	public void updateFacebookToken(String token)
+	{
+		mFacebookAccessToken = token;
+	}
+
+	public String getFacebookToken()
+	{
+		return mFacebookAccessToken;
+	}
+
 	public void updateTwitterUserName(String username)
 	{
 		mTwitterUserName = username;
@@ -61,6 +87,26 @@ public class LocalGuideApplication extends Application {
 	public String getFacebookUserName()
 	{
 		return mFacebookUserName;
+	}
+
+	public boolean isTwitterAutheticated()
+	{
+		return isTwitterAuthenticated;
+	}
+	
+	public boolean isFacebookAuthenticated()
+	{
+		return isFacebookAuthenticated;
+	}
+
+	public void SetTwitterAutheticated(boolean value)
+	{
+		isTwitterAuthenticated = value;
+	}
+	
+	public void SetFacebookAuthenticated(boolean value)
+	{
+		isFacebookAuthenticated = value;
 	}
 
 	public boolean addToFavorites(String title,String address,String phoneNumber,String lat,String along)
@@ -108,6 +154,11 @@ public class LocalGuideApplication extends Application {
         Editor editor = null;
         mTwitterUserName = prefs.getString("twitterusername", "");
         mFacebookUserName = prefs.getString("facebookusername", "");
+        mTwitterAccessToken = prefs.getString("twittertoken", "");
+        mFacebookAccessToken = prefs.getString("facebooktoken", "");
+        
+        isTwitterAuthenticated = prefs.getBoolean("", true);
+        isFacebookAuthenticated = prefs.getBoolean("", true);
         
         int count = prefs.getInt("FavoritesCount", 0);
         
@@ -129,7 +180,9 @@ public class LocalGuideApplication extends Application {
         Editor editor = null;;
         editor = prefs.edit();
         editor.putString("twitterusername", mTwitterUserName);
+        editor.putString("twittertoken", mTwitterAccessToken);
         editor.putString("facebookusername", mFacebookUserName);
+        editor.putString("facebooktoken", mFacebookAccessToken);
         
         int count = favoritesList.size();
         editor.putInt("FavoritesCount", count);

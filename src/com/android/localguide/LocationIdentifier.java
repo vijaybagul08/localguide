@@ -8,9 +8,8 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Looper;
 import android.widget.Toast;
 
 public class LocationIdentifier{
@@ -97,6 +96,7 @@ public class LocationIdentifier{
         public void run() {
         	locationManager.removeUpdates(locationListenerGps);
         	locationManager.removeUpdates(locationListenerNetwork);
+        //	Looper.prepare();
         	Toast.makeText(mContext, "Timer expired removing listeners", 4000).show();
              Location networkLocation=null, gpsLocation=null;
              if(isGPSenabled)
