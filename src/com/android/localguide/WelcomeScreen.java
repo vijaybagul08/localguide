@@ -62,7 +62,8 @@ public class WelcomeScreen extends Activity  {
 	        
 	        app = (LocalGuideApplication) this.getApplication();
 	        app.loadFromDataBase();
-	        
+	        System.out.println("on facebook authentication complete set token is **** "+app.getFacebookToken());
+	        System.out.println("Accesskey for Twitter is ************* "+app.getTwitterAccessKey()+"::::"+app.getTwitterAccessSecret());
 	        mContext = getApplicationContext();
 	        mReverseGeoCoder = new Geocoder(getApplicationContext());
 	        locationIdentifier = new LocationIdentifier(mContext,this);

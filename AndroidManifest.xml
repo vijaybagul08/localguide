@@ -75,7 +75,7 @@
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 			</intent-filter>
 		</receiver>
-							
+	<service android:name="com.android.localguide.widgetprovider.CellLocationService"/>							
 	<uses-library android:name="com.google.android.maps" />
 </application>
 	<uses-permission android:name="android.permission.INTERNET"/>

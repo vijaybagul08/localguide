@@ -34,6 +34,21 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class TwitterClient {
+	
+	public interface TwitterAuthenticationCallBack
+	{
+		public void onTwitterAuthenticateCompleted(int response,String accessKey,String accessSecret,String username);
+		public static final int AUTHENTICAION_SUCCESSFULL = 1;
+		public static final int AUTHENTICAION_FAILURE = 2;
+	}
+
+	public interface TwitterPostMessageCallBack
+	{
+		public void onFaceBookmessagePostCompleted(int response);
+		public static final int POST_SUCCESSFULL = 1;
+		public static final int POST_FAILURE = 2;
+	}
+	
 //    private static final String CONSUMER_KEY = "GveIPloE2pt1lqOsdVHbcw";
 //    private static final String CONSUMER_SECRET = "o8eRpfPqFzFxaW84PkFC2bGcDibZYKvYiVdJeek";
     private static final String CONSUMER_KEY = "9rGstuoFXWINNjk10wVzQ";
@@ -64,8 +79,9 @@ public class TwitterClient {
     private WebView mWebView;
     Context mContext;
     private static String result;
+    TwitterAuthenticationCallBack mCB;
     
-    TwitterClient(Context context)
+    TwitterClient(Context context,TwitterAuthenticationCallBack aCB)
     {
     mContext = context;
     mConsumerKey = CONSUMER_KEY;
@@ -74,6 +90,17 @@ public class TwitterClient {
     mRequestTokenUrl = REQUEST_URL;
     mAccessTokenUrl = ACCESS_URL;
     mAuthorizeUrl = AUTHORIZE_URL;
+    mCB = aCB;
+    }
+    
+    TwitterClient(Context context,String accessKey,String accessSecret)
+    {
+    mContext = context;
+    mConsumerKey = CONSUMER_KEY;
+    mConsumerSecret = CONSUMER_SECRET;
+    mConsumer = new CommonsHttpOAuthConsumer(mConsumerKey, mConsumerSecret);
+    mConsumer.setTokenWithSecret(accessKey,accessSecret);
+    mClient = new DefaultHttpClient();  
     }
     
 	public void initialize () {
@@ -115,10 +142,11 @@ public class TwitterClient {
 			mProvider.retrieveAccessToken(mConsumer, verifier);
 			mAccessKey = mConsumer.getToken();
 			mAccessSecret = mConsumer.getTokenSecret();
-			mConsumer.setTokenWithSecret(mAccessSecret, mAccessKey);
+			
 			System.out.println("Accesskey = " + mAccessKey);
 			System.out.println( "AccessSecret = " + mAccessSecret);
-
+			
+			fetchUserCredentials();
 		} catch (OAuthMessageSignerException e) {
 			e.printStackTrace();
 		} catch (OAuthNotAuthorizedException e) {
@@ -127,21 +155,22 @@ public class TwitterClient {
 			e.printStackTrace();
 		} catch (OAuthCommunicationException e) {
 			e.printStackTrace();
+		} catch(Exception e)
+		{
+			
 		}
     }
 	
-   
-    public static void fetchUserCredentials(Account account,
-            String authkey, String authtoken,Context context) throws JSONException,
+    public void fetchUserCredentials() throws JSONException,
             ParseException, IOException, AuthenticationException {
-   
     	try {
     		
     		// create a request that requires authentication
     		HttpGet post = new HttpGet(FETCH_CREDENTIALS_URI);
 	        final List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
 	        nvps.add(new BasicNameValuePair("include_entities", "true"));
-	
+	     //   mConsumer.setTokenWithSecret(mAccessKey, mAccessSecret); // Working properly key, secret is the order.
+	        
 	        // set this to avoid 417 error (Expectation Failed)
 	        post.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
 	        // sign the request
@@ -172,12 +201,9 @@ public class TwitterClient {
 	        	 JSONObject json=new JSONObject(result);
 		         JSONObject status;
 		         status = json.getJSONObject("status");
+		         // Update the callback with secret and key and username
+		         mCB.onTwitterAuthenticateCompleted(TwitterAuthenticationCallBack.AUTHENTICAION_SUCCESSFULL, mAccessKey, mAccessSecret, json.get("name").toString());
 		         System.out.println("Name is "+json.get("name").toString());
-		         System.out.println("friends_count is "+json.get("friends_count").toString());
-		         System.out.println("Staus text is "+status.get("text".toString()));
-		         System.out.println("ID is "+status.get("id".toString()));
-		         System.out.println("profile_background_image_url is "+json.get("profile_image_url").toString());
-
 		         }
 		         catch(Exception e)
 		         {

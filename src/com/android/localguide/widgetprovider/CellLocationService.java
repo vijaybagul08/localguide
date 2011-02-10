@@ -52,8 +52,8 @@ public class CellLocationService extends Service{
                         
                         int cellid = loc.getCid();
                         int lac = loc.getLac();
-                        String cellId = "CELL-ID :"+cellid;
-                        cellId="LAC: "+lac;
+                        String cellId = "CELL-ID :"+cellid+"\n";
+                        cellId+="LAC: "+lac;
                 		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
                 		view.setTextViewText(R.id.text, cellId);
                         ComponentName thisWidget = new ComponentName(CellLocationService.this, WidgetProvider.class);

@@ -48,7 +48,13 @@ public class FavoritesScreen extends Activity{
         	
         }); 
 	}
-	
+	public void onBackPressed ()
+	{
+		System.out.println("On back key pressed ************* ");
+		 app.saveToDataBase();
+		 this.finish();
+		 
+	}
 
 	private  class ListAdapter extends BaseAdapter {
         private LayoutInflater mInflater;

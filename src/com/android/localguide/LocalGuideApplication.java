@@ -12,7 +12,8 @@ public class LocalGuideApplication extends Application {
 
 	String mTwitterUserName;
 	String mFacebookUserName;
-	String mTwitterAccessToken;
+	String mTwitterAccessKey;
+	String mTwitterAccessSecret;
 	String mFacebookAccessToken;
 	boolean isTwitterAuthenticated;
 	boolean isFacebookAuthenticated;
@@ -47,17 +48,21 @@ public class LocalGuideApplication extends Application {
 		saveToDataBase();
 	}
 	
-	public void updateTwitterToken(String token)
+	public void updateTwitterToken(String key,String secret)
 	{
-		mTwitterAccessToken = token;
+		mTwitterAccessKey = key;
+		mTwitterAccessSecret = secret;
 	}
 
-	public String getTwitterToken()
+	public String getTwitterAccessKey()
 	{
-		return mTwitterAccessToken;
+		return mTwitterAccessKey;
 	}
 
-	
+	public String getTwitterAccessSecret()
+	{
+		return mTwitterAccessSecret;
+	}
 	public void updateFacebookToken(String token)
 	{
 		mFacebookAccessToken = token;
@@ -99,7 +104,7 @@ public class LocalGuideApplication extends Application {
 		return isFacebookAuthenticated;
 	}
 
-	public void SetTwitterAutheticated(boolean value)
+	public void SetTwitterAuthenticated(boolean value)
 	{
 		isTwitterAuthenticated = value;
 	}
@@ -154,8 +159,10 @@ public class LocalGuideApplication extends Application {
         Editor editor = null;
         mTwitterUserName = prefs.getString("twitterusername", "");
         mFacebookUserName = prefs.getString("facebookusername", "");
-        mTwitterAccessToken = prefs.getString("twittertoken", "");
+        mTwitterAccessKey = prefs.getString("twitteraccesskey", "");
+        mTwitterAccessSecret = prefs.getString("twitteraccesssecret", "");
         mFacebookAccessToken = prefs.getString("facebooktoken", "");
+        System.out.println("Facebook token in loadfromdatabase ********* "+mFacebookAccessToken);
         
         isTwitterAuthenticated = prefs.getBoolean("", true);
         isFacebookAuthenticated = prefs.getBoolean("", true);
@@ -179,8 +186,10 @@ public class LocalGuideApplication extends Application {
 	 	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = null;;
         editor = prefs.edit();
+        System.out.println("Facebook token in savetodatabase ********* "+mFacebookAccessToken);
         editor.putString("twitterusername", mTwitterUserName);
-        editor.putString("twittertoken", mTwitterAccessToken);
+        editor.putString("twitteraccesskey", mTwitterAccessKey);
+        editor.putString("twitteraccesssecret", mTwitterAccessSecret);
         editor.putString("facebookusername", mFacebookUserName);
         editor.putString("facebooktoken", mFacebookAccessToken);
         

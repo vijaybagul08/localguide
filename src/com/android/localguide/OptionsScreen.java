@@ -1,11 +1,15 @@
 package com.android.localguide;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import oauth.signpost.exception.OAuthCommunicationException;
 
-import com.android.localguide.FaceBookClient.FaceBookPostMessageCallBack;
+import org.apache.http.auth.AuthenticationException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -33,8 +37,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.android.localguide.FaceBookClient.FaceBookPostMessageCallBack;
+
 public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,GetDirectionsList.SearchResultCallBack,
-FaceBookClient.FaceBookPostMessageCallBack{
+FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack{
 	
 	Context mContext;
 	LocalGuideApplication app;
@@ -91,8 +97,12 @@ FaceBookClient.FaceBookPostMessageCallBack{
     button7 = (Button)findViewById(R.id.button7);
     
     mFacebookClient  = new FaceBookClient(this,this);
+    System.out.println("Accesskey for facbook is ************* "+app.getFacebookToken());
     mFacebookClient.setAccessToken(app.getFacebookToken());
     
+    
+    mTwitterClient = new TwitterClient(this,app.getTwitterAccessKey(),app.getTwitterAccessSecret());
+    System.out.println("Accesskey for Twitter is ************* "+app.getTwitterAccessKey()+"::::"+app.getTwitterAccessSecret());
     layout.setParent(this);
     animation = new MyAnimation();
     
@@ -165,7 +175,19 @@ FaceBookClient.FaceBookPostMessageCallBack{
 	button4.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
-	    	
+	    	try
+	    	{
+	    	mTwitterClient.fetchUserCredentials();
+	    	}
+	    	catch (JSONException e) {
+				e.printStackTrace();
+			} catch (AuthenticationException e) {
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	    }
      });
 	
