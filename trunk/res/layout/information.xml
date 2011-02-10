@@ -213,7 +213,7 @@
   android:layout_weight="0.4"
   android:text="Facebook"/>
 				
-			<Button android:id="@+id/twitter"
+			<Button android:id="@+id/facebook"
 			 android:layout_width="wrap_content"
 			 android:layout_height="wrap_content" 
 			 android:layout_weight="0.6"

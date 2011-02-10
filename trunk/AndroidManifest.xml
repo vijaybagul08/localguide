@@ -67,7 +67,15 @@
 					<category android:name="android.intent.category.DEFAULT"/>
 				</intent-filter>
 			</activity>
-					
+		
+		<receiver android:name=".widgetprovider.WidgetProvider">
+			<meta-data android:name="android.appwidget.provider"
+			android:resource="@xml/widgetprovider" />
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+		</receiver>
+							
 	<uses-library android:name="com.google.android.maps" />
 </application>
 	<uses-permission android:name="android.permission.INTERNET"/>
