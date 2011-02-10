@@ -9,52 +9,60 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.localguide.FaceBookClient.FaceBookAuthenticationCallBack;
+import com.android.localguide.TwitterClient.TwitterAuthenticationCallBack;
 
-public class Information extends Activity implements FaceBookAuthenticationCallBack{
+public class Information extends Activity implements FaceBookAuthenticationCallBack,TwitterAuthenticationCallBack{
 
 	TextView information;
-	Button twitter;
-	Button facebook;
+	Button twitterButton;
+	Button facebookButton;
 	Handler mHandler = new H();
 
 	private int TWITTER = 1;
 	private int FACEBOOK = 2;
 	LocalGuideApplication app;
+	TextView twitterText;
+	TextView facebookText;
 	
 	public void onCreate(Bundle savedState)
 	{
 		super.onCreate(savedState);
 		setContentView(R.layout.information);
 		app = (LocalGuideApplication)this.getApplication();
-		
-		twitter = (Button )findViewById(R.id.twitter);
+		twitterText = (TextView)findViewById(R.id.twittertext);
+		facebookText = (TextView)findViewById(R.id.facebooktext);
+		twitterButton = (Button )findViewById(R.id.twitter);
 		
 		if(app.isTwitterAutheticated())
-			twitter.setText("Sign In");
+			twitterButton.setText("Sign In");
 		else
-			twitter.setText("Try Different User");
+			twitterButton.setText("Try Different User");
 		
-		twitter.setOnClickListener(new View.OnClickListener() {
+		twitterButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
+				System.out.println("Twitter button click ************" );
 				mHandler.sendEmptyMessage(TWITTER);
 			}
 			
 		});
-		facebook = (Button )findViewById(R.id.facebook);
+		facebookButton = (Button )findViewById(R.id.facebook);
 		
 		if(app.isFacebookAuthenticated())
-			facebook.setText("Sign In");
+			facebookButton.setText("Sign In");
 		else
-			facebook.setText("Try Different User");
+			facebookButton.setText("Try Different User");
 
-		facebook.setOnClickListener(new View.OnClickListener() {
+		facebookButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
 				mHandler.sendEmptyMessage(FACEBOOK);
 			}
 			
 		});
+		TwitterClient client = new TwitterClient(Information.this,Information.this);
+		client.initialize();
+		client.authenticate();	
 	}
 
 	class H extends Handler
@@ -63,30 +71,56 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		{
 			if(m.what == TWITTER) 
 			{
-				TwitterClient client = new TwitterClient(Information.this);
+				System.out.println("Handle message is TWITTER**************** ");
+				TwitterClient client = new TwitterClient(Information.this,Information.this);
 				client.initialize();
 				client.authenticate();				
 			}
-			else if(m.what == FACEBOOK);
+			else if(m.what == FACEBOOK)
 			{
+				System.out.println("Handle message is facebook**************** ");
 				FaceBookClient client = new FaceBookClient(Information.this,Information.this);
 				client.initialize();
 			}
 		}
 	}
 	
-	public void onFaceBookAuthenticateCompleted(int response,String token)
+	public void onFaceBookAuthenticateCompleted(int response,String token,String username)
 	{
 		switch(response)
 		{
 		case FaceBookAuthenticationCallBack.AUTHENTICAION_SUCCESSFULL:
+			String text="";
+			text="Facebook \n";
 			app.updateFacebookToken(token);
 			app.SetFacebookAuthenticated(true);
+			text+=username;
+			System.out.println("on facebook authentication complete set token is **** "+app.getFacebookToken());
+		//	facebookText.setText(text);
+		//	facebookButton.setText("Try Different User");
 			break;
 		case FaceBookAuthenticationCallBack.AUTHENTICAION_FAILURE:
 			break;
 			
 		}
 	}
-	
+	public void onTwitterAuthenticateCompleted(int response,String key,String secret,String username)
+	{	
+		switch(response)
+		{
+		case TwitterAuthenticationCallBack.AUTHENTICAION_SUCCESSFULL:
+			app.updateTwitterToken(key, secret);
+			app.SetTwitterAuthenticated(true);
+			
+			break;
+		case TwitterAuthenticationCallBack.AUTHENTICAION_FAILURE:
+			break;
+		}
+		
+	}
+	public void onBackPressed ()
+	{
+		 app.saveToDataBase();
+		 this.finish();
+	}
 }
