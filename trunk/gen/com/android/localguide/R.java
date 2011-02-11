@@ -48,6 +48,8 @@ public final class R {
         public static final int button7=0x7f060021;
         public static final int call_list=0x7f060003;
         public static final int categories=0x7f060027;
+        public static final int categories_list=0x7f06002b;
+        public static final int categoryIcon=0x7f06002c;
         public static final int categoryText=0x7f060006;
         public static final int categoryimage=0x7f060005;
         public static final int categotytextbox=0x7f060025;
@@ -59,6 +61,7 @@ public final class R {
         public static final int gridview=0x7f060008;
         public static final int information=0x7f060010;
         public static final int layout_call=0x7f060000;
+        public static final int layout_configure=0x7f06002a;
         public static final int layout_root=0x7f060007;
         public static final int list=0x7f060009;
         public static final int locationtextbox=0x7f060028;
@@ -78,7 +81,7 @@ public final class R {
         public static final int title=0x7f060015;
         public static final int twitter=0x7f060012;
         public static final int twittertext=0x7f060011;
-        public static final int widgetlayout=0x7f06002a;
+        public static final int widgetlayout=0x7f06002d;
     }
     public static final class layout {
         public static final int calldialog=0x7f030000;
@@ -96,7 +99,9 @@ public final class R {
         public static final int results=0x7f03000c;
         public static final int splash=0x7f03000d;
         public static final int welcome=0x7f03000e;
-        public static final int widgetlayout=0x7f03000f;
+        public static final int widgetconfigure=0x7f03000f;
+        public static final int widgetconfigurelistview=0x7f030010;
+        public static final int widgetlayout=0x7f030011;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
