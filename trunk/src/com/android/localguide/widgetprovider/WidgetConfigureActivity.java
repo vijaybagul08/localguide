@@ -24,6 +24,8 @@ import com.android.localguide.R;
 
 public class WidgetConfigureActivity extends Activity{
 
+    public static final String PREFS_NAME = "LocalguideWidgetPrefs";
+    
     private Integer[] mThumbIds = {   
             R.drawable.beer, R.drawable.hotel,R.drawable.shopping, 
             R.drawable.theatre,R.drawable.train, R.drawable.taxi,   
@@ -36,36 +38,58 @@ public class WidgetConfigureActivity extends Activity{
             };
     private int appWidgetId;
     ListView listView;
+    Context mContext;
     
 	public void onCreate(Bundle savedInstance)
 	{
 		super.onCreate(savedInstance);
+		mContext = this.getApplicationContext();
+		setContentView(R.layout.widgetconfigure);
+		
 		Intent launchIntent = getIntent();
 		Bundle extras = launchIntent.getExtras();
-		appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-				AppWidgetManager.INVALID_APPWIDGET_ID);
-		setContentView(R.layout.widgetconfigure);
+		if (extras != null) {
+			appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
+					AppWidgetManager.INVALID_APPWIDGET_ID);
+            Intent cancelResultValue = new Intent();
+            cancelResultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            setResult(RESULT_CANCELED, cancelResultValue);
+            
+			System.out.println("Appwidget id in Congiure activity is ****** "+appWidgetId);
+		}
+		
+        // If they gave us an intent without the widget id, just bail.
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            finish();
+        }
+        
 		listView = (ListView)findViewById(R.id.categories_list);
 		listView.setAdapter(new ConfigureListAdapter(this));
 	    listView.setOnItemClickListener(new OnItemClickListener() { 
 	            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-	                if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
 
 	                	//Store the appwidgetid and category in the shared prefs
-	                	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WidgetConfigureActivity.this);
+	                	SharedPreferences prefs = getSharedPreferences(PREFS_NAME,0);
 	                    Editor editor = null;;
 	                    editor = prefs.edit();
-	                    editor.putString("category"+appWidgetId, categories[position]+"::"+appWidgetId);
-	                    
+	                    editor.putString("category"+appWidgetId, categories[position]);
+	                    editor.commit();
+	                    System.out.println("Appwidget id after selecting a entry in list is **** "+appWidgetId);
 	                    // tell the app widget manager that we're now configured
 	                    Intent resultValue = new Intent();
 	                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 	                    setResult(RESULT_OK, resultValue);
-	                }
-	                finish();
+	                    
+	                    Intent serviceIntent = new Intent(mContext, CellLocationService.class);
+	                    serviceIntent.putExtra("appwidgetid", appWidgetId);
+	                    mContext.startService(serviceIntent);
+	                    finish();
 	        	}
 	        	
-	        }); 
+	        });
+	    System.out.println("Calling finish **************** ");
+	    finish();
+	    
 	}
 	
 	 /* Call List adapter to display the call icon and phone number along with it in the call list dialog */

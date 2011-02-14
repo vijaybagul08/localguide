@@ -34,8 +34,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.android.localguide.LocationIdentifier.LocationIdentifierCallBack;
 
-public class WelcomeScreen extends Activity  {
+
+public class WelcomeScreen extends Activity implements LocationIdentifierCallBack {
 	    
 	public final int CATEGORY_ID =0;
 	public final int LOCATION_ID =1;

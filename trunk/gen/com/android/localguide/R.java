@@ -34,6 +34,7 @@ public final class R {
         public static final int theatre=0x7f020014;
         public static final int train=0x7f020015;
         public static final int ubuntu=0x7f020016;
+        public static final int widgetbackground=0x7f020017;
     }
     public static final class id {
         public static final int MainLayout=0x7f06000e;
