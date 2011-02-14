@@ -9,19 +9,23 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.widget.Toast;
 
 public class LocationIdentifier{
-
+	
+	public interface LocationIdentifierCallBack{
+		public void gotLocation(Location location);
+	}
+	
 	Context mContext;
 	private LocationManager locationManager;
-	WelcomeScreen mParent;
+	LocationIdentifierCallBack mParent;
 	ProgressDialog dialog;
     boolean isGPSenabled=false;
     boolean isNetworkenabled=false;
+    boolean isSearching = false;
     Timer timer;
-	public LocationIdentifier(Context context,WelcomeScreen parent)
+	public LocationIdentifier(Context context,LocationIdentifierCallBack parent)
 	{
 	mContext = context;
 	mParent = parent;
@@ -29,7 +33,7 @@ public class LocationIdentifier{
 	
 	public void getLocation()
 	{
-	
+		isSearching= true;
 		if(locationManager == null)
 	   locationManager = (LocationManager)mContext.getSystemService(mContext.LOCATION_SERVICE);
 
@@ -61,6 +65,7 @@ public class LocationIdentifier{
 		public void onLocationChanged(Location location) {
 			timer.cancel();
             mParent.gotLocation(location);
+            isSearching = false;
             locationManager.removeUpdates(this);
             locationManager.removeUpdates(locationListenerGps);
 		}
@@ -79,6 +84,7 @@ public class LocationIdentifier{
         	Toast.makeText(mContext, location.toString(), 5000).show();
         	timer.cancel();
             mParent.gotLocation(location);
+            isSearching = false;
             locationManager.removeUpdates(this);
             locationManager.removeUpdates(locationListenerNetwork);
         }
@@ -90,7 +96,10 @@ public class LocationIdentifier{
         }
         public void onStatusChanged(String provider, int status, Bundle extras) {}
     };
-    
+    public boolean isSearchingLocation()
+    {
+    	return isSearching;
+    }
     class GetLastLocation extends TimerTask {
         @Override
         public void run() {
@@ -103,7 +112,7 @@ public class LocationIdentifier{
             	 gpsLocation=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
              if(isNetworkenabled)
             	 networkLocation=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
+             isSearching = false;
              //if there are both values use the latest one
              if(gpsLocation!=null && networkLocation!=null){
                  if(gpsLocation.getTime()>networkLocation.getTime())
