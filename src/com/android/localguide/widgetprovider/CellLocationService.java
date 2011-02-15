@@ -2,17 +2,18 @@ package com.android.localguide.widgetprovider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -36,6 +37,10 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	Geocoder mReverseGeoCoder;
 	Context mContext;
 	int currentAppWidgetId;
+	ExecutorService executor;
+	int poolSize = 4;
+	int maxPoolSize = 4;
+	long keepAliveTime = 10;
 	
 	class AppWidgetItem {
 		CollectDataForCategory mConnector;
@@ -55,7 +60,10 @@ public class CellLocationService extends Service implements LocationIdentifierCa
         mContext = this.getApplicationContext();
         appWidgetsList = new ArrayList<AppWidgetItem>();
         
-        // Start a looper thread ( life cycle is valid as long as main process
+        //Create a pool of 4 threads to communicate to the cloud to fetch local search results.
+        executor= Executors.newFixedThreadPool(4);
+        
+        // Start a looper thread life cycle is valid as long as main process
         
 		mTask = new Thread(new Runnable() {
 			public void run() {
@@ -66,12 +74,17 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		});
 		mTask.start();
 		
+		// Calling immediately after the task is started is giving nullpointer exception for Looperthreadhandler
+		//startUpdatingWidgetProviders(); 
+		
+		// Need to register for screen OFF and ON events to stop and pause the looper thread.
 	}
 	
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
 		System.out.println("On startcommand my Service ::::::: ");
 		
+		// appWidget id is set to zero, it means, the intent is triggered to delete a appWidget instance from the list.
 		if(intent.getIntExtra("appwidgetid", 0) != 0 )
 		{
 			// Some other widget instance is still waiting for its current location
@@ -89,11 +102,16 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
 			item.mConnector= new CollectDataForCategory();
 			appWidgetsList.add(item);
+			
+			// Call the looper thread when the first element is added
+			if(appWidgetsList.size() == 1)
+				startUpdatingWidgetProviders();
 		}
 		else
 		{
+			// Get the delete appWidget id and remove it from the list.
 			int deleteAppId = intent.getIntExtra("deleteAppWidgetId", 0);
-			System.out.println("Delete app widget id ********* "+deleteAppId);
+
 			//Delete from the appWidgetList
 			int i=0;
 			for(i=0;i<appWidgetsList.size();i++)
@@ -102,10 +120,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					break;
 			}
 			appWidgetsList.remove(i);
-			for(i=0;i<appWidgetsList.size();i++)
-			{
-				System.out.println("Delete app widget id ********* "+appWidgetsList.get(i).AppWidgetId);
-			}
 		}
 		return START_STICKY;
 	}
@@ -116,7 +130,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 
 	public void onDestroy()
 	{
-		System.out.println("On Destroy my Service ::::::: ");
+		//Remove the runnables from the looper thread
 		mLooperThreadHandler.removeCallbacks(updateWidgetsRunnable);
 		
 	}
@@ -127,71 +141,100 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		System.out.println("Location obtained is ********** "+location.toString());
 		
 		try{
-		List<Address> mAddressList = mReverseGeoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-		   if (mAddressList.size()> 0){
+			
+			// Use the rever Geo coder to conver lat and long to a valid location string.
+			List<Address> mAddressList = mReverseGeoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+		   
+			if (mAddressList.size()> 0){
+			
 					String  currlocation = "Location: "+mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
 					currlocation+="\n";
-					currlocation+="Loading the results";
+					currlocation+="Loading the results....... pls wait";
+					
 					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 					view.setTextViewText(R.id.text, currlocation);
 					
 					SharedPreferences prefs = getApplicationContext().getSharedPreferences(WidgetConfigureActivity.PREFS_NAME,0);
-					//Get list of appWidgetIds
-					int[] appWidgetIds;
-					appWidgetIds = mAppWidgetManager.getAppWidgetIds(new ComponentName("com.android.localguide","com.android.localguide.widgetprovider.WidgetProvider"));
 					
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
 						mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
-						String searchString = currlocation+","+prefs.getString("category"+appWidgetsList.get(i).AppWidgetId, null);
-						System.out.println("Searchstrings are ********* "+searchString);
+						// Form the search String. Use the preferences to fetch the category for corresponding appWidget.
+						String searchString = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0)+","+prefs.getString("category"+appWidgetsList.get(i).AppWidgetId, null);
+						appWidgetsList.get(i).mConnector.setSearchString(searchString);
+						appWidgetsList.get(i).mConnector.setStartedSearch(true);
+						
+						final int j =i;
+						executor.execute(new Runnable ()
+						{
+							public void run()
+							{
+								appWidgetsList.get(j).mConnector.sendSearchRequest();		
+							}
+						});
+						
+						
 					}
-					startUpdatingWidgetProviders();
 			  }
 		   }
 		   catch(Exception e)
 		   {
 			   System.out.println("Geo reverse coding is having error");
 		   }
+		
+	}
+	
 
-		
-		
-	}
-	
-	private void startUpdatingWidgetProviders()
-	{
-		mLooperThreadHandler.post(updateWidgetsRunnable ) ;
-		
-	}
-	
 	public Runnable updateWidgetsRunnable = new Runnable() {
+		
 			int count = 0;
 			public void run() {
+				
 				System.out.println("Lopper thread ***************** "+count+"    Size of list is "+appWidgetsList.size() );
-				for(int i =0;i<appWidgetsList.size();i++)
+				if(appWidgetsList.size() > 0)
 				{
-					String result;
+					// Size greater than zero 
+					for(int i =0;i<appWidgetsList.size();i++)
+					{
+						//Check if searching is going for each appwidget
+						//Already connection plese wait 
+						if(appWidgetsList.get(i).mConnector.isStarted == false)
+						{
+							String result;
+							result = appWidgetsList.get(i).mConnector.title.get(count);
+							result+= "\n";
+							result+= appWidgetsList.get(i).mConnector.address.get(count);
+							result+= "\n";
+							result+= appWidgetsList.get(i).mConnector.phonenumbers.get(count);
+						
+							RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+							view.setTextViewText(R.id.text, result);
+							
+							mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
+						}
+					}
+				
+					count++;
 					
-//					result = appWidgetsList.get(i).mConnector.title.get(count);
-//					result+= "\n";
-//					result = appWidgetsList.get(i).mConnector.address.get(count);
-//					result+= "\n";
-//					result = appWidgetsList.get(i).mConnector.phonenumbers.get(count);
-					result = "Count is ***** "+count;
-					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
-					view.setTextViewText(R.id.text, result);
-					mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
-
+					// Rotate through the results list, 0 to 7, when 7 is reached, make count to 0
+					if(count==7)
+						count=0;
+					
+					mLooperThreadHandler.postDelayed(this, 5000);
 				}
-				count++;
+				else
+					mLooperThreadHandler.postDelayed(this, 10000);
 				
-				if(count==7)
-					count=0;
-				
-				mLooperThreadHandler.postDelayed(this, 3000);
 			}
 		};
 	
+		private void startUpdatingWidgetProviders()
+		{
+			if(mLooperThreadHandler != null)
+			mLooperThreadHandler.post(updateWidgetsRunnable ) ;
+			
+		}
+		
     private final PhoneStateListener phoneStateListener = new PhoneStateListener(){
 
     			@Override
