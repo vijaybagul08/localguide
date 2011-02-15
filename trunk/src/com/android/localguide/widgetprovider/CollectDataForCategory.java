@@ -27,10 +27,14 @@ public class CollectDataForCategory {
 	public ArrayList<String> title;
 	public ArrayList<String> address;
 	public ArrayList<String> phonenumbers;
-		
+	boolean isStarted;
+	
 	CollectDataForCategory()
 	{
-		
+	isStarted = true;  // Assuming true	
+    title = new ArrayList<String>();
+    address = new ArrayList<String>();
+    phonenumbers = new ArrayList<String>();
 	}
 	
 	public void setSearchString(String search)
@@ -38,15 +42,20 @@ public class CollectDataForCategory {
 		searchString = search;
 	}
 	
+	public void setStartedSearch(boolean started)
+	{
+		isStarted = started;
+	}
 	int getResultCount()
 	{
 		return resultCount;
 	}
-	public  void sendSearchRequest(int count)
+	public  void sendSearchRequest()
 	   {
+		System.out.println("In search request is *************** "+searchString+"::"+isStarted);
 		HttpClient client = new DefaultHttpClient();
-		String query = "http://ajax.googleapis.com/ajax/services/search/local?hl=en&v=1.0&rsz=8&q="+searchString+"&start=";
-		query+=count;
+		String query = "http://ajax.googleapis.com/ajax/services/search/local?hl=en&v=1.0&rsz=8&q="+searchString+"&start=0";
+		
 		try {
 			URL url = new URL(query);
 			URI uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
@@ -63,7 +72,7 @@ public class CollectDataForCategory {
 			HttpResponse response = client.execute(request);
 			Userrequest(response);
 		}catch (URISyntaxException e){
-			
+			System.out.println("URI syntax error 1 ************8 ");
 		}
 		catch(Exception ex){
 			System.out.println("Neetworj error 1 ************8 ");
@@ -83,6 +92,7 @@ public class CollectDataForCategory {
 	    	        }
 	    	        in.close();
 	    	        result = str.toString();
+	    	       // System.out.println("update result is ********** "+result);
 	    	        updateData(result);
 	    	   }catch(Exception ex){
 	    		   System.out.println("Neetworj error 2 ************8 ");
@@ -92,57 +102,61 @@ public class CollectDataForCategory {
 	    	}
 	 public  void updateData(String result)
 	    {
+		 
+		 System.out.println("update result is ********** "+result);
 	   	 try
 	        {
 	         JSONObject json=new JSONObject(result);
 	         JSONArray ja;
 	         json = json.getJSONObject("responseData");
-	         ja = json.getJSONArray("results");
 	         
+	         ja = json.getJSONArray("results");
 	         resultCount = ja.length();
 	         for (int i = 0; i < resultCount; i++)
 	           {
-	           JSONObject resultObject = ja.getJSONObject(i);
-	           title.add(resultObject.get("titleNoFormatting").toString());
-	           JSONArray addr;
-	           addr = resultObject.getJSONArray("addressLines");
-	           int count = addr.length();
-	           String addrr="";
-	           for(int j=0;j<count;j++)
-	           {
-	               addrr+=addr.getString(j);
-	               if(j==0)
-	             	  addrr+=',';
-	           }
-	           address.add(addrr);
-		      JSONObject phone;
-		      JSONArray numbers;
-		      String phNumber="Ph : ";
-		      String temp="";
-	 	      if(resultObject.has("phoneNumbers") == true )
-		      {
-		      numbers = resultObject.getJSONArray("phoneNumbers");
-			      if(numbers !=null )
+		           JSONObject resultObject = ja.getJSONObject(i);
+		           title.add(resultObject.get("titleNoFormatting").toString());
+		           JSONArray addr;
+		           addr = resultObject.getJSONArray("addressLines");
+		           int count = addr.length();
+		           String addrr="";
+		           for(int j=0;j<count;j++)
+		           {
+		               addrr+=addr.getString(j);
+		               if(j==0)
+		             	  addrr+=',';
+		           }
+		           address.add(addrr);
+		           
+			       JSONObject phone;
+			       JSONArray numbers;
+			       String phNumber="Ph : ";
+			       String temp="";
+			      
+		 	      if(resultObject.has("phoneNumbers") == true )
 			      {
-			    	  if(numbers.length() > 0)
-			    	  {
-				    		  phone = numbers.getJSONObject(0);
-				    		  temp=phone.get("number").toString();
-			    	 }
-	  		      
-			       }
-		      }
-
-		      phNumber+= temp;
-		      phonenumbers.add(phNumber);
-	           }
+		 	    	 numbers = resultObject.getJSONArray("phoneNumbers");
+				      if(numbers !=null )
+				      {
+				    	  if(numbers.length() > 0)
+				    	  {
+				        		  phone = numbers.getJSONObject(0);
+					    		  temp=phone.get("number").toString();
+				      	  }
+		  		      
+				       }
+			         }
+			       phNumber+= temp;
+			       phonenumbers.add(phNumber);
+		        }
+	         
+	         //Update isStarted boolean
+	         isStarted = false;
 	         
 	         }
 	         catch(Exception e)
 	         {
-	         	
-	        	 System.out.println("JSON parsing exception");
+	        	 System.out.println("JSON parsing exception"+e.toString());
 	         }
 	    }
-
 }
