@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -24,7 +25,9 @@ import android.telephony.gsm.GsmCellLocation;
 import android.widget.RemoteViews;
 
 import com.android.localguide.LocationIdentifier;
+import com.android.localguide.OptionsScreen;
 import com.android.localguide.R;
+import com.android.localguide.results;
 import com.android.localguide.LocationIdentifier.LocationIdentifierCallBack;
 
 public class CellLocationService extends Service implements LocationIdentifierCallBack{
@@ -209,7 +212,16 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 						
 							RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 							view.setTextViewText(R.id.text, result);
-							
+							Intent intent = new Intent();
+				     		intent.setClass(mContext, OptionsScreen.class);
+				       		Bundle bun = new Bundle();
+			                bun.putString("resultString",appWidgetsList.get(i).mConnector.result);
+			                bun.putInt("position", count); 
+			                intent.putExtras(bun);
+			        		
+			                PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
+			                        0 /* no requestCode */, intent, 0 /* no flags */);
+			                view.setOnClickPendingIntent(R.id.text, pendingIntent);
 							mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						}
 					}
