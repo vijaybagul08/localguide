@@ -87,9 +87,7 @@ public class WidgetConfigureActivity extends Activity{
 	        	}
 	        	
 	        });
-	    System.out.println("Calling finish **************** ");
-	    finish();
-	    
+	    	    
 	}
 	
 	 /* Call List adapter to display the call icon and phone number along with it in the call list dialog */
