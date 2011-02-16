@@ -40,6 +40,7 @@ public final class R {
         public static final int MainLayout=0x7f06000e;
         public static final int address=0x7f060016;
         public static final int addressLayout=0x7f06000c;
+        public static final int button=0x7f060030;
         public static final int button1=0x7f06001b;
         public static final int button2=0x7f06001c;
         public static final int button3=0x7f06001d;
@@ -82,6 +83,8 @@ public final class R {
         public static final int title=0x7f060015;
         public static final int twitter=0x7f060012;
         public static final int twittertext=0x7f060011;
+        public static final int widgetLayout1=0x7f06002e;
+        public static final int widgetLayout2=0x7f06002f;
         public static final int widgetlayout=0x7f06002d;
     }
     public static final class layout {
