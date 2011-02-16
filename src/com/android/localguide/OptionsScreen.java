@@ -111,7 +111,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     Bundle bundle= getIntent().getExtras();
     result = bundle.getString("resultString");
     currentaddress =  bundle.getInt("position");
-    
+    System.out.println("Result is *************** "+result);
     title = new ArrayList<String>();
     streetaddress = new ArrayList<String>();
     phonenumbers = new ArrayList<String>();

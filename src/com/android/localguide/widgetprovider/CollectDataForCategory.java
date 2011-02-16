@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 public class CollectDataForCategory {
 	String result;
+	int count;
 	String searchString;
 	int resultCount;
 	public ArrayList<String> title;
@@ -32,6 +33,7 @@ public class CollectDataForCategory {
 	CollectDataForCategory()
 	{
 	isStarted = true;  // Assuming true	
+	count = 0;
     title = new ArrayList<String>();
     address = new ArrayList<String>();
     phonenumbers = new ArrayList<String>();
@@ -49,6 +51,35 @@ public class CollectDataForCategory {
 	int getResultCount()
 	{
 		return resultCount;
+	}
+	
+	public int getCurrentCount()
+	{
+		return count;
+	}
+	public String getValue()
+	{
+		String value="";
+		if(count <resultCount)
+		{
+			value = title.get(count);
+			value += "\n";
+			value += address.get(count);
+			value += "\n";
+			value += phonenumbers.get(count);			
+			count++;
+		}
+		else
+		{
+			count = 0;
+			value = title.get(count);
+			value += "\n";
+			value += address.get(count);
+			value += "\n";
+			value += phonenumbers.get(count);			
+		}
+		
+		return value;
 	}
 	public  void sendSearchRequest()
 	   {
@@ -112,6 +143,7 @@ public class CollectDataForCategory {
 	         
 	         ja = json.getJSONArray("results");
 	         resultCount = ja.length();
+	         System.out.println("update result resultcount is  ********** "+resultCount);
 	         for (int i = 0; i < resultCount; i++)
 	           {
 		           JSONObject resultObject = ja.getJSONObject(i);
@@ -152,7 +184,9 @@ public class CollectDataForCategory {
 	         
 	         //Update isStarted boolean
 	         isStarted = false;
-	         
+	         System.out.println("Size of tile ********* "+title.size());
+	         System.out.println("Size of addrress ********* "+address.size());
+	         System.out.println("Size of phonenumber ********* "+phonenumbers.size());
 	         }
 	         catch(Exception e)
 	         {

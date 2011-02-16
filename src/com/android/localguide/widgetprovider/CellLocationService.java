@@ -22,12 +22,12 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.android.localguide.LocationIdentifier;
 import com.android.localguide.OptionsScreen;
 import com.android.localguide.R;
-import com.android.localguide.results;
 import com.android.localguide.LocationIdentifier.LocationIdentifierCallBack;
 
 public class CellLocationService extends Service implements LocationIdentifierCallBack{
@@ -44,10 +44,11 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	int poolSize = 4;
 	int maxPoolSize = 4;
 	long keepAliveTime = 10;
-	
+	SharedPreferences prefs;
 	class AppWidgetItem {
 		CollectDataForCategory mConnector;
 		int AppWidgetId;
+		String category;
 	}
 	
    
@@ -62,7 +63,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
         mReverseGeoCoder = new Geocoder(getApplicationContext());
         mContext = this.getApplicationContext();
         appWidgetsList = new ArrayList<AppWidgetItem>();
-        
+         prefs = getApplicationContext().getSharedPreferences(WidgetConfigureActivity.PREFS_NAME,0);
         //Create a pool of 4 threads to communicate to the cloud to fetch local search results.
         executor= Executors.newFixedThreadPool(4);
         
@@ -86,7 +87,8 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
 		System.out.println("On startcommand my Service ::::::: ");
-		
+		if(intent !=null)
+		{
 		// appWidget id is set to zero, it means, the intent is triggered to delete a appWidget instance from the list.
 		if(intent.getIntExtra("appwidgetid", 0) != 0 )
 		{
@@ -104,6 +106,8 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	   		AppWidgetItem item = new AppWidgetItem();
 			item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
 			item.mConnector= new CollectDataForCategory();
+			item.category = prefs.getString("category"+intent.getIntExtra("appwidgetid", 0), null);
+			System.out.println("category is ********* "+item.category);
 			appWidgetsList.add(item);
 			
 			// Call the looper thread when the first element is added
@@ -120,9 +124,23 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			for(i=0;i<appWidgetsList.size();i++)
 			{
 				if(deleteAppId == appWidgetsList.get(i).AppWidgetId)
+				{
+					appWidgetsList.remove(i);
 					break;
+				}
 			}
-			appWidgetsList.remove(i);
+
+		}
+		}
+		else
+		{
+			// If the process is killed and restarted by the OS, then we need to collect the appwidgetid and categories from
+			// prefs and fill the appWidgetsList then start the looper thread or get location
+	   		AppWidgetItem item = new AppWidgetItem();
+			item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
+			item.mConnector= new CollectDataForCategory();
+			appWidgetsList.add(item);
+			startUpdatingWidgetProviders();  
 		}
 		return START_STICKY;
 	}
@@ -157,7 +175,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 					view.setTextViewText(R.id.text, currlocation);
 					
-					SharedPreferences prefs = getApplicationContext().getSharedPreferences(WidgetConfigureActivity.PREFS_NAME,0);
+					
 					
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
@@ -179,6 +197,10 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 						
 					}
 			  }
+			else
+			{
+				
+			}
 		   }
 		   catch(Exception e)
 		   {
@@ -190,10 +212,11 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 
 	public Runnable updateWidgetsRunnable = new Runnable() {
 		
-			int count = 0;
+			//int count = 0;
+			boolean state = true;
 			public void run() {
 				
-				System.out.println("Lopper thread ***************** "+count+"    Size of list is "+appWidgetsList.size() );
+				System.out.println("Lopper thread *****************  Size of list is "+appWidgetsList.size() );
 				if(appWidgetsList.size() > 0)
 				{
 					// Size greater than zero 
@@ -204,19 +227,30 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 						if(appWidgetsList.get(i).mConnector.isStarted == false)
 						{
 							String result;
-							result = appWidgetsList.get(i).mConnector.title.get(count);
-							result+= "\n";
-							result+= appWidgetsList.get(i).mConnector.address.get(count);
-							result+= "\n";
-							result+= appWidgetsList.get(i).mConnector.phonenumbers.get(count);
+							result = appWidgetsList.get(i).mConnector.getValue();
 						
 							RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+							if(state)
+							{
+								view.setViewVisibility(R.id.widgetLayout1, View.VISIBLE);
+					            view.setViewVisibility(R.id.widgetLayout2, View.GONE);
+					            state = false;
+							}
+							else
+							{
+					            view.setViewVisibility(R.id.widgetLayout1, View.GONE);
+					            view.setViewVisibility(R.id.widgetLayout2, View.VISIBLE);
+					            state = true;
+							}
+				            
 							view.setTextViewText(R.id.text, result);
+							view.setTextViewText(R.id.button, appWidgetsList.get(i).category+"  (More)");
 							Intent intent = new Intent();
 				     		intent.setClass(mContext, OptionsScreen.class);
 				       		Bundle bun = new Bundle();
+				       		//System.out.println(appWidgetsList.get(i).mConnector.result);
 			                bun.putString("resultString",appWidgetsList.get(i).mConnector.result);
-			                bun.putInt("position", count); 
+			                bun.putInt("position", appWidgetsList.get(i).mConnector.getCurrentCount()); 
 			                intent.putExtras(bun);
 			        		
 			                PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
@@ -225,12 +259,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 							mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						}
 					}
-				
-					count++;
-					
-					// Rotate through the results list, 0 to 7, when 7 is reached, make count to 0
-					if(count==7)
-						count=0;
 					
 					mLooperThreadHandler.postDelayed(this, 5000);
 				}

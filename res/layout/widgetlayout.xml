@@ -3,19 +3,39 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
+  android:orientation="vertical"
   android:id="@+id/widgetlayout"
   android:background="@drawable/widgetbackground">
   
-  <ImageView
-  android:layout_width="30dip"
-  android:layout_height="fill_parent"
-  android:src="@drawable/icon" />
-  
+         <!--Normal Theme Black Text -->
+        <RelativeLayout
+                android:id="@+id/widgetLayout1"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:background="#ae22ffee"
+
+                />
+        <!--Yellow Theme Black Text -->
+        <RelativeLayout
+                android:id="@+id/widgetLayout2"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:background="#ffbb00ff"
+                />
+                
   <TextView android:id="@+id/text"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
+  android:layout_weight="0.2"
   android:textColor="#ffffff"
-  android:textSize="25sp"
+  android:textSize="22sp"
   android:text="Location Widget"></TextView>
+  
+  <Button android:id="@+id/button"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:layout_weight="0.8"
+  android:textSize="20sp"
+  android:text=" Beer" />
   
 </LinearLayout>
