@@ -26,6 +26,7 @@
   <TextView android:id="@+id/text"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
+  android:padding="5dip"
   android:layout_weight="0.2"
   android:textColor="#ffffff"
   android:textSize="22sp"
@@ -34,6 +35,7 @@
   <Button android:id="@+id/button"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
+  android:padding="3dip"
   android:layout_weight="0.8"
   android:textSize="20sp"
   android:text=" Beer" />

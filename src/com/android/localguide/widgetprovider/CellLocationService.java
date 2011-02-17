@@ -90,7 +90,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		if(intent !=null)
 		{
 		// appWidget id is set to zero, it means, the intent is triggered to delete a appWidget instance from the list.
-		if(intent.getIntExtra("appwidgetid", 0) != 0 )
+		if(intent.getIntExtra("appwidgetid", 0) != 0 && intent.getIntExtra("appwidgetid", 0) != -1 )
 		{
 			// Some other widget instance is still waiting for its current location
 			if(mLocationIdentifier.isSearchingLocation() == false )
@@ -114,7 +114,21 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			if(appWidgetsList.size() == 1)
 				startUpdatingWidgetProviders();
 		}
-		else
+		else if (intent.getIntExtra("appwidgetid", 0) == -1)
+		{
+			// Get the update appWidget id and remove it from the list.
+			int updateAppId = intent.getIntExtra("updateAppWidgetId", 0);
+			System.out.println("update widget id for "+updateAppId);
+			for(int i=0;i<appWidgetsList.size();i++)
+			{
+				if(updateAppId == appWidgetsList.get(i).AppWidgetId)
+				{
+					System.out.println("update widget id for "+appWidgetsList.get(i).category);
+					break;
+				}
+			}
+		}
+		else if(intent.getIntExtra("appwidgetid", 0) == 0)
 		{
 			// Get the delete appWidget id and remove it from the list.
 			int deleteAppId = intent.getIntExtra("deleteAppWidgetId", 0);
@@ -232,14 +246,14 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 							RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 							if(state)
 							{
-								view.setViewVisibility(R.id.widgetLayout1, View.VISIBLE);
+								view.setViewVisibility(R.id.widgetLayout1, View.GONE);
 					            view.setViewVisibility(R.id.widgetLayout2, View.GONE);
 					            state = false;
 							}
 							else
 							{
 					            view.setViewVisibility(R.id.widgetLayout1, View.GONE);
-					            view.setViewVisibility(R.id.widgetLayout2, View.VISIBLE);
+					            view.setViewVisibility(R.id.widgetLayout2, View.GONE);
 					            state = true;
 							}
 				            
@@ -256,6 +270,17 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			                PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
 			                        0 /* no requestCode */, intent, 0 /* no flags */);
 			                view.setOnClickPendingIntent(R.id.text, pendingIntent);
+			                
+							Intent serviceIntent = new Intent(mContext, CellLocationService.class);
+							serviceIntent.putExtra("appwidgetid", -1);
+							serviceIntent.putExtra("updateAppWidgetId", appWidgetsList.get(i).AppWidgetId);
+				       		
+			                pendingIntent = PendingIntent.getService(mContext,
+			                        0 /* no requestCode */, serviceIntent, 0 /* no flags */);
+			                
+			                view.setOnClickPendingIntent(R.id.button, pendingIntent);
+			                
+			                
 							mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						}
 					}
