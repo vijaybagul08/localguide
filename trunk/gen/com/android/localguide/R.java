@@ -40,7 +40,7 @@ public final class R {
         public static final int MainLayout=0x7f06000e;
         public static final int address=0x7f060016;
         public static final int addressLayout=0x7f06000c;
-        public static final int button=0x7f060030;
+        public static final int button=0x7f060033;
         public static final int button1=0x7f06001b;
         public static final int button2=0x7f06001c;
         public static final int button3=0x7f06001d;
@@ -49,24 +49,25 @@ public final class R {
         public static final int button6=0x7f060020;
         public static final int button7=0x7f060021;
         public static final int call_list=0x7f060003;
-        public static final int categories=0x7f060027;
-        public static final int categories_list=0x7f06002b;
-        public static final int categoryIcon=0x7f06002c;
+        public static final int categories=0x7f06002a;
+        public static final int categories_list=0x7f06002e;
+        public static final int categoryIcon=0x7f06002f;
         public static final int categoryText=0x7f060006;
         public static final int categoryimage=0x7f060005;
-        public static final int categotytextbox=0x7f060025;
-        public static final int checkbox=0x7f060029;
+        public static final int categotytextbox=0x7f060028;
+        public static final int checkbox=0x7f06002c;
         public static final int close=0x7f060001;
         public static final int description=0x7f06000f;
         public static final int facebook=0x7f060014;
         public static final int facebooktext=0x7f060013;
         public static final int gridview=0x7f060008;
+        public static final int hint=0x7f060026;
         public static final int information=0x7f060010;
         public static final int layout_call=0x7f060000;
-        public static final int layout_configure=0x7f06002a;
+        public static final int layout_configure=0x7f06002d;
         public static final int layout_root=0x7f060007;
         public static final int list=0x7f060009;
-        public static final int locationtextbox=0x7f060028;
+        public static final int locationtextbox=0x7f06002b;
         public static final int logo=0x7f060024;
         public static final int mapview=0x7f060017;
         public static final int morebutton=0x7f060023;
@@ -76,16 +77,18 @@ public final class R {
         public static final int phonenumber=0x7f060004;
         public static final int previous=0x7f06000b;
         public static final int resultsLayout=0x7f060022;
-        public static final int search=0x7f060026;
+        public static final int search=0x7f060029;
         public static final int spinner=0x7f060018;
         public static final int text=0x7f060019;
         public static final int text1=0x7f060002;
         public static final int title=0x7f060015;
         public static final int twitter=0x7f060012;
+        public static final int twitterLayout=0x7f060025;
+        public static final int twitter_message_edit=0x7f060027;
         public static final int twittertext=0x7f060011;
-        public static final int widgetLayout1=0x7f06002e;
-        public static final int widgetLayout2=0x7f06002f;
-        public static final int widgetlayout=0x7f06002d;
+        public static final int widgetLayout1=0x7f060031;
+        public static final int widgetLayout2=0x7f060032;
+        public static final int widgetlayout=0x7f060030;
     }
     public static final class layout {
         public static final int calldialog=0x7f030000;
@@ -102,10 +105,11 @@ public final class R {
         public static final int options=0x7f03000b;
         public static final int results=0x7f03000c;
         public static final int splash=0x7f03000d;
-        public static final int welcome=0x7f03000e;
-        public static final int widgetconfigure=0x7f03000f;
-        public static final int widgetconfigurelistview=0x7f030010;
-        public static final int widgetlayout=0x7f030011;
+        public static final int twitterlayout=0x7f03000e;
+        public static final int welcome=0x7f03000f;
+        public static final int widgetconfigure=0x7f030010;
+        public static final int widgetconfigurelistview=0x7f030011;
+        public static final int widgetlayout=0x7f030012;
     }
     public static final class string {
         public static final int app_name=0x7f050001;

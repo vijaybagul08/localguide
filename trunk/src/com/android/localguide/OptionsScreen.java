@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import oauth.signpost.exception.OAuthCommunicationException;
-
 import org.apache.http.auth.AuthenticationException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +15,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -30,6 +29,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TableLayout;
@@ -111,7 +111,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     Bundle bundle= getIntent().getExtras();
     result = bundle.getString("resultString");
     currentaddress =  bundle.getInt("position");
-    System.out.println("Result is *************** "+result);
+    //System.out.println("Result is *************** "+result);
     title = new ArrayList<String>();
     streetaddress = new ArrayList<String>();
     phonenumbers = new ArrayList<String>();
@@ -175,26 +175,14 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	button4.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
-	    	try
-	    	{
-	    	mTwitterClient.fetchUserCredentials();
-	    	}
-	    	catch (JSONException e) {
-				e.printStackTrace();
-			} catch (AuthenticationException e) {
-				e.printStackTrace();
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	    	showDialog(TWITTER_ID);
 	    }
      });
 	
 	button5.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
-	    	mFacebookClient.PostWallMessage("Test message from my application - development");
+	    	showDialog(FACEBOOK_ID);
 	    }
      });
 	
@@ -203,7 +191,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    {
 	    	Intent intent = new Intent();
 	    	intent.setClass(mContext, MapsActivity.class);
-	    	//startActivity(intent);
+	    	startActivity(intent);
 	    	GetDirectionsList obj = new GetDirectionsList("Hougang Avenue 8,Singapore",streetaddress.get(currentaddress),OptionsScreen.this);
 	    	obj.searchRoutes();
 	    }
@@ -440,10 +428,14 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	      
 	}
 	 protected Dialog onCreateDialog(int id) {  
-		 
+		 AlertDialog.Builder builder;
+		 Context mContext = this; 
+		 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE); 
+		 View layout;
+		 TextView hintTitle;
+		 EditText message;
 	  switch(id)
 	  {
-	  
 	  case CALL_ID:
 		  
 			String delims = "[:]";
@@ -451,11 +443,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 			System.out.println("Phonumbers are *** "+temp[0]+"::::"+temp[1]);
 			delims = "[,]";
 			final String[] numbers = temp[1].split(delims);
-			
-			AlertDialog.Builder builder;   
-			Context mContext = this;   
-			LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);   
-			View layout = inflater.inflate(R.layout.calldialog,(ViewGroup) findViewById(R.id.layout_call));   
+			   
+			layout = inflater.inflate(R.layout.calldialog,(ViewGroup) findViewById(R.id.layout_call));   
 			ListView listview = (ListView)layout.findViewById(R.id.call_list);   
 			listview.setAdapter(new CallListAdapter(this,numbers));   
 			 
@@ -484,9 +473,75 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 			 
 			builder = new AlertDialog.Builder(mContext);   
 			builder.setView(layout);   
+	
 			dialog = builder.create();   
 			return dialog;
-	  }
+	  
+	  
+	  case TWITTER_ID:
+		  	builder = new AlertDialog.Builder(mContext);
+		  	layout = inflater.inflate(R.layout.twitterlayout,(ViewGroup) findViewById(R.id.twitterLayout));
+		  	hintTitle = (TextView ) layout.findViewById(R.id.hint);
+		  	hintTitle.setText("Message (Less than 140 characters)");
+		  	message = (EditText)layout.findViewById(R.id.twitter_message_edit);
+    		String text;
+    		text = title.get(currentaddress);
+    		text+= ","+streetaddress.get(currentaddress);
+    		message.setText(text);
+			builder.setPositiveButton("Post Tweet", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+        	    	try
+        	    	{
+        	    	mTwitterClient.fetchUserCredentials();
+        	    	}
+        	    	catch (JSONException e) {
+        				e.printStackTrace();
+        			} catch (AuthenticationException e) {
+        				e.printStackTrace();
+        			} catch (UnsupportedEncodingException e) {
+        				e.printStackTrace();
+        			} catch (IOException e) {
+        				e.printStackTrace();
+        			}
+                }
+            });
+			
+			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                	// Do nothing. Cancel the dialog
+                }
+			});
+                
+			builder.setView(layout);
+			dialog = builder.create();   
+			return dialog;
+	  case FACEBOOK_ID:
+		  	builder = new AlertDialog.Builder(mContext);
+		  	layout = inflater.inflate(R.layout.twitterlayout,(ViewGroup) findViewById(R.id.twitterLayout));
+		  	hintTitle = (TextView ) layout.findViewById(R.id.hint);
+		  	hintTitle.setText("Post to Wall");
+		  	message = (EditText)layout.findViewById(R.id.twitter_message_edit);
+    		String FBtext;
+    		FBtext = title.get(currentaddress);
+    		FBtext+= ","+streetaddress.get(currentaddress);
+    		message.setText(FBtext);
+    		
+			builder.setPositiveButton("Post", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                	mFacebookClient.PostWallMessage("Test message from my application - development");
+                }
+            });
+			
+			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                	// Do nothing. Cancel the dialog
+                }
+			});
+                
+			builder.setView(layout);
+			dialog = builder.create();   
+			return dialog;
+	  }  
 	  return null;
 	 }
 	 

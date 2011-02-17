@@ -38,7 +38,8 @@ public class MapsActivity extends MapActivity{
 	    
 	    Drawable drawable = this.getResources().getDrawable(R.drawable.icon);
 	    
-	    MapsItemizedOverlay itemizedoverlay = new MapsItemizedOverlay(drawable,this);
+	   // MapsItemizedOverlay itemizedoverlay = new MapsItemizedOverlay(drawable,this);
+	   CustomItemizedOverlay itemizedoverlay = new CustomItemizedOverlay(drawable,this);
 	   
 	    GeoPoint point = new GeoPoint(17375812,78490667);
 	    OverlayItem overlayitem = new OverlayItem(point, "Laissez les bon temps rouler!", "I'm in Louisiana!");
