@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class GetDirectionsList {
 	
 	public interface SearchResultCallBack {
-		public void OnSearchCompleted(int result);
+		public void OnSearchCompleted(ArrayList<DirectionItem> list);
 		public static final int SUCCESS 	= 1;
 		public static final int NETWORK_FAILURE		= 2;
 	}
@@ -31,7 +31,7 @@ public class GetDirectionsList {
 		
 		double latitude;
 		double longitude;
-		int duration;
+		String duration;
 		String distance;
 		String instructions;
 	}
@@ -48,6 +48,7 @@ public class GetDirectionsList {
 		startLocation = start;
 		destination = dest;
 		mCB = aCB;
+		DirectionItemList = new ArrayList<DirectionItem>();
 	}
 	
 	public void searchRoutes()
@@ -118,21 +119,35 @@ public class GetDirectionsList {
 		           {
 		           JSONObject resultObject = ja.getJSONObject(i);
 		           DirectionItem item = new DirectionItem();
+		           JSONObject obj;
 		           
 		           // Get the distance
-		           item.distance = resultObject.getString("distance");
+		           obj = resultObject.getJSONObject("distance");
+		           item.distance = obj.getString("text");
 		           
 		           // Get the duration
+		           obj = resultObject.getJSONObject("duration");
+		           item.duration = obj.getString("text");
 		           
 		           // Get the lat,long
+		           obj = resultObject.getJSONObject("start_location");
+		           
+		           item.latitude = Double.parseDouble(obj.getString("lat"));
+		           item.longitude = Double.parseDouble(obj.getString("lng"));
 		           
 		           // Get the instruction
+		           item.instructions = resultObject.getString("html_instructions"); 
 		           
+		           System.out.println("Latitude Longitude is "+item.latitude+"::"+item.longitude);
+		           System.out.println("Instructions are ****** "+item.instructions);
+		           System.out.println("Distance are ****** "+item.distance);
+		           System.out.println("Durations are ****** "+item.duration);
 		           DirectionItemList.add(item);
 		           
 		           //System.out.println("REsult steps is "+resultObject.toString());
 		           
 		           }
+		         mCB.OnSearchCompleted(DirectionItemList);
 		        }
 		         catch(Exception e)
 		         {

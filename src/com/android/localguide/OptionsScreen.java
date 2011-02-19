@@ -39,7 +39,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.localguide.FaceBookClient.FaceBookPostMessageCallBack;
 
-public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,GetDirectionsList.SearchResultCallBack,
+public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,
 FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack{
 	
 	Context mContext;
@@ -190,10 +190,12 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    public void onClick(View v)
 	    {
 	    	Intent intent = new Intent();
+	    	Bundle bun = new Bundle();
+	    	bun.putString("currentaddress",streetaddress.get(currentaddress));
+	    	intent.putExtras(bun);
 	    	intent.setClass(mContext, MapsActivity.class);
 	    	startActivity(intent);
-	    	GetDirectionsList obj = new GetDirectionsList("Hougang Avenue 8,Singapore",streetaddress.get(currentaddress),OptionsScreen.this);
-	    	obj.searchRoutes();
+
 	    }
      });
 	
@@ -263,10 +265,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     	else
     		nextArrow.setVisibility(View.INVISIBLE);
 	}
-	public void OnSearchCompleted(int result)
-	{
-		
-	}
+
 	
 	public void onMovementDetected(boolean isLeftMovement)
 	{
