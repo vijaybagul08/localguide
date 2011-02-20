@@ -15,8 +15,7 @@ public class LocalGuideApplication extends Application {
 	String mTwitterAccessKey;
 	String mTwitterAccessSecret;
 	String mFacebookAccessToken;
-	boolean isTwitterAuthenticated;
-	boolean isFacebookAuthenticated;
+	
 	ArrayList<favoriteItem> favoritesList;
 	
 	class favoriteItem
@@ -39,6 +38,10 @@ public class LocalGuideApplication extends Application {
 	public void onCreate()
 	{
         super.onCreate();
+    	mTwitterAccessKey = null;
+		mTwitterAccessSecret= null;
+		mFacebookAccessToken = null;
+	System.out.println("On create application *********** ");
         favoritesList = new ArrayList<favoriteItem>();
 	    loadFromDataBase();
 	}
@@ -96,22 +99,22 @@ public class LocalGuideApplication extends Application {
 
 	public boolean isTwitterAutheticated()
 	{
-		return isTwitterAuthenticated;
+		System.out.println("Is twitter authenticated *** "+mTwitterAccessKey);
+		if(mTwitterAccessKey == null && mTwitterAccessSecret == null)
+			return false;
+		else
+			return true;
+		
 	}
 	
 	public boolean isFacebookAuthenticated()
 	{
-		return isFacebookAuthenticated;
-	}
+		System.out.println("Is facebook authenticated *** "+mFacebookAccessToken);
+		if(mFacebookAccessToken == null)
+			return false;
+		else
+			return true;
 
-	public void SetTwitterAuthenticated(boolean value)
-	{
-		isTwitterAuthenticated = value;
-	}
-	
-	public void SetFacebookAuthenticated(boolean value)
-	{
-		isFacebookAuthenticated = value;
 	}
 
 	public boolean addToFavorites(String title,String address,String phoneNumber,String lat,String along)
@@ -157,16 +160,24 @@ public class LocalGuideApplication extends Application {
 	{
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = null;
-        mTwitterUserName = prefs.getString("twitterusername", "");
-        mFacebookUserName = prefs.getString("facebookusername", "");
-        mTwitterAccessKey = prefs.getString("twitteraccesskey", "");
-        mTwitterAccessSecret = prefs.getString("twitteraccesssecret", "");
-        mFacebookAccessToken = prefs.getString("facebooktoken", "");
-        System.out.println("Facebook token in loadfromdatabase ********* "+mFacebookAccessToken);
+        mTwitterUserName = prefs.getString("twitterusername", null);
+        mFacebookUserName = prefs.getString("facebookusername", null);
+        mTwitterAccessKey = prefs.getString("twitteraccesskey", null);
+        mTwitterAccessSecret = prefs.getString("twitteraccesssecret", null);
+        mFacebookAccessToken = prefs.getString("facebooktoken", null);
         
-        isTwitterAuthenticated = prefs.getBoolean("", true);
-        isFacebookAuthenticated = prefs.getBoolean("", true);
+        System.out.println("Facebook token in loadfromdatabase *********"+mFacebookAccessToken+"***");
         
+		if(mTwitterAccessKey == null && mTwitterAccessSecret == null)
+			System.out.println("Twitter token is nullllll");
+		else
+			System.out.println("Twitter token is having value");
+		
+		if(mFacebookAccessToken == null)
+			System.out.println("Facebook token is null");
+		else
+			System.out.println("Facebook is having value");
+       
         int count = prefs.getInt("FavoritesCount", 0);
         
         for (int i = 0; i < count; i++) {
@@ -186,12 +197,13 @@ public class LocalGuideApplication extends Application {
 	 	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = null;;
         editor = prefs.edit();
-        System.out.println("Facebook token in savetodatabase ********* "+mFacebookAccessToken);
+        
         editor.putString("twitterusername", mTwitterUserName);
         editor.putString("twitteraccesskey", mTwitterAccessKey);
         editor.putString("twitteraccesssecret", mTwitterAccessSecret);
         editor.putString("facebookusername", mFacebookUserName);
         editor.putString("facebooktoken", mFacebookAccessToken);
+        System.out.println("Facebook token in savetodatabase ********* "+mFacebookAccessToken);
         
         int count = favoritesList.size();
         editor.putInt("FavoritesCount", count);

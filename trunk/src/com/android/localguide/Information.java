@@ -1,6 +1,7 @@
 package com.android.localguide;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,9 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.localguide.FaceBookClient.FaceBookAuthenticationCallBack;
-import com.android.localguide.TwitterClient.TwitterAuthenticationCallBack;
 
-public class Information extends Activity implements FaceBookAuthenticationCallBack,TwitterAuthenticationCallBack{
+public class Information extends Activity implements FaceBookAuthenticationCallBack{
 
 	TextView information;
 	Button twitterButton;
@@ -20,6 +20,7 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 
 	private int TWITTER = 1;
 	private int FACEBOOK = 2;
+	private int TWITTER_AUTHENTICATE = 3;
 	LocalGuideApplication app;
 	TextView twitterText;
 	TextView facebookText;
@@ -34,9 +35,10 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		twitterButton = (Button )findViewById(R.id.twitter);
 		
 		if(app.isTwitterAutheticated())
-			twitterButton.setText("Sign In");
-		else
 			twitterButton.setText("Try Different User");
+		else
+			twitterButton.setText("Sign In");
+			
 		
 		twitterButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -49,9 +51,10 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		facebookButton = (Button )findViewById(R.id.facebook);
 		
 		if(app.isFacebookAuthenticated())
-			facebookButton.setText("Sign In");
+			facebookButton.setText("Try Different User");			
 		else
-			facebookButton.setText("Try Different User");
+			facebookButton.setText("Sign In");
+
 
 		facebookButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -60,9 +63,9 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			}
 			
 		});
-		TwitterClient client = new TwitterClient(Information.this,Information.this);
-		client.initialize();
-		client.authenticate();	
+//		TwitterClient client = new TwitterClient(Information.this,Information.this);
+//		client.initialize();
+//		client.authenticate();	
 	}
 
 	class H extends Handler
@@ -72,9 +75,11 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			if(m.what == TWITTER) 
 			{
 				System.out.println("Handle message is TWITTER**************** ");
-				TwitterClient client = new TwitterClient(Information.this,Information.this);
-				client.initialize();
-				client.authenticate();				
+			
+				Intent twitterIntent= new Intent();
+				twitterIntent.setClass(Information.this, TwitterActivity.class);
+				startActivityForResult(twitterIntent,TWITTER_AUTHENTICATE);
+		        
 			}
 			else if(m.what == FACEBOOK)
 			{
@@ -85,6 +90,21 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		}
 	}
 	
+	 protected void onActivityResult(int requestCode, int resultCode,
+             Intent data) {
+		 if (requestCode == TWITTER_AUTHENTICATE) {
+             if (resultCode == RESULT_OK) {
+            	 
+            	 Bundle bundle= data.getExtras();
+            	 String key = bundle.getString("AccessKey");
+            	 String secret = bundle.getString("AccessSecret");
+            	 String username = bundle.getString("UserName");
+            	 System.out.println("Key and secret is "+key +":::"+secret);
+            	 app.updateTwitterToken(key, secret);
+            	 twitterButton.setText("Try different user");
+             }
+		 }
+	 }
 	public void onFaceBookAuthenticateCompleted(int response,String token,String username)
 	{
 		switch(response)
@@ -93,7 +113,6 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			String text="";
 			text="Facebook \n";
 			app.updateFacebookToken(token);
-			app.SetFacebookAuthenticated(true);
 			text+=username;
 			System.out.println("on facebook authentication complete set token is **** "+app.getFacebookToken());
 		//	facebookText.setText(text);
@@ -104,20 +123,7 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			
 		}
 	}
-	public void onTwitterAuthenticateCompleted(int response,String key,String secret,String username)
-	{	
-		switch(response)
-		{
-		case TwitterAuthenticationCallBack.AUTHENTICAION_SUCCESSFULL:
-			app.updateTwitterToken(key, secret);
-			app.SetTwitterAuthenticated(true);
-			
-			break;
-		case TwitterAuthenticationCallBack.AUTHENTICAION_FAILURE:
-			break;
-		}
-		
-	}
+
 	public void onBackPressed ()
 	{
 		 app.saveToDataBase();

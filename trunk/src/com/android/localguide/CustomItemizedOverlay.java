@@ -4,10 +4,13 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
@@ -23,8 +26,9 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 	String TAG = "CustomItemizedOverlay";
 	TrackBallFocusListener listener;
 	private Context mContext;
-	
+	Bitmap bitmap;
 	ArrayList<GeoPoint> mGeoPoints;
+	int icons[]={ R.drawable.exit,R.drawable.beer,R.drawable.hotel,R.drawable.hotel,R.drawable.hotel,R.drawable.hotel,R.drawable.hotel};
 	
 	interface TrackBallFocusListener{
 		public void focused(int itemIndex);
@@ -122,8 +126,10 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		
 		for(int i=0; i<overlays.size(); i++){
+			bitmap = BitmapFactory.decodeResource(mContext.getResources(), icons[i] );
 			OverlayItem item = overlays.get(i);
 			Point p = projection.toPixels(item.getPoint(), null);
+			
 			Log.i(TAG, "Point..."+ p.x +" "+ p.y);
 			if(i == 0){
 				x = p.x;
@@ -131,6 +137,7 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 			}
 			else{
 				canvas.drawLine(x, y, p.x, p.y, paint);
+				canvas.drawBitmap(bitmap, null, new Rect((int)x,(int)y,40,40), null);
 				x = p.x;
 				y = p.y;
 			}

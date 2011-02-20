@@ -1,46 +1,32 @@
 package com.android.localguide;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import oauth.signpost.OAuth;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.exception.OAuthNotAuthorizedException;
 
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import android.accounts.Account;
-import android.app.Activity;
 import android.content.Context;
 import android.net.ParseException;
-import android.net.Uri;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 public class TwitterClient {
 	
-	public interface TwitterAuthenticationCallBack
-	{
-		public void onTwitterAuthenticateCompleted(int response,String accessKey,String accessSecret,String username);
-		public static final int AUTHENTICAION_SUCCESSFULL = 1;
-		public static final int AUTHENTICAION_FAILURE = 2;
-	}
 
 	public interface TwitterPostMessageCallBack
 	{
@@ -59,7 +45,8 @@ public class TwitterClient {
     private static final String ACCESS_URL = "http://twitter.com/oauth/access_token";
     private static final String AUTHORIZE_URL = "http://twitter.com/oauth/authorize";
     public static final String FETCH_CREDENTIALS_URI = "http://api.twitter.com/1/account/verify_credentials.json";
-	
+    public static final String UPDATE_STATUS_URI = "http://api.twitter.com/version/statuses/update.json";
+    
     private String mConsumerKey;
     private String mConsumerSecret;
     private String mCallbackUrl;
@@ -79,97 +66,35 @@ public class TwitterClient {
     private WebView mWebView;
     Context mContext;
     private static String result;
-    TwitterAuthenticationCallBack mCB;
     
-    TwitterClient(Context context,TwitterAuthenticationCallBack aCB)
-    {
-    mContext = context;
-    mConsumerKey = CONSUMER_KEY;
-    mConsumerSecret = CONSUMER_SECRET;
-    mCallbackUrl = CALLBACK_URL;
-    mRequestTokenUrl = REQUEST_URL;
-    mAccessTokenUrl = ACCESS_URL;
-    mAuthorizeUrl = AUTHORIZE_URL;
-    mCB = aCB;
-    }
     
+        
     TwitterClient(Context context,String accessKey,String accessSecret)
     {
     mContext = context;
     mConsumerKey = CONSUMER_KEY;
     mConsumerSecret = CONSUMER_SECRET;
+    mAccessKey = accessKey;
+    mAccessSecret = accessSecret;
+    
     mConsumer = new CommonsHttpOAuthConsumer(mConsumerKey, mConsumerSecret);
     mConsumer.setTokenWithSecret(accessKey,accessSecret);
     mClient = new DefaultHttpClient();  
     }
     
-	public void initialize () {
-    	mConsumer = new CommonsHttpOAuthConsumer(mConsumerKey, mConsumerSecret);
-    	mProvider = new CommonsHttpOAuthProvider(mRequestTokenUrl, mAccessTokenUrl,mAuthorizeUrl);
-    	mClient = new DefaultHttpClient();  
-    	mWebView = new WebView(mContext);
-    	((Activity)mContext).setContentView (mWebView);
-    }
-	
-	public void authenticate()
-	{
-    	try {
-    		String authURL = mProvider.retrieveRequestToken(mConsumer, mCallbackUrl);
-	    	 
-			 mWebView.getSettings().setJavaScriptEnabled(true);
-			 mWebView.loadUrl(authURL);
-			 mWebView.setWebViewClient(new RestWebViewClient());
-	    } catch (OAuthMessageSignerException e) {
-	    	e.printStackTrace();
-	    	
-	    } catch (OAuthNotAuthorizedException e) {
-	    	e.printStackTrace();
-	    	
-	    } catch (OAuthExpectationFailedException e) {
-	    	e.printStackTrace();
-	    	
-	    } catch (OAuthCommunicationException e) {
-	    	e.printStackTrace();
-	    	
-	    }
-
-	}
-    private void getToken (Uri uri) {
-    	
-		String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
-		try {
-
-			mProvider.retrieveAccessToken(mConsumer, verifier);
-			mAccessKey = mConsumer.getToken();
-			mAccessSecret = mConsumer.getTokenSecret();
-			
-			System.out.println("Accesskey = " + mAccessKey);
-			System.out.println( "AccessSecret = " + mAccessSecret);
-			
-			fetchUserCredentials();
-		} catch (OAuthMessageSignerException e) {
-			e.printStackTrace();
-		} catch (OAuthNotAuthorizedException e) {
-			e.printStackTrace();
-		} catch (OAuthExpectationFailedException e) {
-			e.printStackTrace();
-		} catch (OAuthCommunicationException e) {
-			e.printStackTrace();
-		} catch(Exception e)
-		{
-			
-		}
-    }
-	
-    public void fetchUserCredentials() throws JSONException,
+	public void postTweet(String tweetMessage) throws JSONException,
             ParseException, IOException, AuthenticationException {
     	try {
     		
     		// create a request that requires authentication
-    		HttpGet post = new HttpGet(FETCH_CREDENTIALS_URI);
+    		HttpPost post = new HttpPost(UPDATE_STATUS_URI);
+    		
 	        final List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
 	        nvps.add(new BasicNameValuePair("include_entities", "true"));
-	     //   mConsumer.setTokenWithSecret(mAccessKey, mAccessSecret); // Working properly key, secret is the order.
+	        nvps.add(new BasicNameValuePair("status", tweetMessage));
+	        post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+	        
+	        mConsumer.setTokenWithSecret(mAccessKey, mAccessSecret); // Working properly key, secret is the order.
 	        
 	        // set this to avoid 417 error (Expectation Failed)
 	        post.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
@@ -193,22 +118,10 @@ public class TwitterClient {
 	        else
 	        {	
 	        	// response status should be 200 OK
-	    		parseResponse(response);
+	    	//	parseResponse(response);
 	    		// release connection
-		        response.getEntity().consumeContent();	
-	        	try
-	        	{
-	        	 JSONObject json=new JSONObject(result);
-		         JSONObject status;
-		         status = json.getJSONObject("status");
-		         // Update the callback with secret and key and username
-		         mCB.onTwitterAuthenticateCompleted(TwitterAuthenticationCallBack.AUTHENTICAION_SUCCESSFULL, mAccessKey, mAccessSecret, json.get("name").toString());
-		         System.out.println("Name is "+json.get("name").toString());
-		         }
-		         catch(Exception e)
-		         {
-		         	e.printStackTrace();
-		         }
+		        response.getEntity().consumeContent();
+		        System.out.println("Response is ******* "+response.toString());
 	        }
 	    } catch (OAuthMessageSignerException e) {
 			e.printStackTrace();
@@ -223,42 +136,4 @@ public class TwitterClient {
 		}
     }
     
- 	 public  static String parseResponse(org.apache.http.HttpResponse response){
-  	    
-	    	try{
-	    	        InputStream in = response.getEntity().getContent();
-	    	        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-	    	        StringBuilder str = new StringBuilder();
-	    	        String line = null;
-	    	        while((line = reader.readLine()) != null){
-	    	            str.append(line + "\n");
-	    	        }
-	    	        in.close();
-	    	        result = str.toString();
-	    
-	    	   }catch(Exception ex){
-	    	        result = "Error";
-	    	   }
-	    	    return result;
-	    	}
-
-	 private class RestWebViewClient extends WebViewClient {
-      	 @Override
-      	 public boolean shouldOverrideUrlLoading(WebView view, String url) {
-      		 
-      		 if (url.toString().startsWith(mCallbackUrl)) {
-      			getToken (Uri.parse(url));
-      		 }
-      		 //else
-      			 //view.loadUrl(url);
-      		 return true;
-      	 }
-      	 
-         @Override
-         public void onReceivedError(WebView view, int errorCode,
-                 String description, String failingUrl) {
-             super.onReceivedError(view, errorCode, description, failingUrl);
-
-         }
-    }
-}
+ }
