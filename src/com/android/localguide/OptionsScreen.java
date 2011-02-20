@@ -175,13 +175,44 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	button4.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
-	    	showDialog(TWITTER_ID);
+	    	if( app.isTwitterAutheticated() == false)
+	    	{
+	    		AlertDialog alertDialog = new AlertDialog.Builder(OptionsScreen.this).create();
+	    		alertDialog.setTitle("Not authenticated");
+	    		alertDialog.setMessage("Please go to help page and authenticate with your twitter account");
+	    		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+	    		      public void onClick(DialogInterface dialog, int which) {
+	    		 
+	    		       //here you can add functions
+	    		 
+	    		    } });
+	    		alertDialog.setIcon(R.drawable.icon);
+	    		alertDialog.show();
+	    	}
+	    	else
+	    		showDialog(TWITTER_ID);
 	    }
      });
 	
 	button5.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
+	    	if( app.isFacebookAuthenticated() == false)
+	    	{
+	    		AlertDialog alertDialog = new AlertDialog.Builder(OptionsScreen.this).create();
+	    		alertDialog.setTitle("Not authenticated");
+	    		alertDialog.setMessage("Please go to help page and authenticate with your facebook account");
+	    		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+	    		      public void onClick(DialogInterface dialog, int which) {
+	    		 
+	    		       //here you can add functions
+	    		 
+	    		    } });
+	    		alertDialog.setIcon(R.drawable.icon);
+	    		alertDialog.show();
+	    		
+	    	}
+	    	else
 	    	showDialog(FACEBOOK_ID);
 	    }
      });
@@ -491,7 +522,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
                 public void onClick(DialogInterface dialog, int whichButton) {
         	    	try
         	    	{
-        	    	mTwitterClient.fetchUserCredentials();
+        	    		mTwitterClient.postTweet("test message from sample android app");
         	    	}
         	    	catch (JSONException e) {
         				e.printStackTrace();
