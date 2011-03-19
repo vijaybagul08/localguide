@@ -85,7 +85,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
         		Intent intent = new Intent();
         		intent.setClass(results.this, OptionsScreen.class);
-       		
+        		intent.setAction("com.mani.results");
         		  Bundle bun = new Bundle();
                   bun.putString("resultString", result);
                   bun.putInt("position", position); 

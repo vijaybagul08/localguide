@@ -38,6 +38,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.localguide.FaceBookClient.FaceBookPostMessageCallBack;
+import com.android.localguide.LocalGuideApplication.favoriteItem;
 
 public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,
 FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack{
@@ -75,7 +76,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     MyAnimation animation;
     ImageView nextArrow;
     ImageView previousArrow;
-    
+    ArrayList<favoriteItem> mFavList;
 	public void onCreate(Bundle savedInstanceState) {
 		
 	super.onCreate(savedInstanceState);
@@ -108,18 +109,77 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     
     /* get the results and position of list where user clicked from results activity */
     
-    Bundle bundle= getIntent().getExtras();
-    result = bundle.getString("resultString");
-    currentaddress =  bundle.getInt("position");
-    //System.out.println("Result is *************** "+result);
+    System.out.println("Options screen calle with intent action********* "+this.getIntent().getAction());
+    
     title = new ArrayList<String>();
     streetaddress = new ArrayList<String>();
     phonenumbers = new ArrayList<String>();
     latitude = new ArrayList<String>();
     longitude = new ArrayList<String>();
     
-    updateAllDetails();
+    Bundle bundle= getIntent().getExtras();
     
+    if(this.getIntent().getAction().equals("com.mani.favorites") == true )
+    {
+    	app = (LocalGuideApplication)this.getApplication();
+    	mFavList = app.getFavoritesList();
+    	for(int count=0;count<mFavList.size();count++)
+    	{
+    		System.out.println("title is "+mFavList.get(count).title);
+    		System.out.println("title is "+mFavList.get(count).streetAddress);
+    		System.out.println("title is "+mFavList.get(count).phoneNumber);
+    		System.out.println("title is "+mFavList.get(count).latitude);
+    		System.out.println("title is "+mFavList.get(count).longitude);
+    		title.add(mFavList.get(count).title);
+    		streetaddress.add(mFavList.get(count).streetAddress);
+    		phonenumbers.add(mFavList.get(count).phoneNumber);
+    		latitude.add(mFavList.get(count).latitude);
+    		longitude.add(mFavList.get(count).longitude);
+    		button7.setText("Delete favorites");
+    		button7.setOnClickListener( new View.OnClickListener(){
+    		    public void onClick(View v)
+    		    {
+    				   if( 	app.deleteFavorites(title.get(currentaddress)) == true )
+    				   {
+    					   Toast.makeText(mContext, "Successfully delted from favorites list", 4000).show();
+    				   }
+    				   else
+    				   {
+    					   Toast.makeText(mContext, "Failed to delete favorites", 4000).show();
+    				   }
+    				   
+    				   
+    		    }
+    	     });
+    	}
+    }
+    else if(this.getIntent().getAction().equals("com.mani.results") == true)
+    {
+    	   
+    	    result = bundle.getString("resultString");
+    	    updateAllDetails();
+    		button7.setOnClickListener( new View.OnClickListener(){
+    		    public void onClick(View v)
+    		    {
+    				   if( 	app.addToFavorites(title.get(currentaddress),
+    				    				streetaddress.get(currentaddress),
+    				    				phonenumbers.get(currentaddress),
+    				    				latitude.get(currentaddress), 
+    				    				longitude.get(currentaddress)) == false )
+    				   {
+    					   Toast.makeText(mContext, "Already present in favorites list", 4000).show();
+    				   }
+    				   else
+    				   {
+    					   Toast.makeText(mContext, "Succesfully added to favorites", 4000).show();
+    				   }
+    		    }
+    	     });
+    	    	
+    }
+    currentaddress =  bundle.getInt("position");
+    
+        
 	String text;
 	text = streetaddress.get(currentaddress);
 	text+="\n";
@@ -230,23 +290,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    }
      });
 	
-	button7.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-			   if( 	app.addToFavorites(title.get(currentaddress),
-			    				streetaddress.get(currentaddress),
-			    				phonenumbers.get(currentaddress),
-			    				latitude.get(currentaddress), 
-			    				longitude.get(currentaddress)) == false )
-			   {
-				   Toast.makeText(mContext, "Already present in favorites list", 4000).show();
-			   }
-			   else
-			   {
-				   Toast.makeText(mContext, "Succesfully added to favorites", 4000).show();
-			   }
-	    }
-     });
+
 	
 	
 	}

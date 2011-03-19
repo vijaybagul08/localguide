@@ -39,9 +39,12 @@ public class FavoritesScreen extends Activity{
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 
             	Intent intent = new Intent();
-        		intent.setClass(FavoritesScreen.this, FavoritesResults.class);
+        		//intent.setClass(FavoritesScreen.this, FavoritesResults.class);
+            	intent.setClass(FavoritesScreen.this, OptionsScreen.class);
+            	intent.setAction("com.mani.favorites");
         		Bundle bun = new Bundle();
-                bun.putInt("position", position); 
+                bun.putInt("position", position);
+                
                 intent.putExtras(bun);
         		startActivity(intent);
         	}

@@ -22,19 +22,21 @@ public final class R {
         public static final int icon=0x7f020008;
         public static final int icon48x48_1=0x7f020009;
         public static final int info=0x7f02000a;
-        public static final int localguide=0x7f02000b;
-        public static final int next_arrow=0x7f02000c;
-        public static final int police=0x7f02000d;
-        public static final int previous_arrow=0x7f02000e;
-        public static final int rowselector=0x7f02000f;
-        public static final int shopping=0x7f020010;
-        public static final int spinner_white_48=0x7f020011;
-        public static final int taxi=0x7f020012;
-        public static final int telephone=0x7f020013;
-        public static final int theatre=0x7f020014;
-        public static final int train=0x7f020015;
-        public static final int ubuntu=0x7f020016;
-        public static final int widgetbackground=0x7f020017;
+        public static final int list_normal=0x7f02000b;
+        public static final int list_pressed=0x7f02000c;
+        public static final int localguide=0x7f02000d;
+        public static final int next_arrow=0x7f02000e;
+        public static final int police=0x7f02000f;
+        public static final int previous_arrow=0x7f020010;
+        public static final int rowselector=0x7f020011;
+        public static final int shopping=0x7f020012;
+        public static final int spinner_white_48=0x7f020013;
+        public static final int taxi=0x7f020014;
+        public static final int telephone=0x7f020015;
+        public static final int theatre=0x7f020016;
+        public static final int train=0x7f020017;
+        public static final int ubuntu=0x7f020018;
+        public static final int widgetbackground=0x7f020019;
     }
     public static final class id {
         public static final int MainLayout=0x7f06000e;
