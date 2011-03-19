@@ -136,9 +136,9 @@ public class LocalGuideApplication extends Application {
     	return true;
 	}
 	
-	public void deleteFavorites(String title)
+	public boolean deleteFavorites(String title)
 	{
-		int position=0;
+		int position=-1;
 		for(int i=0;i<favoritesList.size();i++)
 		{
 			if(favoritesList.get(i).title.contains(title) == true)
@@ -148,7 +148,13 @@ public class LocalGuideApplication extends Application {
 				break;
 			}
 		}
+		if(position != -1)
+		{
 		favoritesList.remove(position);
+		return true;
+		}
+		else
+			return false;
 	}
 	
 	public ArrayList<favoriteItem>	 getFavoritesList()

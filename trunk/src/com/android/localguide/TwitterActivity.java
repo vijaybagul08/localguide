@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +20,15 @@ import oauth.signpost.exception.OAuthNotAuthorizedException;
 
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,6 +54,7 @@ public class TwitterActivity extends Activity{
     private static final String ACCESS_URL = "http://twitter.com/oauth/access_token";
     private static final String AUTHORIZE_URL = "http://twitter.com/oauth/authorize";
     public static final String FETCH_CREDENTIALS_URI = "http://api.twitter.com/1/account/verify_credentials.json";
+    public static final String FETCH_UPDATESTATUS_URI= "http://api.twitter.com/1/statuses/update.json";
     
     private String mConsumerKey;
     private String mConsumerSecret;
@@ -170,8 +178,8 @@ public class TwitterActivity extends Activity{
 			
 			System.out.println("Accesskey = " + mAccessKey);
 			System.out.println( "AccessSecret = " + mAccessSecret);
-			
-			fetchUserCredentials();
+			postTweet("sent to post");
+			//fetchUserCredentials();
 		} catch (OAuthMessageSignerException e) {
 			showError("OauthSigning Exception");
 		} catch (OAuthNotAuthorizedException e) {
@@ -256,6 +264,63 @@ public class TwitterActivity extends Activity{
 				showError("Input Ouput Exception");
 			}
 			}
+	public void postTweet(String tweetMessage) throws JSONException,
+    ParseException, IOException, AuthenticationException {
+try {
+	
+	List<BasicNameValuePair> qparams = new ArrayList<BasicNameValuePair>();
+	qparams.add(new BasicNameValuePair("status","@vinothg123 Visint next week bangkok"));
+	qparams.add(new BasicNameValuePair("in_reply_to_status_id", "9100592710418432"));
+
+    URI uri = URIUtils.createURI(null,FETCH_UPDATESTATUS_URI, -1, null, URLEncodedUtils.format(qparams, "UTF-8"), null);
+    
+	// create a request that requires authentication
+    HttpPost post = new HttpPost(FETCH_UPDATESTATUS_URI);
+    post.setEntity(new UrlEncodedFormEntity(qparams, HTTP.UTF_8)); 
+    post.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
+    mConsumer.setTokenWithSecret(mAccessKey, mAccessSecret); // Working properly key, secret is the order.
+    
+    // sign the request
+    mConsumer.sign(post);
+    // send the request
+	org.apache.http.HttpResponse response = mClient.execute(post);
+
+	int statusCode = response.getStatusLine().getStatusCode();
+    final String reason = response.getStatusLine().getReasonPhrase();
+
+    System.out.println( "Posting message, statuscode = " + statusCode);
+    if (statusCode != 200) {
+        System.out.println("Reason is :::"+ reason);
+    
+        if(statusCode == 401)
+        {
+        	throw new AuthenticationException();
+        }
+    }
+    else
+    {	
+    	// response status should be 200 OK
+	//	parseResponse(response);
+		// release connection
+        response.getEntity().consumeContent();
+        System.out.println("Response is ******* "+response.toString());
+    }
+} catch(URISyntaxException e)
+{
+
+}catch (OAuthMessageSignerException e) {
+
+	e.printStackTrace();
+} catch (OAuthExpectationFailedException e) {
+	e.printStackTrace();
+} catch (OAuthCommunicationException e) {
+	e.printStackTrace();
+} catch (UnsupportedEncodingException e) {
+	e.printStackTrace();
+} catch (IOException e) {
+	e.printStackTrace();
+}
+}
 
 	 public  static String parseResponse(org.apache.http.HttpResponse response){
 	  	    
