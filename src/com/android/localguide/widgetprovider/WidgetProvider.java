@@ -15,6 +15,7 @@ import com.android.localguide.R;
 
 public class WidgetProvider extends AppWidgetProvider{
 	boolean isFirstTimeInstance = true;
+	private final int DELETE_ID = -100;
             
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,int[] appWidgetIds) {
 		
@@ -39,7 +40,7 @@ public class WidgetProvider extends AppWidgetProvider{
 	          */
 			  Intent serviceIntent = new Intent(context, CellLocationService.class);
 			  serviceIntent.putExtra("deleteAppWidgetId", appWidgetId);
-			  serviceIntent.putExtra("appwidgetid", 0);
+			  serviceIntent.putExtra("appwidgetid", DELETE_ID);
 			  context.startService(serviceIntent);
       }
 
@@ -51,7 +52,7 @@ public class WidgetProvider extends AppWidgetProvider{
 		// ON Enabled of widget provider
 		// First time a instance of the widget is added to home screen. 
 		Intent serviceIntent = new Intent(context, CellLocationService.class);
-		serviceIntent.putExtra("appwidgetid", 0);
+		serviceIntent.putExtra("appwidgetid", DELETE_ID);
     }
 	
 	public void onDisabled(Context context)

@@ -118,6 +118,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     longitude = new ArrayList<String>();
     
     Bundle bundle= getIntent().getExtras();
+    System.out.println("Result is ********* "+bundle.getString("resultString"));
     
     if(this.getIntent().getAction().equals("com.mani.favorites") == true )
     {
@@ -155,8 +156,10 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     }
     else if(this.getIntent().getAction().equals("com.mani.results") == true)
     {
-    	   
+    	 	System.out.println("welcome is ********* "+this.getIntent().getStringExtra("welcome"));
     	    result = bundle.getString("resultString");
+    	    System.out.println("position is ********* "+bundle.getString("position1"));
+    	    
     	    updateAllDetails();
     		button7.setOnClickListener( new View.OnClickListener(){
     		    public void onClick(View v)
@@ -177,14 +180,40 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     	     });
     	    	
     }
+    else if(this.getIntent().getAction().equals("com.mani.widgetprodiver") == true)
+    {
+    	 	System.out.println("welcome is ********* "+this.getIntent().getStringExtra("welcome"));
+    	    result = bundle.getString("resultString");
+    	        	    
+    	    updateAllDetails();
+    		button7.setOnClickListener( new View.OnClickListener(){
+    		    public void onClick(View v)
+    		    {
+    				   if( 	app.addToFavorites(title.get(currentaddress),
+    				    				streetaddress.get(currentaddress),
+    				    				phonenumbers.get(currentaddress),
+    				    				latitude.get(currentaddress), 
+    				    				longitude.get(currentaddress)) == false )
+    				   {
+    					   Toast.makeText(mContext, "Already present in favorites list", 4000).show();
+    				   }
+    				   else
+    				   {
+    					   Toast.makeText(mContext, "Succesfully added to favorites", 4000).show();
+    				   }
+    		    }
+    	     });
+    	    	
+    }
+
     currentaddress =  bundle.getInt("position");
-    
+    System.out.println("Position is *************************************** "+currentaddress);
         
 	String text;
 	text = streetaddress.get(currentaddress);
 	text+="\n";
 	text += phonenumbers.get(currentaddress);
-	
+	System.out.println("Position is *************************************** "+text);
 	layout.setTitle(title.get(currentaddress));
 	layout.setAddress(text);
 	layout1.startAnimation(animation);
@@ -294,7 +323,11 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	
 	
 	}
-	
+	protected void onNewIntent(Intent intent) {
+		
+		  String action = intent.getAction();
+	    	System.out.println("on new intent optionscree ************* "+action);
+	}
 	public void onFaceBookmessagePostCompleted(int response)
 	{
 		switch(response)
@@ -372,7 +405,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		      
 		      /* Add the title */
 		      title.add(resultObject.get("titleNoFormatting").toString());
-		      
+		      System.out.println("Title is *************** "+resultObject.get("titleNoFormatting").toString());
 		      /* Add Address */
 		      JSONArray addr;
 		      addr = resultObject.getJSONArray("addressLines");
@@ -385,7 +418,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		        	  temp+=',';
 		      }
 		      streetaddress.add(temp);
-
+		      System.out.println("Title is *************** "+temp);
 		      /* Parse the phone numbers JSONobject */
 		      JSONObject phone;
 		      JSONArray numbers;
@@ -422,7 +455,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 
 		      phNumber+= temp;
 		      phonenumbers.add(phNumber);
-		      
+		      System.out.println("Title is *************** "+phNumber);
 		      /* Add latitude and longitude */
 		      if(resultObject.has("lat"))
 		    	  latitude.add(resultObject.get("lat").toString());

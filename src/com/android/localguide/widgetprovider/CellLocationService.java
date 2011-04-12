@@ -45,6 +45,9 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	int maxPoolSize = 4;
 	long keepAliveTime = 10;
 	SharedPreferences prefs;
+	private final int NO_MATCH = -102;
+	private final int DELETE_ID = -100;
+	private final int UPDATE_ID = -101;
 	class AppWidgetItem {
 		CollectDataForCategory mConnector;
 		int AppWidgetId;
@@ -86,68 +89,75 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-		System.out.println("On startcommand my Service ::::::: ");
+		
 		if(intent !=null)
 		{
-		// appWidget id is set to zero, it means, the intent is triggered to delete a appWidget instance from the list.
-		if(intent.getIntExtra("appwidgetid", 0) != 0 && intent.getIntExtra("appwidgetid", 0) != -1 )
-		{
-			// Some other widget instance is still waiting for its current location
-			if(mLocationIdentifier.isSearchingLocation() == false )
+			System.out.println("On startcommand my Service ::::::: "+intent.getIntExtra("appwidgetid", NO_MATCH) );
+			// appWidget id is set to zero, it means, the intent is triggered to delete a appWidget instance from the list.
+			if (intent.getIntExtra("appwidgetid", NO_MATCH) == UPDATE_ID)
 			{
-				mLocationIdentifier.getLocation();
-			}
-			
-			// Update the view with "Finding the location...."
-	   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
-			view.setTextViewText(R.id.text, "Finding the location ...");
-			System.out.println("Updating the widget id ********* "+intent.getIntExtra("appwidgetid", 0));
-			mAppWidgetManager.updateAppWidget(intent.getIntExtra("appwidgetid", 0), view);
-	   		AppWidgetItem item = new AppWidgetItem();
-			item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
-			item.mConnector= new CollectDataForCategory();
-			item.category = prefs.getString("category"+intent.getIntExtra("appwidgetid", 0), null);
-			System.out.println("category is ********* "+item.category);
-			appWidgetsList.add(item);
-			
-			// Call the looper thread when the first element is added
-			if(appWidgetsList.size() == 1)
-				startUpdatingWidgetProviders();
-		}
-		else if (intent.getIntExtra("appwidgetid", 0) == -1)
-		{
-			// Get the update appWidget id and remove it from the list.
-			int updateAppId = intent.getIntExtra("updateAppWidgetId", 0);
-			System.out.println("update widget id for "+updateAppId);
-			for(int i=0;i<appWidgetsList.size();i++)
-			{
-				if(updateAppId == appWidgetsList.get(i).AppWidgetId)
+				System.out.println("updating for more results ****************** ");
+				// Get the update appWidget id and remove it from the list.
+				int updateAppId = intent.getIntExtra("updateAppWidgetId", 0);
+				System.out.println("update widget id for "+updateAppId);
+				for(int i=0;i<appWidgetsList.size();i++)
 				{
-					System.out.println("update widget id for "+appWidgetsList.get(i).category);
-					break;
+					System.out.println("Appd widget ids are ********** "+appWidgetsList.get(i).AppWidgetId);
+					if(updateAppId == appWidgetsList.get(i).AppWidgetId)
+					{
+						System.out.println("update widget id isssssss 222222 "+appWidgetsList.get(i).category);
+						break;
+					}
 				}
 			}
-		}
-		else if(intent.getIntExtra("appwidgetid", 0) == 0)
-		{
-			// Get the delete appWidget id and remove it from the list.
-			int deleteAppId = intent.getIntExtra("deleteAppWidgetId", 0);
-
-			//Delete from the appWidgetList
-			int i=0;
-			for(i=0;i<appWidgetsList.size();i++)
+			else if(intent.getIntExtra("appwidgetid", NO_MATCH) == DELETE_ID)
 			{
-				if(deleteAppId == appWidgetsList.get(i).AppWidgetId)
+				// Get the delete appWidget id and remove it from the list.
+				int deleteAppId = intent.getIntExtra("deleteAppWidgetId", 0);
+				System.out.println("delete app widget id is ************** "+deleteAppId);
+				
+				//Delete from the appWidgetList
+				int i=0;
+				for(i=0;i<appWidgetsList.size();i++)
 				{
-					appWidgetsList.remove(i);
-					break;
+					if(deleteAppId == appWidgetsList.get(i).AppWidgetId)
+					{
+						appWidgetsList.remove(i);
+						break;
+					}
 				}
+	
+			}
+			else if(intent.getIntExtra("appwidgetid", NO_MATCH) != DELETE_ID && intent.getIntExtra("appwidgetid", NO_MATCH) != UPDATE_ID )
+			{
+				// Some other widget instance is still waiting for its current location
+				if(mLocationIdentifier.isSearchingLocation() == false )
+				{
+					System.out.println("GEtting location ************");
+					mLocationIdentifier.getLocation();
+				}
+				
+				// Update the view with "Finding the location...."
+		   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+				view.setTextViewText(R.id.text, "Finding the location ...");
+				System.out.println("Updating the widget id ********* "+intent.getIntExtra("appwidgetid", 0));
+				mAppWidgetManager.updateAppWidget(intent.getIntExtra("appwidgetid", 0), view);
+		   		AppWidgetItem item = new AppWidgetItem();
+				item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
+				item.mConnector= new CollectDataForCategory();
+				item.category = prefs.getString("category"+intent.getIntExtra("appwidgetid", 0), null);
+				System.out.println("category is ********* "+item.category);
+				appWidgetsList.add(item);
+				
+				// Call the looper thread when the first element is added
+				if(appWidgetsList.size() == 1);
+					startUpdatingWidgetProviders();
 			}
 
-		}
 		}
 		else
 		{
+			System.out.println("else part of onstart ******************** ");
 			// If the process is killed and restarted by the OS, then we need to collect the appwidgetid and categories from
 			// prefs and fill the appWidgetsList then start the looper thread or get location
 	   		AppWidgetItem item = new AppWidgetItem();
@@ -189,7 +199,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 					view.setTextViewText(R.id.text, currlocation);
 					
-					
+					System.out.println("Location is **************** "+currlocation);
 					
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
@@ -236,35 +246,41 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					// Size greater than zero 
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
+						System.out.println("Appd widget ids are ********** "+appWidgetsList.get(i).AppWidgetId);
 						//Check if searching is going for each appwidget
 						//Already connection plese wait 
 						if(appWidgetsList.get(i).mConnector.isStarted == false)
 						{
 							String result;
 							result = appWidgetsList.get(i).mConnector.getValue();
-						
-							RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+					
+							RemoteViews view;
+							//view.setInt(R.id.widgetlayout, "setBackgroundColor", android.graphics.Color.BLACK);
 							if(state)
 							{
-								view.setViewVisibility(R.id.widgetLayout1, View.GONE);
-					            view.setViewVisibility(R.id.widgetLayout2, View.GONE);
+								view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 					            state = false;
 							}
 							else
 							{
-					            view.setViewVisibility(R.id.widgetLayout1, View.GONE);
-					            view.setViewVisibility(R.id.widgetLayout2, View.GONE);
+								view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout1);
 					            state = true;
-							}
+							} 
 				            
 							view.setTextViewText(R.id.text, result);
 							view.setTextViewText(R.id.button, appWidgetsList.get(i).category+"  (More)");
+						
 							Intent intent = new Intent();
 				     		intent.setClass(mContext, OptionsScreen.class);
+				     		intent.setAction("com.mani.widgetprodiver");
+				     		
 				       		Bundle bun = new Bundle();
-				       		//System.out.println(appWidgetsList.get(i).mConnector.result);
-			                bun.putString("resultString",appWidgetsList.get(i).mConnector.result);
-			                bun.putInt("position", appWidgetsList.get(i).mConnector.getCurrentCount()); 
+				       		final String result1 = appWidgetsList.get(i).mConnector.result;
+			                bun.putString("resultString",result1);
+			                System.out.println("Current count is ******** "+appWidgetsList.get(i).mConnector.getCurrentCount());
+			                //System.out.println("Current count is ******** "+result1);
+			                final int position = appWidgetsList.get(i).mConnector.getCurrentCount();
+			                bun.putInt("position", position); 
 			                intent.putExtras(bun);
 			        		
 			                PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
@@ -272,13 +288,13 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			                view.setOnClickPendingIntent(R.id.text, pendingIntent);
 			                
 							Intent serviceIntent = new Intent(mContext, CellLocationService.class);
-							serviceIntent.putExtra("appwidgetid", -1);
 							serviceIntent.putExtra("updateAppWidgetId", appWidgetsList.get(i).AppWidgetId);
-				       		
-			                pendingIntent = PendingIntent.getService(mContext,
+							serviceIntent.putExtra("appwidgetid", DELETE_ID);
+							
+							PendingIntent pendingIntent1 = PendingIntent.getService(mContext,
 			                        0 /* no requestCode */, serviceIntent, 0 /* no flags */);
 			                
-			                view.setOnClickPendingIntent(R.id.button, pendingIntent);
+			                view.setOnClickPendingIntent(R.id.button, pendingIntent1);
 			                
 			                
 							mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
@@ -295,8 +311,12 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	
 		private void startUpdatingWidgetProviders()
 		{
+			
 			if(mLooperThreadHandler != null)
+			{
+				System.out.println("Start updating widget prodivers ***********");
 			mLooperThreadHandler.post(updateWidgetsRunnable ) ;
+			}
 			
 		}
 		
