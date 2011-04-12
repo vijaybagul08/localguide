@@ -37,12 +37,13 @@ public final class R {
         public static final int train=0x7f020017;
         public static final int ubuntu=0x7f020018;
         public static final int widgetbackground=0x7f020019;
+        public static final int widgetbackground1=0x7f02001a;
     }
     public static final class id {
         public static final int MainLayout=0x7f06000e;
         public static final int address=0x7f060016;
         public static final int addressLayout=0x7f06000c;
-        public static final int button=0x7f060033;
+        public static final int button=0x7f060031;
         public static final int button1=0x7f06001b;
         public static final int button2=0x7f06001c;
         public static final int button3=0x7f06001d;
@@ -88,9 +89,8 @@ public final class R {
         public static final int twitterLayout=0x7f060025;
         public static final int twitter_message_edit=0x7f060027;
         public static final int twittertext=0x7f060011;
-        public static final int widgetLayout1=0x7f060031;
-        public static final int widgetLayout2=0x7f060032;
         public static final int widgetlayout=0x7f060030;
+        public static final int widgetlayout1=0x7f060032;
     }
     public static final class layout {
         public static final int calldialog=0x7f030000;
@@ -112,6 +112,7 @@ public final class R {
         public static final int widgetconfigure=0x7f030010;
         public static final int widgetconfigurelistview=0x7f030011;
         public static final int widgetlayout=0x7f030012;
+        public static final int widgetlayout1=0x7f030013;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
