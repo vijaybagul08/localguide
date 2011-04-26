@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -92,17 +93,17 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		
 		if(intent !=null)
 		{
-			System.out.println("On startcommand my Service ::::::: "+intent.getIntExtra("appwidgetid", NO_MATCH) );
+			
 			// appWidget id is set to zero, it means, the intent is triggered to delete a appWidget instance from the list.
 			if (intent.getIntExtra("appwidgetid", NO_MATCH) == UPDATE_ID)
 			{
-				System.out.println("updating for more results ****************** ");
+				
 				// Get the update appWidget id and remove it from the list.
 				int updateAppId = intent.getIntExtra("updateAppWidgetId", 0);
 				System.out.println("update widget id for "+updateAppId);
 				for(int i=0;i<appWidgetsList.size();i++)
 				{
-					System.out.println("Appd widget ids are ********** "+appWidgetsList.get(i).AppWidgetId);
+					
 					if(updateAppId == appWidgetsList.get(i).AppWidgetId)
 					{
 						System.out.println("update widget id isssssss 222222 "+appWidgetsList.get(i).category);
@@ -114,7 +115,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			{
 				// Get the delete appWidget id and remove it from the list.
 				int deleteAppId = intent.getIntExtra("deleteAppWidgetId", 0);
-				System.out.println("delete app widget id is ************** "+deleteAppId);
 				
 				//Delete from the appWidgetList
 				int i=0;
@@ -138,8 +138,12 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 				}
 				
 				// Update the view with "Finding the location...."
+				
 		   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
-				view.setTextViewText(R.id.text, "Finding the location ...");
+		   		if(checkInternetConnection() == true)
+		   			view.setTextViewText(R.id.text, "Finding the location ...");
+		   		else
+		   			view.setTextViewText(R.id.text, "No internet connection..Please connect to internet...");
 				System.out.println("Updating the widget id ********* "+intent.getIntExtra("appwidgetid", 0));
 				mAppWidgetManager.updateAppWidget(intent.getIntExtra("appwidgetid", 0), view);
 		   		AppWidgetItem item = new AppWidgetItem();
@@ -173,6 +177,22 @@ public class CellLocationService extends Service implements LocationIdentifierCa
         return null;
     }
 
+	private boolean checkInternetConnection() {
+
+		ConnectivityManager conMgr = (ConnectivityManager) mContext.getSystemService (mContext.CONNECTIVITY_SERVICE);
+
+		// ARE WE CONNECTED TO THE NET
+
+		if (conMgr.getActiveNetworkInfo() != null
+		&& conMgr.getActiveNetworkInfo().isAvailable()
+		&& conMgr.getActiveNetworkInfo().isConnected()) {
+			return true;
+		} else {
+			return false;
+		}
+
+	} 
+	
 	public void onDestroy()
 	{
 		//Remove the runnables from the looper thread
@@ -240,13 +260,11 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			boolean state = true;
 			public void run() {
 				
-				System.out.println("Lopper thread *****************  Size of list is "+appWidgetsList.size() );
 				if(appWidgetsList.size() > 0)
 				{
 					// Size greater than zero 
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
-						System.out.println("Appd widget ids are ********** "+appWidgetsList.get(i).AppWidgetId);
 						//Check if searching is going for each appwidget
 						//Already connection plese wait 
 						if(appWidgetsList.get(i).mConnector.isStarted == false)
@@ -275,24 +293,22 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 				     		intent.setAction("com.mani.widgetprodiver");
 				     		
 				       		Bundle bun = new Bundle();
-				       		final String result1 = appWidgetsList.get(i).mConnector.result;
+				       		String result1 = appWidgetsList.get(i).mConnector.result;
 			                bun.putString("resultString",result1);
-			                System.out.println("Current count is ******** "+appWidgetsList.get(i).mConnector.getCurrentCount());
-			                //System.out.println("Current count is ******** "+result1);
-			                final int position = appWidgetsList.get(i).mConnector.getCurrentCount();
-			                bun.putInt("position", position); 
+			                int position = appWidgetsList.get(i).mConnector.getCurrentCount();
+			                bun.putInt("position", position-1); 
 			                intent.putExtras(bun);
-			        		
+			        		System.out.println("Position is And update valriable "+position+":::"+(position*appWidgetsList.get(i).AppWidgetId));
 			                PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
-			                        0 /* no requestCode */, intent, 0 /* no flags */);
+			                        (position*appWidgetsList.get(i).AppWidgetId) /* no requestCode */, intent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
 			                view.setOnClickPendingIntent(R.id.text, pendingIntent);
 			                
 							Intent serviceIntent = new Intent(mContext, CellLocationService.class);
 							serviceIntent.putExtra("updateAppWidgetId", appWidgetsList.get(i).AppWidgetId);
-							serviceIntent.putExtra("appwidgetid", DELETE_ID);
+							serviceIntent.putExtra("appwidgetid", UPDATE_ID);
 							
 							PendingIntent pendingIntent1 = PendingIntent.getService(mContext,
-			                        0 /* no requestCode */, serviceIntent, 0 /* no flags */);
+			                        position/* no requestCode */, serviceIntent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
 			                
 			                view.setOnClickPendingIntent(R.id.button, pendingIntent1);
 			                
