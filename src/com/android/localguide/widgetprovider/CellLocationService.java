@@ -8,13 +8,16 @@ import java.util.concurrent.Executors;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -23,7 +26,6 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import com.android.localguide.LocationIdentifier;
@@ -38,8 +40,10 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	private Thread mTask;
 	private Handler mLooperThreadHandler;
 	ArrayList<AppWidgetItem> appWidgetsList;
+	ArrayList<AppWidgetItem> pendingAppWidgetsList;
 	Geocoder mReverseGeoCoder;
 	Context mContext;
+	boolean looperthreadStarted = false;
 	int currentAppWidgetId;
 	ExecutorService executor;
 	int poolSize = 4;
@@ -55,6 +59,42 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		String category;
 	}
 	
+    BroadcastReceiver mNetworkStateIntentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(
+                        ConnectivityManager.CONNECTIVITY_ACTION)) {
+
+                System.out.println("Network is up ***************************************** "+pendingAppWidgetsList.size());
+                if(checkInternetConnection() == true)
+                {
+					// Some other widget instance is still waiting for its current location
+					if(mLocationIdentifier.isSearchingLocation() == false )
+					{
+						System.out.println("GEtting location ************");
+						mLocationIdentifier.getLocation();
+					}
+	
+					for(int i =0;i< pendingAppWidgetsList.size();i++)
+					{
+						AppWidgetItem item = pendingAppWidgetsList.get(i);
+						appWidgetsList.add(item);
+					}
+					
+					pendingAppWidgetsList.clear();
+	
+					// Call the looper thread when the first element is added
+					if(appWidgetsList.size() == 1)
+					{
+						System.out.println("In appwidget size euqals 1 starting thread  ");
+						startUpdatingWidgetProviders();
+					}
+	
+	                }
+                }
+            }
+        };
+
    
 	public void onCreate()
 	{
@@ -67,6 +107,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
         mReverseGeoCoder = new Geocoder(getApplicationContext());
         mContext = this.getApplicationContext();
         appWidgetsList = new ArrayList<AppWidgetItem>();
+        pendingAppWidgetsList = new ArrayList<AppWidgetItem>();
          prefs = getApplicationContext().getSharedPreferences(WidgetConfigureActivity.PREFS_NAME,0);
         //Create a pool of 4 threads to communicate to the cloud to fetch local search results.
         executor= Executors.newFixedThreadPool(4);
@@ -86,6 +127,11 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		//startUpdatingWidgetProviders(); 
 		
 		// Need to register for screen OFF and ON events to stop and pause the looper thread.
+		// receive broadcasts
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        mContext.registerReceiver(mNetworkStateIntentReceiver, filter);
+
 	}
 	
 	public int onStartCommand(Intent intent, int flags, int startId)
@@ -141,21 +187,35 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 				
 		   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 		   		if(checkInternetConnection() == true)
+		   		{
 		   			view.setTextViewText(R.id.text, "Finding the location ...");
+		   			
+		   		}
 		   		else
 		   			view.setTextViewText(R.id.text, "No internet connection..Please connect to internet...");
-				System.out.println("Updating the widget id ********* "+intent.getIntExtra("appwidgetid", 0));
+				
+		   		System.out.println("Updating the widget id ********* "+intent.getIntExtra("appwidgetid", 0));
+			
 				mAppWidgetManager.updateAppWidget(intent.getIntExtra("appwidgetid", 0), view);
 		   		AppWidgetItem item = new AppWidgetItem();
 				item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
 				item.mConnector= new CollectDataForCategory();
 				item.category = prefs.getString("category"+intent.getIntExtra("appwidgetid", 0), null);
 				System.out.println("category is ********* "+item.category);
+		   		if(checkInternetConnection() == false)
+		   		{
+		   			
+		   			pendingAppWidgetsList.add(item);
+		   		}
+		   		else
+		   		{
+		   			System.out.println("Adding item to appwidgestlist ******************* ");
 				appWidgetsList.add(item);
 				
 				// Call the looper thread when the first element is added
 				if(appWidgetsList.size() == 1);
 					startUpdatingWidgetProviders();
+		   		}
 			}
 
 		}
@@ -259,7 +319,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			//int count = 0;
 			boolean state = true;
 			public void run() {
-				
+				System.out.println("Run of thread for widgets update ****************");
 				if(appWidgetsList.size() > 0)
 				{
 					// Size greater than zero 
@@ -330,8 +390,13 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			
 			if(mLooperThreadHandler != null)
 			{
-				System.out.println("Start updating widget prodivers ***********");
-			mLooperThreadHandler.post(updateWidgetsRunnable ) ;
+				
+				if(looperthreadStarted == false)
+				{
+					System.out.println("Start updating widget prodivers ***********");
+					mLooperThreadHandler.post(updateWidgetsRunnable ) ;
+					looperthreadStarted = true;
+				}
 			}
 			
 		}
