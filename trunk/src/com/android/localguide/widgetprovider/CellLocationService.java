@@ -26,6 +26,7 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.RemoteViews;
@@ -55,7 +56,9 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	private final int NO_MATCH = -102;
 	private final int DELETE_ID = -100;
 	private final int UPDATE_ID = -101;
+	private boolean isFirstTimeStarting = false;
 	public static final String PREFS_NAME = "LocalguideWidgetPrefs";
+	
 	class AppWidgetItem {
 		CollectDataForCategory mConnector;
 		int AppWidgetId;
@@ -69,13 +72,11 @@ public class CellLocationService extends Service implements LocationIdentifierCa
                 if (intent.getAction().equals(
                         ConnectivityManager.CONNECTIVITY_ACTION)) {
 
-                System.out.println("Network is up ***************************************** "+pendingAppWidgetsList.size());
                 if(checkInternetConnection() == true)
                 {
 					// Some other widget instance is still waiting for its current location
 					if(mLocationIdentifier.isSearchingLocation() == false )
 					{
-						System.out.println("GEtting location connectivity up************");
 						mLocationIdentifier.getLocation();
 					}
 	
@@ -102,7 +103,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
    
 	public void onCreate()
 	{
-		System.out.println("On create my Service ::::::: ");
+
 		mAppWidgetManager = AppWidgetManager.getInstance(this);
 		mLocationIdentifier = new LocationIdentifier (this.getApplicationContext(),this);
 		TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -112,7 +113,8 @@ public class CellLocationService extends Service implements LocationIdentifierCa
         mContext = this.getApplicationContext();
         appWidgetsList = new ArrayList<AppWidgetItem>();
         pendingAppWidgetsList = new ArrayList<AppWidgetItem>();
-         prefs = getApplicationContext().getSharedPreferences(WidgetConfigureActivity.PREFS_NAME,0);
+        prefs = getApplicationContext().getSharedPreferences(WidgetConfigureActivity.PREFS_NAME,0);
+        isFirstTimeStarting = true;
         //Create a pool of 4 threads to communicate to the cloud to fetch local search results.
         executor= Executors.newFixedThreadPool(4);
         
@@ -156,7 +158,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					
 					if(updateAppId == appWidgetsList.get(i).AppWidgetId)
 					{ 
-						System.out.println("update widget id isssssss 222222 "+appWidgetsList.get(i).category);
 				   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 				   		if(checkInternetConnection() == true)
 				   		{
@@ -196,7 +197,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 				// Some other widget instance is still waiting for its current location
 				if(mLocationIdentifier.isSearchingLocation() == false )
 				{
-					System.out.println("GEtting location ************");
 					mLocationIdentifier.getLocation();
 				}
 				
@@ -211,18 +211,36 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		   		else
 		   			view.setTextViewText(R.id.text, "No internet connection..Please connect to internet...");
 				
-		   		System.out.println("Updating the widget id ********* "+intent.getIntExtra("appwidgetid", 0));
-			
+		
 				mAppWidgetManager.updateAppWidget(intent.getIntExtra("appwidgetid", 0), view);
+				
+				/* There might be a scenario like.. if there is appwidget running and the service crashes 2 times... then 
+				 * appwidget wont be updated. In such case, when the user adds a another widget, then it will come to this place.
+				 * So we need to check if the count from preference value is same as appwidgetList count. It wont be same, so 
+				 * we need to fetch those appwidget ids and category and add it as a item in appWidgetsList. So that , that appwidget
+				 * will be updated from this cycle.
+				 */
+				
+				if(prefs.getInt("count", 0)-1 > appWidgetsList.size() )
+				{
+					for(int i=0;i<prefs.getInt("count", 0)-1;i++)
+					{
+					AppWidgetItem item = new AppWidgetItem();
+					item.AppWidgetId = prefs.getInt("appwidgetid"+i, 0); 
+					item.mConnector= new CollectDataForCategory();
+					item.category = prefs.getString("category"+i, null);
+					appWidgetsList.add(item);
+					}
+				}
+				
 		   		AppWidgetItem item = new AppWidgetItem();
 				item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
 				item.mConnector= new CollectDataForCategory();
 				int currcount = prefs.getInt("count", 0);
 				if(currcount != 0)
 					--currcount;
-				System.out.println("Current count is ******* "+currcount);
 				item.category = prefs.getString("category"+currcount, null);
-				System.out.println("category is ********* "+item.category+":::"+prefs.getInt("appwidgetid"+currcount, 0));
+				
 		   		if(checkInternetConnection() == false)
 		   		{
 		   			
@@ -230,7 +248,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		   		}
 		   		else
 		   		{
-		   			System.out.println("Adding item to appwidgestlist ******************* ");
 				appWidgetsList.add(item);
 				
 				// Call the looper thread when the first element is added
@@ -242,29 +259,24 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		}
 		else
 		{
-			System.out.println("else part of onstart ******************** ");
 			// If the process is killed and restarted by the OS, then we need to collect the appwidgetid and categories from
 			// prefs and fill the appWidgetsList then start the looper thread or get location
 
    		    SharedPreferences prefs = mContext.getSharedPreferences(WidgetConfigureActivity.PREFS_NAME, 0);
 	        Editor editor = null;
 	        int count = prefs.getInt("count", 0);
-	        System.out.println("Count is ********************** "+count);
 	        if(appWidgetsList.size() == 0)
 	        {
 				if(mLocationIdentifier.isSearchingLocation() == false )
 				{
-					System.out.println("GEtting location connectivity up************");
 					mLocationIdentifier.getLocation();
 				}
 		        for(int i=0;i<count;i++)
 		        {
-		        	System.out.println("Count is ********************** "+prefs.getInt("appwidgetid"+i, 0));	
-		        	System.out.println("Count is ********************** "+prefs.getString("category"+i, "X"));
 			   		AppWidgetItem item = new AppWidgetItem();
 					item.AppWidgetId =  prefs.getInt("appwidgetid"+i, 0);
 					item.mConnector= new CollectDataForCategory();
-					item.category = prefs.getString("category"+i, "X");
+					item.category = prefs.getString("category"+i, "");
 					appWidgetsList.add(item);
 		        }
 
@@ -310,7 +322,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	public void gotLocation(Location location)
 	{
 		if(location !=null)
-		System.out.println("Location obtained is ********** "+location.toString());
 		
 		try{
 			
@@ -325,11 +336,10 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					
 					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 					view.setTextViewText(R.id.text, currlocation);
-					
-					System.out.println("Location is **************** "+currlocation);
-					
+
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
+						view.setTextViewText(R.id.button, appWidgetsList.get(i).category+"  (More)");
 						mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						// Form the search String. Use the preferences to fetch the category for corresponding appWidget.
 						String searchString = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0)+","+appWidgetsList.get(i).category;
@@ -350,7 +360,11 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			  }
 			else
 			{
-				
+				System.out.println("Geo reverse coding is having no results..so trying again..");
+				if(mLocationIdentifier.isSearchingLocation() == false )
+				{
+					mLocationIdentifier.getLocation();
+				}
 			}
 		   }
 		   catch(Exception e)
@@ -366,7 +380,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			//int count = 0;
 			boolean state = true;
 			public void run() {
-				System.out.println("Run of thread for widgets update ****************");
+
 				if(appWidgetsList.size() > 0)
 				{
 					// Size greater than zero 
@@ -405,7 +419,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			                int position = appWidgetsList.get(i).mConnector.getCurrentCount();
 			                bun.putInt("position", position-1); 
 			                intent.putExtras(bun);
-			        		System.out.println("Position is And update valriable "+position+":::"+(position*appWidgetsList.get(i).AppWidgetId));
 			                PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
 			                        (position*appWidgetsList.get(i).AppWidgetId) /* no requestCode */, intent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
 			                view.setOnClickPendingIntent(R.id.text, pendingIntent);
@@ -418,11 +431,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			                        position/* no requestCode */, serviceIntent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
 			                
 			                view.setOnClickPendingIntent(R.id.button, pendingIntent1);
-/*			                View v1=null;
-			                if(position == 4)
-			                	v1.getHeight();*/
-			                Animation anim = new AlphaAnimation(0.0f,1.0f);
-			                anim.setDuration(200);
 			                
   						    mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						}
@@ -456,8 +464,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
     			@Override
                 public void onCellLocationChanged(CellLocation location)
                 {
-    				System.out.println("On cell location changed *********************");
-                        String locationString = location.toString();
+    			        String locationString = location.toString();
                         TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
                         GsmCellLocation loc = (GsmCellLocation) tm.getCellLocation();
                         
