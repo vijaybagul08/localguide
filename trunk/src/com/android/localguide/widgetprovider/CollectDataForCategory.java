@@ -25,18 +25,21 @@ public class CollectDataForCategory {
 	int count;
 	String searchString;
 	int resultCount;
-	public ArrayList<String> title;
-	public ArrayList<String> address;
-	public ArrayList<String> phonenumbers;
-	boolean isStarted;
+	int currentResultCount;
+	private ArrayList<DataItem> itemsList;
 	
+	boolean isStarted;
+	class DataItem {
+		String title;
+		String address;
+		String phonenumbers;
+	}
 	CollectDataForCategory()
 	{
 	isStarted = true;  // Assuming true	
 	count = 0;
-    title = new ArrayList<String>();
-    address = new ArrayList<String>();
-    phonenumbers = new ArrayList<String>();
+	currentResultCount = 0;
+    itemsList = new ArrayList<DataItem>();
 	}
 	
 	public void setSearchString(String search)
@@ -57,36 +60,46 @@ public class CollectDataForCategory {
 	{
 		return count;
 	}
+	
+	public void updateMoreResults()
+	{
+		currentResultCount+=8;
+		isStarted = true;
+		count=0;
+		itemsList.clear();
+		sendSearchRequest();
+		
+	}
 	public String getValue()
 	{
 		String value="";
 		if(count <resultCount)
 		{
-			value = title.get(count);
+			value = itemsList.get(count).title;
 			value += "\n";
-			value += address.get(count);
+			value += itemsList.get(count).address;
 			value += "\n";
-			value += phonenumbers.get(count);			
+			value += itemsList.get(count).phonenumbers;			
 			count++;
 		}
 		else
 		{
 			count = 0;
-			value = title.get(count);
+			value = itemsList.get(count).title;
 			value += "\n";
-			value += address.get(count);
+			value += itemsList.get(count).address;
 			value += "\n";
-			value += phonenumbers.get(count);			
+			value += itemsList.get(count).phonenumbers;			
 		}
 		
 		return value;
 	}
 	public  void sendSearchRequest()
 	   {
-		System.out.println("In search request is *************** "+searchString+"::"+isStarted);
-		HttpClient client = new DefaultHttpClient();
-		String query = "http://ajax.googleapis.com/ajax/services/search/local?hl=en&v=1.0&rsz=8&q="+searchString+"&start=0";
 		
+		HttpClient client = new DefaultHttpClient();
+		String query = "http://ajax.googleapis.com/ajax/services/search/local?hl=en&v=1.0&rsz=8&q="+searchString+"&start="+currentResultCount;
+		System.out.println("In search request is *************** "+query);
 		try {
 			URL url = new URL(query);
 			URI uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
@@ -146,9 +159,11 @@ public class CollectDataForCategory {
 	         System.out.println("update result resultcount is  ********** "+resultCount);
 	         for (int i = 0; i < resultCount; i++)
 	           {
+	        	 DataItem item = new DataItem();
+		        
 		           JSONObject resultObject = ja.getJSONObject(i);
-		           title.add(resultObject.get("titleNoFormatting").toString());
-		           JSONArray addr;
+		           item.title = resultObject.get("titleNoFormatting").toString();
+			       JSONArray addr;
 		           addr = resultObject.getJSONArray("addressLines");
 		           int count = addr.length();
 		           String addrr="";
@@ -158,7 +173,7 @@ public class CollectDataForCategory {
 		               if(j==0)
 		             	  addrr+=',';
 		           }
-		           address.add(addrr);
+		           item.address = addrr;
 		           
 			       JSONObject phone;
 			       JSONArray numbers;
@@ -179,14 +194,13 @@ public class CollectDataForCategory {
 				       }
 			         }
 			       phNumber+= temp;
-			       phonenumbers.add(phNumber);
+			       item.phonenumbers = phNumber;
+			       itemsList.add(item);
 		        }
 	         
+
 	         //Update isStarted boolean
 	         isStarted = false;
-	         System.out.println("Size of tile ********* "+title.size());
-	         System.out.println("Size of addrress ********* "+address.size());
-	         System.out.println("Size of phonenumber ********* "+phonenumbers.size());
 	         }
 	         catch(Exception e)
 	         {

@@ -13,11 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -26,6 +26,8 @@ import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.RemoteViews;
 
 import com.android.localguide.LocationIdentifier;
@@ -53,10 +55,12 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	private final int NO_MATCH = -102;
 	private final int DELETE_ID = -100;
 	private final int UPDATE_ID = -101;
+	public static final String PREFS_NAME = "LocalguideWidgetPrefs";
 	class AppWidgetItem {
 		CollectDataForCategory mConnector;
 		int AppWidgetId;
 		String category;
+		
 	}
 	
     BroadcastReceiver mNetworkStateIntentReceiver = new BroadcastReceiver() {
@@ -71,7 +75,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					// Some other widget instance is still waiting for its current location
 					if(mLocationIdentifier.isSearchingLocation() == false )
 					{
-						System.out.println("GEtting location ************");
+						System.out.println("GEtting location connectivity up************");
 						mLocationIdentifier.getLocation();
 					}
 	
@@ -151,8 +155,21 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 				{
 					
 					if(updateAppId == appWidgetsList.get(i).AppWidgetId)
-					{
+					{ 
 						System.out.println("update widget id isssssss 222222 "+appWidgetsList.get(i).category);
+				   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+				   		if(checkInternetConnection() == true)
+				   		{
+				   			view.setTextViewText(R.id.text, "Finding the location ...");
+				   			
+				   		}
+				   		else
+				   			view.setTextViewText(R.id.text, "No internet connection..Please connect to internet...");
+						
+						mAppWidgetManager.updateAppWidget(updateAppId, view);
+						appWidgetsList.get(i).mConnector.updateMoreResults();
+						/* ask for update from CollectDataForCategory */
+						
 						break;
 					}
 				}
@@ -200,8 +217,12 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		   		AppWidgetItem item = new AppWidgetItem();
 				item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
 				item.mConnector= new CollectDataForCategory();
-				item.category = prefs.getString("category"+intent.getIntExtra("appwidgetid", 0), null);
-				System.out.println("category is ********* "+item.category);
+				int currcount = prefs.getInt("count", 0);
+				if(currcount != 0)
+					--currcount;
+				System.out.println("Current count is ******* "+currcount);
+				item.category = prefs.getString("category"+currcount, null);
+				System.out.println("category is ********* "+item.category+":::"+prefs.getInt("appwidgetid"+currcount, 0));
 		   		if(checkInternetConnection() == false)
 		   		{
 		   			
@@ -224,10 +245,36 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			System.out.println("else part of onstart ******************** ");
 			// If the process is killed and restarted by the OS, then we need to collect the appwidgetid and categories from
 			// prefs and fill the appWidgetsList then start the looper thread or get location
-	   		AppWidgetItem item = new AppWidgetItem();
-			item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
-			item.mConnector= new CollectDataForCategory();
-			appWidgetsList.add(item);
+
+   		    SharedPreferences prefs = mContext.getSharedPreferences(WidgetConfigureActivity.PREFS_NAME, 0);
+	        Editor editor = null;
+	        int count = prefs.getInt("count", 0);
+	        System.out.println("Count is ********************** "+count);
+	        if(appWidgetsList.size() == 0)
+	        {
+				if(mLocationIdentifier.isSearchingLocation() == false )
+				{
+					System.out.println("GEtting location connectivity up************");
+					mLocationIdentifier.getLocation();
+				}
+		        for(int i=0;i<count;i++)
+		        {
+		        	System.out.println("Count is ********************** "+prefs.getInt("appwidgetid"+i, 0));	
+		        	System.out.println("Count is ********************** "+prefs.getString("category"+i, "X"));
+			   		AppWidgetItem item = new AppWidgetItem();
+					item.AppWidgetId =  prefs.getInt("appwidgetid"+i, 0);
+					item.mConnector= new CollectDataForCategory();
+					item.category = prefs.getString("category"+i, "X");
+					appWidgetsList.add(item);
+		        }
+
+				
+	        }
+	        else
+	        {
+	        	System.out.println("Size if has some values ");
+	        }
+//	   		appWidgetsList.add(item);
 			startUpdatingWidgetProviders();  
 		}
 		return START_STICKY;
@@ -285,7 +332,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					{
 						mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						// Form the search String. Use the preferences to fetch the category for corresponding appWidget.
-						String searchString = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0)+","+prefs.getString("category"+appWidgetsList.get(i).AppWidgetId, null);
+						String searchString = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0)+","+appWidgetsList.get(i).category;
 						appWidgetsList.get(i).mConnector.setSearchString(searchString);
 						appWidgetsList.get(i).mConnector.setStartedSearch(true);
 						
@@ -326,7 +373,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
 						//Check if searching is going for each appwidget
-						//Already connection plese wait 
+						//Already connection please wait 
 						if(appWidgetsList.get(i).mConnector.isStarted == false)
 						{
 							String result;
@@ -371,9 +418,13 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			                        position/* no requestCode */, serviceIntent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
 			                
 			                view.setOnClickPendingIntent(R.id.button, pendingIntent1);
+/*			                View v1=null;
+			                if(position == 4)
+			                	v1.getHeight();*/
+			                Animation anim = new AlphaAnimation(0.0f,1.0f);
+			                anim.setDuration(200);
 			                
-			                
-							mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
+  						    mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						}
 					}
 					
@@ -393,7 +444,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 				
 				if(looperthreadStarted == false)
 				{
-					System.out.println("Start updating widget prodivers ***********");
 					mLooperThreadHandler.post(updateWidgetsRunnable ) ;
 					looperthreadStarted = true;
 				}
