@@ -23,13 +23,26 @@ public class WidgetProvider extends AppWidgetProvider{
 	
 	public void onDeleted(Context context, int[] appWidgetIds)
 	{
-		
+		SharedPreferences config = context.getSharedPreferences(WidgetConfigureActivity.PREFS_NAME, 0);
+		SharedPreferences.Editor configEditor = config.edit();
+ 
 	      for (int appWidgetId : appWidgetIds) {
-	      
-		      SharedPreferences config = context.getSharedPreferences(WidgetConfigureActivity.PREFS_NAME, 0);
-	          SharedPreferences.Editor configEditor = config.edit();
-	          configEditor.remove("category"+appWidgetId);
-	          configEditor.commit();
+		      
+		      int count = config.getInt("count", 0);
+		      for(int i=0;i<count;i++)
+		      {
+		    	  System.out.println("Appwidget ids are ********** "+config.getInt("appwidgetid"+i, 0)+"::"+config.getString("category"+count, "null"));
+		    	  if(config.getInt("appwidgetid"+i, 0) ==  appWidgetId)
+		    	  {
+		    		  System.out.println("Removing from the prefs......"+appWidgetId);
+		    		  configEditor.remove("category"+count);
+		    		  configEditor.remove("appwidgetid"+count);
+		    		  configEditor.putInt("count", --count);
+		    		  configEditor.commit();
+		    		  break;
+		    	  }
+		      }
+		      System.out.println("Appwidget ids count is  ********** "+config.getInt("count", -1));
 	          
 	          /* Since broadcast receivers cannot bind to a service, we couldn't communicate service
 	          	 instance, to intimate that a appWidgetId is deleted.So i found a shortcut, like
