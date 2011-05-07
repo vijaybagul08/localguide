@@ -161,11 +161,11 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 				   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 				   		if(checkInternetConnection() == true)
 				   		{
-				   			view.setTextViewText(R.id.text, "Finding the location ...");
+				   			view.setTextViewText(R.id.title, "Finding the location ...");
 				   			
 				   		}
 				   		else
-				   			view.setTextViewText(R.id.text, "No internet connection..Please connect to internet...");
+				   			view.setTextViewText(R.id.title, "No internet connection..Please connect to internet...");
 						
 						mAppWidgetManager.updateAppWidget(updateAppId, view);
 						appWidgetsList.get(i).mConnector.updateMoreResults();
@@ -205,11 +205,11 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
 		   		if(checkInternetConnection() == true)
 		   		{
-		   			view.setTextViewText(R.id.text, "Finding the location ...");
+		   			view.setTextViewText(R.id.title, "Finding the location ...");
 		   			
 		   		}
 		   		else
-		   			view.setTextViewText(R.id.text, "No internet connection..Please connect to internet...");
+		   			view.setTextViewText(R.id.title, "No internet connection..Please connect to internet...");
 				
 		
 				mAppWidgetManager.updateAppWidget(intent.getIntExtra("appwidgetid", 0), view);
@@ -335,7 +335,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					currlocation+="Loading the results....... pls wait";
 					
 					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
-					view.setTextViewText(R.id.text, currlocation);
+					view.setTextViewText(R.id.title, currlocation);
 
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
@@ -390,9 +390,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 						//Already connection please wait 
 						if(appWidgetsList.get(i).mConnector.isStarted == false)
 						{
-							String result;
-							result = appWidgetsList.get(i).mConnector.getValue();
-					
+				
 							RemoteViews view;
 							//view.setInt(R.id.widgetlayout, "setBackgroundColor", android.graphics.Color.BLACK);
 							if(state)
@@ -406,7 +404,9 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					            state = true;
 							} 
 				            
-							view.setTextViewText(R.id.text, result);
+							view.setTextViewText(R.id.title, appWidgetsList.get(i).mConnector.getTitle());
+							view.setTextViewText(R.id.address, appWidgetsList.get(i).mConnector.getAddress());
+							view.setTextViewText(R.id.phonenumber, appWidgetsList.get(i).mConnector.getPhoneNumbers());
 							view.setTextViewText(R.id.button, appWidgetsList.get(i).category+"  (More)");
 						
 							Intent intent = new Intent();

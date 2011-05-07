@@ -70,26 +70,54 @@ public class CollectDataForCategory {
 		sendSearchRequest();
 		
 	}
-	public String getValue()
+	
+	public String getTitle()
 	{
 		String value="";
 		if(count <resultCount)
 		{
 			value = itemsList.get(count).title;
-			value += "\n";
-			value += itemsList.get(count).address;
-			value += "\n";
-			value += itemsList.get(count).phonenumbers;			
 			count++;
 		}
 		else
 		{
 			count = 0;
 			value = itemsList.get(count).title;
-			value += "\n";
-			value += itemsList.get(count).address;
-			value += "\n";
+		}
+		
+		return value;
+		
+	}
+	public String getPhoneNumbers()
+	{
+		String value="";
+		if(count <resultCount)
+		{
 			value += itemsList.get(count).phonenumbers;			
+			count++;
+		}
+		else
+		{
+			count = 0;
+			value += itemsList.get(count).phonenumbers;			
+		}
+		
+		return value;
+		
+	}
+	
+	public String getAddress()
+	{
+		String value="";
+		if(count <resultCount)
+		{
+			value += itemsList.get(count).address;
+			count++;
+		}
+		else
+		{
+			count = 0;
+			value += itemsList.get(count).address;
 		}
 		
 		return value;
