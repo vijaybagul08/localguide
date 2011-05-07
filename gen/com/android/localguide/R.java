@@ -95,7 +95,6 @@ public final class R {
         public static final int twitter_message_edit=0x7f070027;
         public static final int twittertext=0x7f070011;
         public static final int widgetlayout=0x7f070031;
-        public static final int widgetlayout1=0x7f070033;
     }
     public static final class layout {
         public static final int calldialog=0x7f030000;
