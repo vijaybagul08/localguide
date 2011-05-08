@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -158,7 +160,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					
 					if(updateAppId == appWidgetsList.get(i).AppWidgetId)
 					{ 
-				   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+				   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout3);
 				   		if(checkInternetConnection() == true)
 				   		{
 				   			view.setTextViewText(R.id.title, "Finding the location ...");
@@ -166,7 +168,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 				   		}
 				   		else
 				   			view.setTextViewText(R.id.title, "No internet connection..Please connect to internet...");
-						
+
 						mAppWidgetManager.updateAppWidget(updateAppId, view);
 						appWidgetsList.get(i).mConnector.updateMoreResults();
 						/* ask for update from CollectDataForCategory */
@@ -202,7 +204,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 				
 				// Update the view with "Finding the location...."
 				
-		   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+		   		RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout3);
 		   		if(checkInternetConnection() == true)
 		   		{
 		   			view.setTextViewText(R.id.title, "Finding the location ...");
@@ -211,7 +213,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		   		else
 		   			view.setTextViewText(R.id.title, "No internet connection..Please connect to internet...");
 				
-		
 				mAppWidgetManager.updateAppWidget(intent.getIntExtra("appwidgetid", 0), view);
 				
 				/* There might be a scenario like.. if there is appwidget running and the service crashes 2 times... then 
@@ -330,16 +331,15 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		   
 			if (mAddressList.size()> 0){
 			
-					String  currlocation = "Location: "+mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
-					currlocation+="\n";
+					String  currlocation = "Location: \n\n"+mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
+					currlocation+="\n\n";
 					currlocation+="Loading the results....... pls wait";
 					
-					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout3);
 					view.setTextViewText(R.id.title, currlocation);
 
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
-						view.setTextViewText(R.id.button, appWidgetsList.get(i).category+"  (More)");
 						mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						// Form the search String. Use the preferences to fetch the category for corresponding appWidget.
 						String searchString = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0)+","+appWidgetsList.get(i).category;
@@ -407,7 +407,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 							view.setTextViewText(R.id.title, appWidgetsList.get(i).mConnector.getTitle());
 							view.setTextViewText(R.id.address, appWidgetsList.get(i).mConnector.getAddress());
 							view.setTextViewText(R.id.phonenumber, appWidgetsList.get(i).mConnector.getPhoneNumbers());
-							view.setTextViewText(R.id.button, appWidgetsList.get(i).category+"  (More)");
 						
 							Intent intent = new Intent();
 				     		intent.setClass(mContext, OptionsScreen.class);
@@ -427,11 +426,30 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 							serviceIntent.putExtra("updateAppWidgetId", appWidgetsList.get(i).AppWidgetId);
 							serviceIntent.putExtra("appwidgetid", UPDATE_ID);
 							
-							PendingIntent pendingIntent1 = PendingIntent.getService(mContext,
+							pendingIntent = PendingIntent.getService(mContext,
 			                        position/* no requestCode */, serviceIntent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
 			                
-			                view.setOnClickPendingIntent(R.id.button, pendingIntent1);
+			                view.setOnClickPendingIntent(R.id.button, pendingIntent);
+			            
+			                /* To make call options */
 			                
+			       		    Intent callIntent = new Intent(Intent.ACTION_CALL);
+			 		        String numberString ="tel:";
+			 		        numberString+=appWidgetsList.get(i).mConnector.getPhoneNumbers();
+			 		        callIntent.setData(Uri.parse(numberString));
+			                pendingIntent = PendingIntent.getActivity(mContext,
+			                        (position*appWidgetsList.get(i).AppWidgetId) /* no requestCode */, callIntent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
+			                view.setOnClickPendingIntent(R.id.call, pendingIntent);
+			 		        
+			                /* To send message */
+			        		Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+			        		String smsBody= appWidgetsList.get(i).mConnector.getTitle()+","+appWidgetsList.get(i).mConnector.getAddress()+","+appWidgetsList.get(i).mConnector.getPhoneNumbers();
+			        		sendIntent.putExtra("sms_body", smsBody); 
+			        		sendIntent.setType("vnd.android-dir/mms-sms");
+			                pendingIntent = PendingIntent.getActivity(mContext,
+			                        (position*appWidgetsList.get(i).AppWidgetId) /* no requestCode */, sendIntent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
+			                view.setOnClickPendingIntent(R.id.message, pendingIntent);
+
   						    mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						}
 					}
