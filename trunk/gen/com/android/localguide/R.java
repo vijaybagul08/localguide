@@ -15,7 +15,12 @@ public final class R {
     }
     public static final class attr {
     }
+    public static final class color {
+        public static final int app_background_color=0x7f070000;
+        public static final int list_elements_bkg=0x7f070001;
+    }
     public static final class drawable {
+        public static final int app_bkg_color=0x7f020020;
         public static final int beer=0x7f020000;
         public static final int exit=0x7f020001;
         public static final int favorite=0x7f020002;
@@ -27,6 +32,7 @@ public final class R {
         public static final int icon=0x7f020008;
         public static final int icon48x48_1=0x7f020009;
         public static final int info=0x7f02000a;
+        public static final int list_elements_color=0x7f020021;
         public static final int list_normal=0x7f02000b;
         public static final int list_pressed=0x7f02000c;
         public static final int localguide=0x7f02000d;
@@ -50,59 +56,59 @@ public final class R {
         public static final int widgetbuttonpress=0x7f02001f;
     }
     public static final class id {
-        public static final int MainLayout=0x7f07000e;
-        public static final int address=0x7f070016;
-        public static final int addressLayout=0x7f07000c;
-        public static final int button=0x7f070034;
-        public static final int button1=0x7f07001b;
-        public static final int button2=0x7f07001c;
-        public static final int button3=0x7f07001d;
-        public static final int button4=0x7f07001e;
-        public static final int button5=0x7f07001f;
-        public static final int button6=0x7f070020;
-        public static final int button7=0x7f070021;
-        public static final int call=0x7f070032;
-        public static final int call_list=0x7f070003;
-        public static final int categories=0x7f07002a;
-        public static final int categories_list=0x7f07002f;
-        public static final int category=0x7f07002e;
-        public static final int categoryIcon=0x7f070030;
-        public static final int categoryText=0x7f070006;
-        public static final int categoryimage=0x7f070005;
-        public static final int categotytextbox=0x7f070028;
-        public static final int checkbox=0x7f07002c;
-        public static final int close=0x7f070001;
-        public static final int description=0x7f07000f;
-        public static final int facebook=0x7f070014;
-        public static final int facebooktext=0x7f070013;
-        public static final int gridview=0x7f070008;
-        public static final int hint=0x7f070026;
-        public static final int information=0x7f070010;
-        public static final int layout_call=0x7f070000;
-        public static final int layout_configure=0x7f07002d;
-        public static final int layout_root=0x7f070007;
-        public static final int list=0x7f070009;
-        public static final int locationtextbox=0x7f07002b;
-        public static final int logo=0x7f070024;
-        public static final int mapview=0x7f070017;
-        public static final int message=0x7f070033;
-        public static final int morebutton=0x7f070023;
-        public static final int myTableLayout=0x7f07001a;
-        public static final int myTableLayout1=0x7f07000a;
-        public static final int next=0x7f07000d;
-        public static final int phonenumber=0x7f070004;
-        public static final int previous=0x7f07000b;
-        public static final int resultsLayout=0x7f070022;
-        public static final int search=0x7f070029;
-        public static final int spinner=0x7f070018;
-        public static final int text=0x7f070019;
-        public static final int text1=0x7f070002;
-        public static final int title=0x7f070015;
-        public static final int twitter=0x7f070012;
-        public static final int twitterLayout=0x7f070025;
-        public static final int twitter_message_edit=0x7f070027;
-        public static final int twittertext=0x7f070011;
-        public static final int widgetlayout=0x7f070031;
+        public static final int MainLayout=0x7f08000e;
+        public static final int address=0x7f080016;
+        public static final int addressLayout=0x7f08000c;
+        public static final int button=0x7f080034;
+        public static final int button1=0x7f08001b;
+        public static final int button2=0x7f08001c;
+        public static final int button3=0x7f08001d;
+        public static final int button4=0x7f08001e;
+        public static final int button5=0x7f08001f;
+        public static final int button6=0x7f080020;
+        public static final int button7=0x7f080021;
+        public static final int call=0x7f080032;
+        public static final int call_list=0x7f080003;
+        public static final int categories=0x7f08002a;
+        public static final int categories_list=0x7f08002f;
+        public static final int category=0x7f08002e;
+        public static final int categoryIcon=0x7f080030;
+        public static final int categoryText=0x7f080006;
+        public static final int categoryimage=0x7f080005;
+        public static final int categotytextbox=0x7f080028;
+        public static final int checkbox=0x7f08002c;
+        public static final int close=0x7f080001;
+        public static final int description=0x7f08000f;
+        public static final int facebook=0x7f080014;
+        public static final int facebooktext=0x7f080013;
+        public static final int gridview=0x7f080008;
+        public static final int hint=0x7f080026;
+        public static final int information=0x7f080010;
+        public static final int layout_call=0x7f080000;
+        public static final int layout_configure=0x7f08002d;
+        public static final int layout_root=0x7f080007;
+        public static final int list=0x7f080009;
+        public static final int locationtextbox=0x7f08002b;
+        public static final int logo=0x7f080024;
+        public static final int mapview=0x7f080017;
+        public static final int message=0x7f080033;
+        public static final int morebutton=0x7f080023;
+        public static final int myTableLayout=0x7f08001a;
+        public static final int myTableLayout1=0x7f08000a;
+        public static final int next=0x7f08000d;
+        public static final int phonenumber=0x7f080004;
+        public static final int previous=0x7f08000b;
+        public static final int resultsLayout=0x7f080022;
+        public static final int search=0x7f080029;
+        public static final int spinner=0x7f080018;
+        public static final int text=0x7f080019;
+        public static final int text1=0x7f080002;
+        public static final int title=0x7f080015;
+        public static final int twitter=0x7f080012;
+        public static final int twitterLayout=0x7f080025;
+        public static final int twitter_message_edit=0x7f080027;
+        public static final int twittertext=0x7f080011;
+        public static final int widgetlayout=0x7f080031;
     }
     public static final class layout {
         public static final int calldialog=0x7f030000;
