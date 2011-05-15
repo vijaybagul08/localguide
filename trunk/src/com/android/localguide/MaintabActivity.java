@@ -42,7 +42,7 @@ public class MaintabActivity extends TabActivity{
 	    tabHost.setCurrentTab(1);
 	    for(int i=0;i<tabHost.getTabWidget().getChildCount();i++)
 	    	{
-	    	     //   tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#7392B5"));
+	    	       tabHost.getTabWidget().getChildAt(i).setBackgroundDrawable(this.getResources().getDrawable(R.color.list_elements_bkg));
 	    	}
 
 	}

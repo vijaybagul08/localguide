@@ -73,9 +73,10 @@ public class CellLocationService extends Service implements LocationIdentifierCa
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(
                         ConnectivityManager.CONNECTIVITY_ACTION)) {
-
+System.out.println("Network is connectivity is changed ****************** ");
                 if(checkInternetConnection() == true)
                 {
+                	System.out.println("Network is connectivity is changed ****************** 111");
 					// Some other widget instance is still waiting for its current location
 					if(mLocationIdentifier.isSearchingLocation() == false )
 					{

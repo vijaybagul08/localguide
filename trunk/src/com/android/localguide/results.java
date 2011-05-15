@@ -22,9 +22,8 @@ import org.json.JSONObject;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -33,7 +32,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,7 +49,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 	Handler mHandler = new Handler();
 	private int mCurrentResultCount = 0;
 	SpinnerButton moreButton;
-
+    Context mContext;
 	private Runnable mDelayedTask = new Runnable() {
         public void run() {
         	sendSearchRequest(mCurrentResultCount);
@@ -62,6 +60,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
       
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.results);
+        mContext = this;
         Bundle bundle= getIntent().getExtras();
         searchString = bundle.getString("categoryString");
         searchString += " ";
@@ -81,6 +80,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         animation = new MyAnimation();
         mScreenLayout.startAnimation(animation);
         ListView list =  getListView();
+        
         list.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
         		Intent intent = new Intent();
@@ -212,7 +212,8 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
             ViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.listview, null);
-                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, 100);
+                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, 120);
+                //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 convertView.setLayoutParams(params);
                 holder = new ViewHolder();
                 holder.title = (TextView) convertView.findViewById(R.id.title);
@@ -222,13 +223,12 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.title.setText(title.get(position));
-            holder.title.setTextColor(Color.rgb(0xbf, 0x6e, 0x46));
+            holder.title.setTextColor(Color.rgb(0xff, 0xff, 0xff));
             holder.title.setTextSize(22);
             
             holder.address.setText(address.get(position));
-            holder.address.setTextColor(Color.rgb(0xbf, 0x6e, 0x46));
+            holder.address.setTextColor(Color.rgb(0xff, 0xff, 0xff));
             holder.address.setTextSize(18);
-            
             return convertView;
         }
          class ViewHolder {
