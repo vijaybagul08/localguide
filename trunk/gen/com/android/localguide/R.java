@@ -12,12 +12,15 @@ public final class R {
         public static final int fade_in=0x7f040000;
         public static final int from_right=0x7f040001;
         public static final int layout_anim=0x7f040002;
+        public static final int layout_animation=0x7f040003;
+        public static final int slide_in_left=0x7f040004;
     }
     public static final class attr {
     }
     public static final class color {
         public static final int app_background_color=0x7f070000;
-        public static final int list_elements_bkg=0x7f070001;
+        public static final int edittext_bkg=0x7f070001;
+        public static final int list_elements_bkg=0x7f070002;
     }
     public static final class drawable {
         public static final int app_bkg_color=0x7f020023;

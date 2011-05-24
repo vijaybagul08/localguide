@@ -23,20 +23,21 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout.LayoutParams;
 
 public class results extends ListActivity implements SpinnerButton.SpinnerButtonCallback {
 
@@ -71,16 +72,23 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         mHandler.postDelayed(mDelayedTask, 2000);
         
         mScreenLayout = (LinearLayout) findViewById(R.id.resultsLayout);
-        moreButton = (SpinnerButton)findViewById(R.id.morebutton);
+     /*   moreButton = (SpinnerButton)findViewById(R.id.morebutton);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 50);
         moreButton.setLayoutParams(params);
         moreButton.setTextSize(30);
         moreButton.setParent(this);
-        moreButton.start();
+        moreButton.start();*/
         animation = new MyAnimation();
         mScreenLayout.startAnimation(animation);
         ListView list =  getListView();
+        AnimationSet set = new AnimationSet(true);
+        Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
+        animation1.setDuration(300);
+        set.addAnimation(animation);
+        LayoutAnimationController controller = new LayoutAnimationController(set,1.0f);
         
+        list.setLayoutAnimation(controller);
+
         list.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
         		Intent intent = new Intent();
@@ -212,9 +220,9 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
             ViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.listview, null);
-                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, 120);
-                //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                convertView.setLayoutParams(params);
+//                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, 120);
+//                //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                convertView.setLayoutParams(params);
                 holder = new ViewHolder();
                 holder.title = (TextView) convertView.findViewById(R.id.title);
                 holder.address = (TextView) convertView.findViewById(R.id.address);
