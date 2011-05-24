@@ -5,12 +5,13 @@
     android:id="@+id/resultsLayout"
     android:layout_width="match_parent" 
     android:layout_height="match_parent"
-    android:background="@color/app_background_color"
+    android:background="#ff0000"
 >
 <com.android.localguide.SpinnerButton
     android:id="@+id/morebutton"
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent" 
+    android:visibility="gone"
 />
  
 <ListView android:id="@android:id/list"
