@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 public class MaintabActivity extends TabActivity{
 	TabHost tabHost;
@@ -42,11 +44,13 @@ public class MaintabActivity extends TabActivity{
 	    tabHost.setCurrentTab(1);
 	    for(int i=0;i<tabHost.getTabWidget().getChildCount();i++)
 	    	{
-	    	       tabHost.getTabWidget().getChildAt(i).setBackgroundDrawable(this.getResources().getDrawable(R.color.list_elements_bkg));
+	    	       tabHost.getTabWidget().getChildAt(i).setBackgroundDrawable(this.getResources().getDrawable(R.drawable.rowselector));
 	    	}
-
+	    //tabHost.getTabWidget().setDividerDrawable(R.color.tab_divider);
+	    
 	}
-	
+ 
+    
 	public void onTabChanged(String tabId) {
 		// TODO Auto-generated method stub
 		for(int i=0;i<tabHost.getTabWidget().getChildCount();i++)

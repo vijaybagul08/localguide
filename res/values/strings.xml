@@ -2,4 +2,7 @@
 <resources>
     <string name="hello">Hello World, WelcomeScreen!</string>
     <string name="app_name">Local Guide</string>
+    <string name="description"><b>LocalGuide</b> provides an easy way to search for anything around you.Gives you detailed result of address,phone numbers.The search categories can be <i>(eg. pubs brimingham,theatres liverpool, hospital edinburgh)</i> </string>
+	<string name="description1">If the city or country is not entered, your current location will be automitcally picked up either through GPS or with your Wifi info.Once the desired result is chosen ,it gives you an option to</string>
+	<string name="auth">Please authenticate your twitter and facebook accounts</string>
 </resources>

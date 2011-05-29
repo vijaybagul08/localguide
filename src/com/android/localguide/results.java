@@ -66,7 +66,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         searchString = bundle.getString("categoryString");
         searchString += " ";
         searchString += bundle.getString("locationString");
-
+System.out.println("Search string is ********************* "+searchString);
         title = new ArrayList<String>();
         address = new ArrayList<String>();
         mHandler.postDelayed(mDelayedTask, 2000);
@@ -84,7 +84,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         AnimationSet set = new AnimationSet(true);
         Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
         animation1.setDuration(300);
-        set.addAnimation(animation);
+        set.addAnimation(animation1);
         LayoutAnimationController controller = new LayoutAnimationController(set,1.0f);
         
         list.setLayoutAnimation(controller);
@@ -117,6 +117,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 	  	HttpClient client = new DefaultHttpClient();
 		String query = "http://ajax.googleapis.com/ajax/services/search/local?hl=en&v=1.0&rsz=8&q="+searchString+"&start=";
 		query+=count;
+		System.out.println("Query is ******************* "+query);
 		try {
 			URL url = new URL(query);
 			URI uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
@@ -136,13 +137,13 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 			
 		}
 		catch(Exception ex){
-			System.out.println("Neetworj error 1 ************8 ");
+			System.out.println("Neetworj error 1 ************8 "+ex.toString()+":::");
 	          //txtResult.setText("Failed!");
 		}
 		
 	   }
 	 public  void Userrequest(HttpResponse response){
-	    
+	    System.out.println("response is *** "+response);
 	    	try{
 	    	        InputStream in = response.getEntity().getContent();
 	    	        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -153,10 +154,10 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 	    	        }
 	    	        in.close();
 	    	        result = str.toString();
-	    	        moreButton.stop();
+	    	       // moreButton.stop();
 	    	        updateData(result);
 	    	   }catch(Exception ex){
-	    		   System.out.println("Neetworj error 2 ************8 ");
+	    		   System.out.println("Neetworj error + ************8 "+ex.toString()+":::");
 	    	        result = "Error";
 	    	   }
 	    	    
@@ -220,9 +221,6 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
             ViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.listview, null);
-//                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, 120);
-//                //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//                convertView.setLayoutParams(params);
                 holder = new ViewHolder();
                 holder.title = (TextView) convertView.findViewById(R.id.title);
                 holder.address = (TextView) convertView.findViewById(R.id.address);
@@ -232,11 +230,9 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
             }
             holder.title.setText(title.get(position));
             holder.title.setTextColor(Color.rgb(0xff, 0xff, 0xff));
-            holder.title.setTextSize(22);
             
             holder.address.setText(address.get(position));
             holder.address.setTextColor(Color.rgb(0xff, 0xff, 0xff));
-            holder.address.setTextSize(18);
             return convertView;
         }
          class ViewHolder {

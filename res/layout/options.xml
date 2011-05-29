@@ -3,7 +3,7 @@
 			  android:layout_width="fill_parent" 
               android:layout_height="fill_parent"
               android:padding="3dip"
-              android:background="#e4bebf"
+              android:background="@color/app_background_color"
               android:orientation="vertical">
 <View
 android:layout_width="fill_parent" 
@@ -14,8 +14,11 @@ android:background="#FFFFFFFF" />
     android:id="@+id/myTableLayout1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#a22a2c">
-    
+    android:background="#AB12105E">
+    <View
+android:layout_width="fill_parent" 
+android:layout_height="8dip"
+android:background="#FFFFFFFF" />
     <TableRow
       android:layout_width="fill_parent"
       android:layout_height="wrap_content">

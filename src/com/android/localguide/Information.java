@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Spannable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 	LocalGuideApplication app;
 	TextView twitterText;
 	TextView facebookText;
+	TextView description;
 	
 	public void onCreate(Bundle savedState)
 	{
@@ -33,6 +35,7 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		twitterText = (TextView)findViewById(R.id.twittertext);
 		facebookText = (TextView)findViewById(R.id.facebooktext);
 		twitterButton = (Button )findViewById(R.id.twitter);
+		description = (TextView) findViewById(R.id.description);
 		
 		if(app.isTwitterAutheticated())
 			twitterButton.setText("Try Different User");
