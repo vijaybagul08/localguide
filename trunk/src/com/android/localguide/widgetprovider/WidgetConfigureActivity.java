@@ -175,8 +175,8 @@ public class WidgetConfigureActivity extends Activity{
 	            ViewHolder holder;
 	            if (convertView == null) {
 	                convertView = mInflater.inflate(R.layout.widgetconfigurelistview, null);
-	                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, 50);
-	                convertView.setLayoutParams(params);
+//	                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, 50);
+//	                convertView.setLayoutParams(params);
 	                holder = new ViewHolder();
 	                holder.title = (TextView) convertView.findViewById(R.id.categoryText);
 	                holder.image = (ImageView) convertView.findViewById(R.id.categoryIcon);

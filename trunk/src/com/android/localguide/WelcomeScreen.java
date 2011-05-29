@@ -164,7 +164,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
  		   Intent intent = new Intent();
          intent.putExtra("categoryString", category);
          location = locationTextbox.getText().toString();
-         intent.putExtra("locationString", location);
+         System.out.println("Location is ******************** "+location);
          Bundle bun = new Bundle();
          bun.putString("categoryString", category); 
          bun.putString("locationString", location);

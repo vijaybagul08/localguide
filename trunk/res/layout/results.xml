@@ -5,7 +5,7 @@
     android:id="@+id/resultsLayout"
     android:layout_width="match_parent" 
     android:layout_height="match_parent"
-    android:background="#ff0000"
+    android:background="@color/app_background_color"
 >
 <com.android.localguide.SpinnerButton
     android:id="@+id/morebutton"
@@ -18,7 +18,6 @@
 android:layout_marginTop="10px"
 android:layout_width="match_parent" 
 android:layout_height="fill_parent"
-android:background="@color/app_background_color"
 android:fadeScrollbars="true"
 android:soundEffectsEnabled="true"
 android:cacheColorHint="#000000"
@@ -29,7 +28,6 @@ android:paddingLeft="3px"
 android:paddingTop="2px"
 android:paddingBottom="2px"
 android:paddingRight="2px"
-android:layout_weight="1"
-android:transcriptMode="normal"/>
+android:layout_weight="1"/>
         
 </LinearLayout>
