@@ -10,6 +10,7 @@
        >
         <TabWidget
             android:id="@android:id/tabs"
+            android:layout_margin="5px"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
             />

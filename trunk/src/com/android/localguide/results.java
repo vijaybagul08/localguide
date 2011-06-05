@@ -47,6 +47,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 	String searchString;
     LinearLayout mScreenLayout;
     MyAnimation animation;
+    String location;
 	Handler mHandler = new Handler();
 	private int mCurrentResultCount = 0;
 	SpinnerButton moreButton;
@@ -66,6 +67,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         searchString = bundle.getString("categoryString");
         searchString += " ";
         searchString += bundle.getString("locationString");
+        location = bundle.getString("locationString");
 System.out.println("Search string is ********************* "+searchString);
         title = new ArrayList<String>();
         address = new ArrayList<String>();
@@ -96,6 +98,7 @@ System.out.println("Search string is ********************* "+searchString);
         		intent.setAction("com.mani.results");
         		  Bundle bun = new Bundle();
                   bun.putString("resultString", result);
+                  bun.putString("location", location);
                   bun.putInt("position", position); 
                   intent.putExtras(bun);
         		startActivity(intent);

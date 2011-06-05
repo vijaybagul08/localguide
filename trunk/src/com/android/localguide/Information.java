@@ -36,7 +36,9 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		facebookText = (TextView)findViewById(R.id.facebooktext);
 		twitterButton = (Button )findViewById(R.id.twitter);
 		description = (TextView) findViewById(R.id.description);
-		
+		String tmp = getString(R.string.description);
+		String tmp1 ="     "+tmp;
+		//description.setText(tmp1);
 		if(app.isTwitterAutheticated())
 			twitterButton.setText("Try Different User");
 		else

@@ -3,8 +3,10 @@ package com.android.localguide;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,14 +27,16 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	private MapController myMapController;
 	private final int ROUTES_ID = 1;
 	ProgressDialog dialog;
+	String startLocation;
 	private Handler mHandler = new Handler();
 	
 	private Runnable mTask = new Runnable()
 	{
 		public void run()
 		{
-					    GetDirectionsList obj = new GetDirectionsList("Hougang Avenue 8,Singapore",address,MapsActivity.this);
-				    	obj.searchRoutes();
+					    //GetDirectionsList obj = new GetDirectionsList("Hougang Avenue 8,Singapore",address,MapsActivity.this);
+			GetDirectionsList obj = new GetDirectionsList(startLocation,address,MapsActivity.this);
+			obj.searchRoutes();
 		}
 	};
 	String address;
@@ -43,7 +47,8 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	    
 	    Bundle bundle= getIntent().getExtras();
 	    address = bundle.getString("currentaddress");
-	    
+	    startLocation = bundle.getString("location");
+
 	    //Show the dialog
     	showDialog(ROUTES_ID);
     	mHandler.postDelayed(mTask, 2000);
@@ -52,6 +57,20 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	
 	public void OnSearchCompleted(ArrayList<DirectionItem> list)
 	{
+		
+		if(list == null)
+		{
+			dialog.dismiss();
+			AlertDialog.Builder builder =  new AlertDialog.Builder(this);
+			builder.setMessage("Please enable the internet connection");
+			builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+             public void onClick(DialogInterface dialog, int id) {
+                 MapsActivity.this.finish();
+            }
+        });
+    	 builder.create().show();
+	 
+		}
 		dialog.dismiss();
 		
 		System.out.println("On search completed ");
@@ -63,7 +82,8 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    mapOverlays.clear();
 	    
-	    Drawable drawable = this.getResources().getDrawable(R.drawable.icon);
+	    Drawable drawable = this.getResources().getDrawable(R.drawable.facebook);
+	    drawable.setAlpha(0);
 	    CustomItemizedOverlay itemizedoverlay = new CustomItemizedOverlay(drawable,this);
 	    GeoPoint point;
 	    OverlayItem overlayitem;

@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Contacts.People;
@@ -46,6 +47,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	Context mContext;
 	LocalGuideApplication app;
 	String result;
+	String location;
 	OptionsAddressLayout layout;
 	private ArrayList<String> title;
 	private ArrayList<String> streetaddress;
@@ -158,7 +160,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     {
     	 	System.out.println("welcome is ********* "+this.getIntent().getStringExtra("welcome"));
     	    result = bundle.getString("resultString");
-    	    System.out.println("position is ********* "+bundle.getString("position1"));
     	    
     	    updateAllDetails();
     		button7.setOnClickListener( new View.OnClickListener(){
@@ -208,6 +209,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 
     currentaddress =  bundle.getInt("position");
     System.out.println("Position is *************************************** "+currentaddress);
+    location = bundle.getString("location");
+    System.out.println("location is ********* "+location);
         
 	String text;
 	text = streetaddress.get(currentaddress);
@@ -279,7 +282,17 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    		alertDialog.show();
 	    	}
 	    	else
-	    		showDialog(TWITTER_ID);
+	    	{
+		    	if(checkInternetConnection() == true )
+		    	{
+		    		showDialog(TWITTER_ID);
+		    	}
+		    	else
+		    	{
+		    		showInternetErrorDialog();
+		    	}
+
+	    	}
 	    }
      });
 	
@@ -302,32 +315,74 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    		
 	    	}
 	    	else
-	    	showDialog(FACEBOOK_ID);
+	    	{
+		    	if(checkInternetConnection() == true )
+		    	{
+		    		showDialog(FACEBOOK_ID);
+		    	}
+		    	else
+		    	{
+		    		showInternetErrorDialog();
+		    	}
+	    	}
 	    }
      });
 	
 	button6.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
+	    	if(checkInternetConnection() == true )
+	    	{
 	    	Intent intent = new Intent();
 	    	Bundle bun = new Bundle();
 	    	bun.putString("currentaddress",streetaddress.get(currentaddress));
+	    	  System.out.println("location is ********* "+location);
+	    	bun.putString("location",location);
 	    	intent.putExtras(bun);
 	    	intent.setClass(mContext, MapsActivity.class);
 	    	startActivity(intent);
+	    	}
+	    	else
+	    	{
+	    		showInternetErrorDialog();
+	    	}
 
 	    }
      });
+	}
 	
+	public void showInternetErrorDialog()
+	{
+		AlertDialog alertDialog = new AlertDialog.Builder(OptionsScreen.this).create();
+		alertDialog.setTitle("No Internet ");
+		alertDialog.setMessage("Please enable internet connection");
+		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+		      public void onClick(DialogInterface dialog, int which) {
+		 
+		       //here you can add functions
+		 
+		    } });
+		alertDialog.setIcon(R.drawable.icon);
+		alertDialog.show();	    		
 
-	
-	
 	}
-	protected void onNewIntent(Intent intent) {
-		
-		  String action = intent.getAction();
-	    	System.out.println("on new intent optionscree ************* "+action);
-	}
+	
+	private boolean checkInternetConnection() {
+
+		ConnectivityManager conMgr = (ConnectivityManager) mContext.getSystemService (mContext.CONNECTIVITY_SERVICE);
+
+		// ARE WE CONNECTED TO THE NET
+
+		if (conMgr.getActiveNetworkInfo() != null
+		&& conMgr.getActiveNetworkInfo().isAvailable()
+		&& conMgr.getActiveNetworkInfo().isConnected()) {
+			return true;
+		} else {
+			return false;
+		}
+
+	} 
+
 	public void onFaceBookmessagePostCompleted(int response)
 	{
 		switch(response)

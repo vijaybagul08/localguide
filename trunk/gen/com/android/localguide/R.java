@@ -24,7 +24,7 @@ public final class R {
         public static final int tab_divider=0x7f070003;
     }
     public static final class drawable {
-        public static final int app_bkg_color=0x7f020029;
+        public static final int app_bkg_color=0x7f02002a;
         public static final int beer=0x7f020000;
         public static final int exit=0x7f020001;
         public static final int facebook=0x7f020002;
@@ -38,35 +38,36 @@ public final class R {
         public static final int icon=0x7f02000a;
         public static final int icon48x48_1=0x7f02000b;
         public static final int info=0x7f02000c;
-        public static final int list_elements_color=0x7f02002a;
+        public static final int list_elements_color=0x7f02002b;
         public static final int list_normal=0x7f02000d;
         public static final int list_pressed=0x7f02000e;
         public static final int localguide=0x7f02000f;
         public static final int mail=0x7f020010;
-        public static final int message=0x7f020011;
-        public static final int next_arrow=0x7f020012;
-        public static final int phone=0x7f020013;
-        public static final int phonebook=0x7f020014;
-        public static final int police=0x7f020015;
-        public static final int previous_arrow=0x7f020016;
-        public static final int rowselector=0x7f020017;
-        public static final int search_button=0x7f020018;
-        public static final int search_button_normal=0x7f020019;
-        public static final int search_button_press=0x7f02001a;
-        public static final int shopping=0x7f02001b;
-        public static final int spinner_white_48=0x7f02001c;
-        public static final int taxi=0x7f02001d;
-        public static final int telephone=0x7f02001e;
-        public static final int theatre=0x7f02001f;
-        public static final int train=0x7f020020;
-        public static final int twitter=0x7f020021;
-        public static final int twitter_icon=0x7f020022;
-        public static final int ubuntu=0x7f020023;
-        public static final int widget_button_off=0x7f020024;
-        public static final int widget_button_on=0x7f020025;
-        public static final int widgetbackground=0x7f020026;
-        public static final int widgetbackground1=0x7f020027;
-        public static final int widgetbuttonpress=0x7f020028;
+        public static final int marker=0x7f020011;
+        public static final int message=0x7f020012;
+        public static final int next_arrow=0x7f020013;
+        public static final int phone=0x7f020014;
+        public static final int phonebook=0x7f020015;
+        public static final int police=0x7f020016;
+        public static final int previous_arrow=0x7f020017;
+        public static final int rowselector=0x7f020018;
+        public static final int search_button=0x7f020019;
+        public static final int search_button_normal=0x7f02001a;
+        public static final int search_button_press=0x7f02001b;
+        public static final int shopping=0x7f02001c;
+        public static final int spinner_white_48=0x7f02001d;
+        public static final int taxi=0x7f02001e;
+        public static final int telephone=0x7f02001f;
+        public static final int theatre=0x7f020020;
+        public static final int train=0x7f020021;
+        public static final int twitter=0x7f020022;
+        public static final int twitter_icon=0x7f020023;
+        public static final int ubuntu=0x7f020024;
+        public static final int widget_button_off=0x7f020025;
+        public static final int widget_button_on=0x7f020026;
+        public static final int widgetbackground=0x7f020027;
+        public static final int widgetbackground1=0x7f020028;
+        public static final int widgetbuttonpress=0x7f020029;
     }
     public static final class id {
         public static final int MainLayout=0x7f08000e;
@@ -152,6 +153,7 @@ public final class R {
         public static final int description=0x7f060002;
         public static final int description1=0x7f060003;
         public static final int hello=0x7f060000;
+        public static final int route_error=0x7f060005;
     }
     public static final class xml {
         public static final int widgetprovider=0x7f050000;
