@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Bitmap.Config;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
@@ -28,8 +29,14 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 	private Context mContext;
 	Bitmap bitmap;
 	ArrayList<GeoPoint> mGeoPoints;
+	Paint mPaint;
+	Paint mTextPaint;
+	Rect  mMarkerRect;
+	int mOveryLayItemsCount=0;
 	int icons[]={ R.drawable.exit,R.drawable.beer,R.drawable.hotel,R.drawable.hotel,R.drawable.hotel,R.drawable.hotel,R.drawable.hotel};
-	
+	String markers[] = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+	ArrayList<Bitmap> mMarkerList;
+	Bitmap mMarker;
 	interface TrackBallFocusListener{
 		public void focused(int itemIndex);
 	}
@@ -39,6 +46,22 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 	public CustomItemizedOverlay(Drawable defaultMarker,Context context) {
 		super(boundCenterBottom(defaultMarker));
 		mContext = context;
+		mMarkerList = new ArrayList<Bitmap>();
+		mPaint = new Paint();
+		mPaint.setAntiAlias(true);
+		mPaint.setColor(Color.BLUE);
+		mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+		
+		mTextPaint = new Paint();
+		mTextPaint.setAntiAlias(true);
+		//mTextPaint.setColor(Color.WHITE);
+		mTextPaint.setColor(Color.rgb(0x12, 0x10, 0x5E));
+		
+		mTextPaint.setTextSize(12);
+		mTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+		mMarkerRect = new Rect(0,0,18,32);
+		mMarker = BitmapFactory.decodeResource(context.getResources(), R.drawable.marker);
 		setOnFocusChangeListener(this);
 	}
 	
@@ -53,7 +76,9 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 		return super.boundCenter(d);
 	}
 	public void addOverlay(OverlayItem item){
+		System.out.println("Add overrlay ***************************** ");
 		overlays.add(item);
+		createMarkerImage();
 		// call populate, which internally call createItem
 		populate();
 	}
@@ -74,6 +99,22 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 		return overlays.size();
 	}
 
+	public void createMarkerImage()
+	{
+		Bitmap bitmap = Bitmap.createBitmap(18,32, Config.ARGB_8888);
+		Canvas drawcanvas = new Canvas(bitmap);
+		drawcanvas.drawBitmap(mMarker,null,mMarkerRect,mPaint);
+
+		System.out.println("Cmavket image "+";;;"+markers[mOveryLayItemsCount]);
+		if(mOveryLayItemsCount == 8 ||mOveryLayItemsCount == 9 ||mOveryLayItemsCount == 14 ||mOveryLayItemsCount == 15)
+			drawcanvas.drawText(markers[mOveryLayItemsCount], 8, 16, mTextPaint);
+		else
+			drawcanvas.drawText(markers[mOveryLayItemsCount], 6, 16, mTextPaint);
+		//drawcanvas.drawRect(mMarkerRect, mPaint);
+		mMarkerList.add(bitmap);
+		mOveryLayItemsCount++;
+		
+	}
 	@Override
 	public boolean onTap(GeoPoint p, MapView mapView) {
 		Log.i(TAG, "onTap: "+ p.toString());
@@ -89,24 +130,8 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 	 dialog.show();
 	 return true;
 	 }
-//	@Override
-//	public boolean onTrackballEvent(MotionEvent event, MapView mapView) {
-//		// TODO Auto-generated method stub
-//		Log.i(TAG, "onTrackballEvent");
-//		int x = (int)event.getRawX();
-//		int y = (int)event.getRawY();
-//		Log.i(TAG, "Clicked on ["+event.getRawX() +", "+ event.getRawY()+"]");
-//		// move through markers
-//		focusCounter++;
-//		if(focusCounter >= overlays.size())
-//			focusCounter = 0;
-////		OverlayItem item = overlays.get(index);
-////		setFocus(overlays.get(focusCounter));
-//		listener.focused(focusCounter);
-//		return false;
-//	}
 
-	public void onFocusChanged(ItemizedOverlay overlay, OverlayItem newFocus) {
+	 public void onFocusChanged(ItemizedOverlay overlay, OverlayItem newFocus) {
 		Log.i(TAG, "onFocusChanged: ");
 		if(newFocus != null)
 			Log.i(TAG, "Focused Marker: "+ newFocus.getTitle());
@@ -116,32 +141,33 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 	@Override
 	public void draw(Canvas canvas, MapView mapView, boolean flag) {
 		super.draw(canvas, mapView, flag);
-		Log.i(TAG, "ItemizedOverlay- Draw....");
+		//Log.i(TAG, "ItemizedOverlay- Draw....");
 		Projection projection = mapView.getProjection();
 		
 		float x = 0;
 		float y = 0;
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		
+		System.out.println("size value is ** "+overlays.size());
 		for(int i=0; i<overlays.size(); i++){
-			bitmap = BitmapFactory.decodeResource(mContext.getResources(), icons[i] );
+			//Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.marker );//icons[i] );
 			OverlayItem item = overlays.get(i);
 			Point p = projection.toPixels(item.getPoint(), null);
 			
-			Log.i(TAG, "Point..."+ p.x +" "+ p.y);
+			//Log.i(TAG, "Point..."+ p.x +" "+ p.y);
 			if(i == 0){
+				System.out.println("I value is ** "+i);
 				x = p.x;
 				y = p.y;
+				canvas.drawBitmap(mMarkerList.get(0), x-9, y-32, mPaint);
 			}
 			else{
-				canvas.drawLine(x, y, p.x, p.y, paint);
-				canvas.drawBitmap(bitmap, null, new Rect((int)x,(int)y,40,40), null);
+				System.out.println("I value is ** "+i);
+				canvas.drawLine(x, y, p.x, p.y, mPaint);
+				canvas.drawBitmap(mMarkerList.get(i), x-9, y-32, mPaint);
 				x = p.x;
 				y = p.y;
 			}
 		}
 	}
 	// End- Changes required to draw lines connecting markers
+	
 }

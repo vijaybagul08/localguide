@@ -153,6 +153,7 @@ public class GetDirectionsList {
 		         {
 		         	
 		         System.out.println("Exception is "+e.toString());
+		         mCB.OnSearchCompleted(null);
 		         }
 		    }
 }

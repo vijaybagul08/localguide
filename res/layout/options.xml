@@ -5,20 +5,13 @@
               android:padding="3dip"
               android:background="@color/app_background_color"
               android:orientation="vertical">
-<View
-android:layout_width="fill_parent" 
-android:layout_height="8dip"
-android:background="#FFFFFFFF" />
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/myTableLayout1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="#AB12105E">
-    <View
-android:layout_width="fill_parent" 
-android:layout_height="8dip"
-android:background="#FFFFFFFF" />
+
     <TableRow
       android:layout_width="fill_parent"
       android:layout_height="wrap_content">
