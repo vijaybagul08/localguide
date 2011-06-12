@@ -8,9 +8,10 @@
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/myTableLayout1"
+    android:padding="3px"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#AB12105E">
+    android:background="@drawable/list_normal">
 
     <TableRow
       android:layout_width="fill_parent"
@@ -37,11 +38,12 @@
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/next_arrow"/>
      </TableRow>
+
+</TableLayout>
 <View
+ android:layout_width="fill_parent"
  android:layout_height="2dip"
  android:background="#FFFFFFFF" />
-</TableLayout>
-
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/myTableLayout"
     android:layout_width="fill_parent"
