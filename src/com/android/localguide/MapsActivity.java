@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ZoomControls;
 
@@ -107,6 +108,7 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	    myMapController.animateTo(new GeoPoint((int)(list.get(0).latitude * 1E6),(int)(list.get(0).longitude * 1E6)));
 	    myMapController.setZoom(17); //Fixed Zoom Level
 	
+
 	}
 	
 	protected Dialog onCreateDialog(int id)

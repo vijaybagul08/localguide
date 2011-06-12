@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:padding="3dip"
+              android:background="@drawable/list_normal"
+              android:orientation="vertical">
+              
+<TextView 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:textColor="#ffffffff"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:text="Select from location" />
+
+<View
+android:layout_width="fill_parent"
+ android:layout_height="2dip"
+ android:background="#FFFFFFFF" />
+
+<TextView
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:textColor="#ffffffff"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:text="Select location from where you want to get get directions" />
+
+<CheckBox android:id="@+id/checkbox"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:layout_marginLeft="3dip"
+android:checked="true"
+android:text="Current Location"/>
+              
+<TextView android:id="@+id/text1"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:visibility="gone"
+android:textColor="#ffffffff"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:padding="3dip"
+android:text="Enter from Location:" />
+			
+<EditText android:id="@+id/locationtextbox"
+android:hint="eg. Liverpool,uk "
+android:layout_width="250dip"
+android:layout_height="wrap_content"
+android:textColor="#12105E"
+android:textColorHint="#AA12105E"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:layout_marginLeft="5dip"
+android:background="@color/edittext_bkg"
+android:visibility="gone"
+android:singleLine="true"
+android:maxLines="1"/>
+ 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:paddingTop="10dip" 
+              android:paddingLeft="5dip"
+              android:paddingRight="5dip"
+              android:paddingBottom="10dip">
+
+<Button android:id="@+id/ok"
+android:layout_width="wrap_content"
+android:layout_height="50px"
+android:layout_marginRight="2px"
+android:text="OK"
+android:layout_weight="0.5"
+android:textAppearance="?android:attr/textAppearanceSmall"
+android:background="@color/app_background_color"
+android:textColor="#ffffff"/>
+
+<Button android:id="@+id/cancel"
+android:layout_width="wrap_content"
+android:layout_height="50px"
+android:layout_weight="0.5"
+android:text="CANCEL"
+android:textAppearance="?android:attr/textAppearanceSmall"
+android:background="@color/app_background_color"
+android:textColor="#ffffff"/>
+</LinearLayout>
+                           
+</LinearLayout>              

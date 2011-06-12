@@ -42,7 +42,7 @@ import com.android.localguide.FaceBookClient.FaceBookPostMessageCallBack;
 import com.android.localguide.LocalGuideApplication.favoriteItem;
 
 public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,
-FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack{
+FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack ,GetDirectionsDialog.GetDirectionsDialogListener{
 	
 	Context mContext;
 	LocalGuideApplication app;
@@ -56,7 +56,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	private ArrayList<String> longitude;
 	TwitterClient mTwitterClient;
 	FaceBookClient mFacebookClient;
-	
+	GetDirectionsDialog mGetDirectionsDialog;
 	Button button1;
 	Button button2;
 	Button button3;
@@ -85,7 +85,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     setContentView(R.layout.options);
     app = (LocalGuideApplication)this.getApplication();
     
-    mContext = this.getApplicationContext();
+    mContext = this;
     layout1 = (TableLayout)findViewById(R.id.myTableLayout1);
     layout2 = (TableLayout)findViewById(R.id.myTableLayout);
     nextArrow = (ImageView)findViewById(R.id.next);
@@ -98,7 +98,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     button5 = (Button)findViewById(R.id.button5);
     button6 = (Button)findViewById(R.id.button6);
     button7 = (Button)findViewById(R.id.button7);
-    
+    mGetDirectionsDialog = new GetDirectionsDialog(this,this);
     mFacebookClient  = new FaceBookClient(this,this);
     System.out.println("Accesskey for facbook is ************* "+app.getFacebookToken());
     mFacebookClient.setAccessToken(app.getFacebookToken());
@@ -328,19 +328,14 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    }
      });
 	
+	
 	button6.setOnClickListener( new View.OnClickListener(){
 	    public void onClick(View v)
 	    {
 	    	if(checkInternetConnection() == true )
 	    	{
-	    	Intent intent = new Intent();
-	    	Bundle bun = new Bundle();
-	    	bun.putString("currentaddress",streetaddress.get(currentaddress));
-	    	  System.out.println("location is ********* "+location);
-	    	bun.putString("location",location);
-	    	intent.putExtras(bun);
-	    	intent.setClass(mContext, MapsActivity.class);
-	    	startActivity(intent);
+
+	    	mGetDirectionsDialog.show();
 	    	}
 	    	else
 	    	{
@@ -350,7 +345,23 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    }
      });
 	}
-	
+
+	public void onButtonOkPressed(boolean isCurrentLocation,String alocation)
+	{
+    	Intent intent = new Intent();
+    	Bundle bun = new Bundle();
+    	bun.putString("currentaddress",streetaddress.get(currentaddress));
+    	  System.out.println("location is ********* "+location);
+  		if(isCurrentLocation == true)
+  			bun.putString("location",location);
+  		else
+  			bun.putString("location",alocation);
+  		
+    	intent.putExtras(bun);
+    	intent.setClass(mContext, MapsActivity.class);
+    	startActivity(intent);
+	}
+
 	public void showInternetErrorDialog()
 	{
 		AlertDialog alertDialog = new AlertDialog.Builder(OptionsScreen.this).create();
