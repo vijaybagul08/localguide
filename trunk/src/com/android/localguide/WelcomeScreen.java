@@ -289,34 +289,13 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	                 return dialog1;
 	        	// break;
 	         case INTERNET_ALERT:
-	        	 builder =  new AlertDialog.Builder(this);
-	        	 builder.setMessage("Please enable the internet connection");
-	        	 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-	                 public void onClick(DialogInterface dialog, int id) {
-	                     //
-	                }
-	            });
-	        	 dialog = builder.create();
+	        	 dialog = new ErrorDialog(this,"No Internet Connection","Please enable the internet connection");
 	        	 return dialog;
 	         case CATEGORY_ALERT:
-	        	 builder =  new AlertDialog.Builder(this);
-	        	 builder.setMessage("Please enter a category");
-	        	 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-	                 public void onClick(DialogInterface dialog, int id) {
-	                     //
-	                }
-	            });
-	        	 dialog = builder.create();
+	        	 dialog = new ErrorDialog(this,"Category not entered","Please enter a category");
 	        	 return dialog;
 	         case LOCATION_ALERT:
-	        	 builder =  new AlertDialog.Builder(this);
-	        	 builder.setMessage("Please enter a location");
-	        	 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-	                 public void onClick(DialogInterface dialog, int id) {
-	                     //
-	                }
-	            });
-	        	 dialog = builder.create();
+	        	 dialog = new ErrorDialog(this,"Location not entered","Please enter a valid location");
 	        	 return dialog;	        	 
 	         default:   
 	             dialog = null;   
