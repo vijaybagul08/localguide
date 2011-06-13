@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:padding="10dip"
+              android:background="@drawable/list_normal"
+              android:orientation="vertical">
+              
+<TextView 
+android:id="@+id/title"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:textColor="#ffffffff"
+android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<View
+android:layout_width="fill_parent"
+android:layout_height="2dip"
+android:background="#FFFFFFFF" />
+
+<TextView
+android:id="@+id/content"
+android:layout_marginTop="20px"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:textColor="#ffffffff"
+android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<Button android:id="@+id/ok"
+android:layout_width="wrap_content"
+android:layout_height="50px"
+android:layout_marginTop="20px"
+android:layout_marginBottom="10px"
+android:layout_gravity="center_horizontal"
+android:textAppearance="?android:attr/textAppearanceMedium"
+android:background="@color/app_background_color"
+android:text="OK"
+android:textColor="#ffffff"/>
+
+</LinearLayout>
