@@ -52,7 +52,6 @@ public class Spinner extends View implements Runnable{
 	{
 		int height =  MeasureSpec.getSize(heightMeasureSpec);
 		int width =  MeasureSpec.getSize(widthMeasureSpec);
-		System.out.println("Widht and height spinner *************** "+width +"::"+height);
 		mSpinnerHeight = mSpinnerWidth = width;
 		mSpinnerPivotX = mSpinnerPivotY = width /2 ;
 	    mSpinnerRect = new Rect(0,0,mSpinnerWidth,mSpinnerHeight);

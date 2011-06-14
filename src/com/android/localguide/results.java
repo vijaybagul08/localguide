@@ -19,6 +19,7 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -52,6 +53,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 	private int mCurrentResultCount = 0;
 	SpinnerButton moreButton;
     Context mContext;
+    Dialog mDialog;
 	private Runnable mDelayedTask = new Runnable() {
         public void run() {
         	sendSearchRequest(mCurrentResultCount);
@@ -64,22 +66,18 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         setContentView(R.layout.results);
         mContext = this;
         Bundle bundle= getIntent().getExtras();
+        mDialog = new ErrorDialog(this,"","Searching...",true);
         searchString = bundle.getString("categoryString");
         searchString += " ";
         searchString += bundle.getString("locationString");
         location = bundle.getString("locationString");
-System.out.println("Search string is ********************* "+searchString);
         title = new ArrayList<String>();
         address = new ArrayList<String>();
         mHandler.postDelayed(mDelayedTask, 2000);
         
         mScreenLayout = (LinearLayout) findViewById(R.id.resultsLayout);
-     /*   moreButton = (SpinnerButton)findViewById(R.id.morebutton);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 50);
-        moreButton.setLayoutParams(params);
-        moreButton.setTextSize(30);
-        moreButton.setParent(this);
-        moreButton.start();*/
+
+        mDialog.show();
         animation = new MyAnimation();
         mScreenLayout.startAnimation(animation);
         ListView list =  getListView();
@@ -93,15 +91,15 @@ System.out.println("Search string is ********************* "+searchString);
 
         list.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-        		Intent intent = new Intent();
-        		intent.setClass(results.this, OptionsScreen.class);
-        		intent.setAction("com.mani.results");
+        		  Intent intent = new Intent();
+        		  intent.setClass(results.this, OptionsScreen.class);
+        		  intent.setAction("com.mani.results");
         		  Bundle bun = new Bundle();
                   bun.putString("resultString", result);
                   bun.putString("location", location);
                   bun.putInt("position", position); 
                   intent.putExtras(bun);
-        		startActivity(intent);
+                  startActivity(intent);
         	}
         	
         }); 
@@ -157,7 +155,7 @@ System.out.println("Search string is ********************* "+searchString);
 	    	        }
 	    	        in.close();
 	    	        result = str.toString();
-	    	       // moreButton.stop();
+	    	        mDialog.dismiss();
 	    	        updateData(result);
 	    	   }catch(Exception ex){
 	    		   System.out.println("Neetworj error + ************8 "+ex.toString()+":::");

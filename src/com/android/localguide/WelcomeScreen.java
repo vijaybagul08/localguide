@@ -161,7 +161,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
         else
         {
       	  // Start the results activity with location from location text box.
- 		   Intent intent = new Intent();
+ 		 Intent intent = new Intent();
          intent.putExtra("categoryString", category);
          location = locationTextbox.getText().toString();
          System.out.println("Location is ******************** "+location);
@@ -199,6 +199,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	   {
 		   if(aLocation != null)
 		   {
+			   System.out.println("latitude and longitude is ************ "+aLocation.getLatitude()+";;;"+ aLocation.getLongitude());
 			   //Reverse Geo coding
 			   String currlocation=null;
 			   try
@@ -206,14 +207,16 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 			   mAddressList = mReverseGeoCoder.getFromLocation(aLocation.getLatitude(), aLocation.getLongitude(), 1);
 			   if (mAddressList.size()> 0){
 				   currlocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
+				   System.out.println("Currlocations is *************** "+currlocation);
 	               Toast.makeText(mContext, currlocation, 4000).show();
 			   }	
 			   }
 			   catch(Exception e)
 			   {
-				   
+				   System.out.println("Couldnt find the location *************");
+				   Toast.makeText(mContext, "Sorry, Couldnt fetch the current location, due to unavailability of network or GPS provider", 4000).show();
 			   }
-	
+			   // Check fo currlocation is null... if null dont trigger start activity.
 			   Intent intent = new Intent();
 	           intent.putExtra("categoryString", category);
 	           location = locationTextbox.getText().toString();
@@ -224,7 +227,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	           intent.putExtras(bun);
 	           intent.setClass(mContext, results.class);
 	           startActivity(intent);
-	           dialog1.dismiss();
+	           dialog.dismiss();
 		   }
 		   else
 		   {
@@ -263,39 +266,17 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
                  builder.setView(layout);   
                  dialog = builder.create();   
                  return dialog;
-	             //break;   
 	         case LOCATION_ID:
- 	        	     dialog1 = new ProgressDialog(this);
-	                 dialog1.setMessage("Location...");
-	                 dialog1.setIndeterminate(true);
-	                 dialog1.setCancelable(true);
-	              
-	                 layout  = inflater.inflate(R.layout.myprogressdialog,(ViewGroup) findViewById(R.id.layout_root));
-	                 
-	                 TextView text = (TextView)layout.findViewById(R.id.text);
-	                 text.setText("Location");
-	                 text.setTextSize(25);
-	                 
-	                 Spinner spinner = (Spinner)layout.findViewById(R.id.spinner);
-	                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(30, 30, 0.8f);
-	                 spinner.setLayoutParams(params);
-	                 spinner.start();
-	                 
-	                 builder = new AlertDialog.Builder(mContext);   
-	                 builder.setView(layout);   
-	                 dialog = builder.create(); 	
-	                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	                 
-	                 return dialog1;
-	        	// break;
+	             dialog = new ErrorDialog(this,"No Internet Connection","Location...",true);
+	             return dialog;
 	         case INTERNET_ALERT:
-	        	 dialog = new ErrorDialog(this,"No Internet Connection","Please enable the internet connection");
+	        	 dialog = new ErrorDialog(this,"No Internet Connection","Please enable the internet connection",false);
 	        	 return dialog;
 	         case CATEGORY_ALERT:
-	        	 dialog = new ErrorDialog(this,"Category not entered","Please enter a category");
+	        	 dialog = new ErrorDialog(this,"Category not entered","Please enter a category",false);
 	        	 return dialog;
 	         case LOCATION_ALERT:
-	        	 dialog = new ErrorDialog(this,"Location not entered","Please enter a valid location");
+	        	 dialog = new ErrorDialog(this,"Location not entered","Please enter a valid location",false);
 	        	 return dialog;	        	 
 	         default:   
 	             dialog = null;   
