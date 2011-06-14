@@ -50,6 +50,7 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
 		mPaint.setColor(Color.BLUE);
+		mPaint.setStrokeWidth(5f);
 		mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 		
 		mTextPaint = new Paint();

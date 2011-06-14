@@ -25,6 +25,7 @@ public class LocationIdentifier{
     boolean isNetworkenabled=false;
     boolean isSearching = false;
     Timer timer;
+    
 	public LocationIdentifier(Context context,LocationIdentifierCallBack parent)
 	{
 	mContext = context;
@@ -70,18 +71,16 @@ public class LocationIdentifier{
             locationManager.removeUpdates(locationListenerGps);
 		}
 		public void onProviderDisabled(String provider) {
-			System.out.println("NETWORK ************** provider Disabled");
+
 		}
 		public void onProviderEnabled(String provider) {
-			System.out.println("NETWORK ************** provider Enabled");
+
 		}
 		public void onStatusChanged(String provider, int status, Bundle extras) {}
 	};
 	
 	LocationListener locationListenerGps = new LocationListener() {
         public void onLocationChanged(Location location) {
-        	System.out.println(" ********** GPS Locatoin is :::"+location.toString());
-        	Toast.makeText(mContext, location.toString(), 5000).show();
         	timer.cancel();
             mParent.gotLocation(location);
             isSearching = false;
@@ -89,10 +88,10 @@ public class LocationIdentifier{
             locationManager.removeUpdates(locationListenerNetwork);
         }
         public void onProviderDisabled(String provider) {
-        	System.out.println("GPS ************** provider Disabled");
+ 
         }
         public void onProviderEnabled(String provider) {
-        	System.out.println("GPS************** provider Enabled");
+ 
         }
         public void onStatusChanged(String provider, int status, Bundle extras) {}
     };
@@ -105,8 +104,6 @@ public class LocationIdentifier{
         public void run() {
         	locationManager.removeUpdates(locationListenerGps);
         	locationManager.removeUpdates(locationListenerNetwork);
-        //	Looper.prepare();
-        	Toast.makeText(mContext, "Timer expired removing listeners", 4000).show();
              Location networkLocation=null, gpsLocation=null;
              if(isGPSenabled)
             	 gpsLocation=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);

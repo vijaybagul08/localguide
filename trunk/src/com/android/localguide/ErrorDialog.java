@@ -24,8 +24,9 @@ public class ErrorDialog extends Dialog {
 	Button mOK;
 	TextView mTitle;
 	TextView mContent;
-	
-	public ErrorDialog(Context context,String title,String msg)
+	View mLine;
+	Spinner mSpinner;
+	public ErrorDialog(Context context,String title,String msg,boolean spinner)
 	{
 		super(context, R.style.getdirectionsdialog);	
 		mContext = context;
@@ -35,9 +36,11 @@ public class ErrorDialog extends Dialog {
 		Display display = ((WindowManager)mContext.getSystemService(mContext.WINDOW_SERVICE)).getDefaultDisplay();  
 		screenWidth = display.getWidth();  
 
+		mLine = (View) findViewById(R.id.line);
 		mTitle = (TextView) findViewById(R.id.title);
 		mContent = (TextView) findViewById(R.id.content);
-
+		mSpinner = (com.android.localguide.Spinner)findViewById(R.id.spinner);
+		
 		mTitle.setText(title);
 		mContent.setText(msg);
 		
@@ -48,6 +51,14 @@ public class ErrorDialog extends Dialog {
 	            	ErrorDialog.this.dismiss();
 	            }
 	         });
+			if(spinner)
+			{
+				mTitle.setVisibility(View.GONE);
+				mLine.setVisibility(View.GONE);
+				mOK.setVisibility(View.GONE);
+				mSpinner.setVisibility(View.VISIBLE);
+				mSpinner.start();
+			}
 		}
 	
 		public void show()
@@ -58,5 +69,16 @@ public class ErrorDialog extends Dialog {
 		    this.getWindow().setAttributes(lp);
 		    mOK.setWidth((int) (screenWidth*0.7));
 	    }		
+		
+		public void dismiss()
+		{
+			super.dismiss();
+			mTitle.setVisibility(View.VISIBLE);
+			mLine.setVisibility(View.VISIBLE);
+			mOK.setVisibility(View.VISIBLE);
+			mSpinner.setVisibility(View.GONE);
+			mSpinner.stop();
+			
+		}
 	    
 }
