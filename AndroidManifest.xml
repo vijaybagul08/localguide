@@ -74,6 +74,13 @@
 				</intent-filter>
 			</activity>
 
+		<activity android:name=".MapstabActivity">
+          android:theme="@android:style/Theme.NoTitleBar">      
+           <intent-filter>
+		        <category android:name="android.intent.category.DEFAULT" />
+		    </intent-filter>
+		</activity> 
+		
 			<activity android:name=".widgetprovider.WidgetConfigureActivity"
      				android:theme="@android:style/Theme.NoTitleBar">	
      			<intent-filter>

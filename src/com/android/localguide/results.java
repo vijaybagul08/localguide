@@ -138,8 +138,9 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 			
 		}
 		catch(Exception ex){
-			System.out.println("Neetworj error 1 ************8 "+ex.toString()+":::");
-	          //txtResult.setText("Failed!");
+			System.out.println("Please try again... "+ex.toString()+":::");
+			mDialog.dismiss();
+			this.finish();
 		}
 		
 	   }
