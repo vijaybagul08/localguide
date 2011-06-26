@@ -102,7 +102,7 @@ public class GetDirectionsList {
 		 public  void updateData(String result)
 		    {
 			 
-			 System.out.println("Routes are ****** "+result);
+			// System.out.println("Routes are ****** "+result);
 		   	 try
 		        {
 		         JSONObject json=new JSONObject(result);

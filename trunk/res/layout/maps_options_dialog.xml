@@ -69,7 +69,6 @@ android:layout_height="50px"
 android:layout_marginRight="2px"
 android:text="OK"
 android:layout_weight="0.5"
-android:textAppearance="?android:attr/textAppearanceMeduim"
 android:background="@drawable/error_dialog_button"
 android:textColor="#ffffff"/>
 
@@ -78,7 +77,6 @@ android:layout_width="wrap_content"
 android:layout_height="50px"
 android:layout_weight="0.5"
 android:text="CANCEL"
-android:textAppearance="?android:attr/textAppearanceMeduim"
 android:background="@drawable/error_dialog_button"
 android:textColor="#ffffff"/>
 </LinearLayout>

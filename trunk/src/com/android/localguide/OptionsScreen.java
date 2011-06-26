@@ -358,7 +358,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
   			bun.putString("location",alocation);
   		
     	intent.putExtras(bun);
-    	intent.setClass(mContext, MapsActivity.class);
+    	//intent.setClass(mContext, MapsActivity.class);
+    	intent.setClass(mContext, MapstabActivity.class);
     	startActivity(intent);
 	}
 
