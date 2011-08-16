@@ -11,7 +11,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -21,7 +20,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -29,7 +28,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -262,9 +260,11 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	            	}
 	             });
 	             
-                 builder = new AlertDialog.Builder(mContext);   
-                 builder.setView(layout);   
-                 dialog = builder.create();   
+                 //builder = new AlertDialog.Builder(mContext);   
+                 //builder.setView(layout);   
+                 //dialog = builder.create();   
+	             dialog = new CustomDialog(mContext);
+	             dialog.setContentView(layout);
                  return dialog;
 	         case LOCATION_ID:
 	             dialog = new ErrorDialog(this,"No Internet Connection","Location...",true);
@@ -305,7 +305,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	        	 ViewHolder holder;
 	             if (convertView == null) {  // if it's not recycled,   
 	                  convertView = mInflater.inflate(R.layout.categorycontent, null);
-	             	  convertView.setLayoutParams(new GridView.LayoutParams(90, 90));
+	             	  convertView.setLayoutParams(new GridView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	            	  holder = new ViewHolder();
 	                  holder.title = (TextView) convertView.findViewById(R.id.categoryText);
 	                  holder.icon = (ImageView )convertView.findViewById(R.id.categoryimage);

@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Bitmap.Config;
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
@@ -124,12 +125,13 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 
 	 protected boolean onTap(int index)
 	 {
-	 OverlayItem item = overlays.get(index);
-	 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-	 dialog.setTitle(item.getTitle());
-	 dialog.setMessage(item.getSnippet());
-	 dialog.show();
-	 return true;
+		 OverlayItem item = overlays.get(index);
+		 MapsMarkerDialog dialog = new MapsMarkerDialog(mContext);
+//		 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+		 dialog.setTitle(item.getTitle());
+		 dialog.setMessage(item.getSnippet());
+		 dialog.show();
+		 return true;
 	 }
 
 	 public void onFocusChanged(ItemizedOverlay overlay, OverlayItem newFocus) {

@@ -3,6 +3,7 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+    		  android:background="@drawable/list_normal"              
               android:padding="10dp"
               >
 <RelativeLayout
@@ -27,15 +28,21 @@ android:paddingTop="3dip" >
               android:textSize="20dip"
               android:text="Choose Categories"/>
 </RelativeLayout>
-              
+
+<View
+android:layout_width="fill_parent"
+ android:layout_height="2dip"
+ android:layout_marginTop="3dp"
+ android:background="#FFFFFFFF" />
+               
  <GridView xmlns:android="http://schemas.android.com/apk/res/android" 
     android:id="@+id/gridview"
     android:layout_width="fill_parent" 
     android:layout_height="fill_parent"
-    android:columnWidth="90dp"
     android:numColumns="3"
-    android:verticalSpacing="10dp"
-    android:horizontalSpacing="10dp"
+
+    android:verticalSpacing="10px"
+    android:horizontalSpacing="5px"
     android:stretchMode="columnWidth"
     android:gravity="center"/>
 </LinearLayout>
