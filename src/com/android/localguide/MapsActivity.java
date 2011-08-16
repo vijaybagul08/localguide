@@ -29,12 +29,15 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	private final int ROUTES_ID = 1;
 	ProgressDialog dialog;
 	String startLocation;
+	List<Overlay> mapOverlays;
+	CustomItemizedOverlay itemizedoverlay;
 	private Handler mHandler = new Handler();
 	
 	private Runnable mTask = new Runnable()
 	{
 		public void run()
 		{
+			System.out.println("MTask runnable calling search routes ********** ");
 					    //GetDirectionsList obj = new GetDirectionsList("Hougang Avenue 8,Singapore",address,MapsActivity.this);
 			GetDirectionsList obj = new GetDirectionsList(startLocation,address,MapsActivity.this);
 			obj.searchRoutes();
@@ -56,41 +59,54 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
     	
 	 }
 	
-	public void OnSearchCompleted(ArrayList<DirectionItem> list)
+	public void OnSearchCompleted(ArrayList<DirectionItem> list,int code)
 	{
+		System.out.println("MAPS ACTIVITY On search completed ");
 		
 		if(list == null)
 		{
-			dialog.dismiss();
-			AlertDialog.Builder builder =  new AlertDialog.Builder(this);
-			builder.setMessage("Please enable the internet connection");
-			builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-             public void onClick(DialogInterface dialog, int id) {
-                 MapsActivity.this.finish();
-            }
-        });
-    	 builder.create().show();
-	 
-		}
+			System.out.println("MAPS ACTIVITY On search completed LIST NULL ");
+			if(code == GetDirectionsList.SearchResultCallBack.NETWORK_FAILURE) {
+				dialog.dismiss();
+				AlertDialog.Builder builder =  new AlertDialog.Builder(this);
+				builder.setMessage("Please enable the internet connection");
+				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	             public void onClick(DialogInterface dialog, int id) {
+	                 MapsActivity.this.finish();
+	             	}
+				});
+				builder.create().show();
+			} else if (code == GetDirectionsList.SearchResultCallBack.NO_ROUTE) {
+				dialog.dismiss();
+				AlertDialog.Builder builder =  new AlertDialog.Builder(this);
+				builder.setMessage("No Route available to this destination");
+				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	             public void onClick(DialogInterface dialog, int id) {
+	                 MapsActivity.this.finish();
+	             	}
+				});
+				builder.create().show();
+			}
+	 	} else {
 		dialog.dismiss();
 		
-		System.out.println("On search completed ");
+		System.out.println("MAPS ACTIVITY On search completed 1111 ");
 		
 		MapView mapView = (MapView) findViewById(R.id.mapview);
 
 	    mapView.setBuiltInZoomControls(true);
 	   
-	    List<Overlay> mapOverlays = mapView.getOverlays();
+	    mapOverlays = mapView.getOverlays();
 	    mapOverlays.clear();
 	    
 	    Drawable drawable = this.getResources().getDrawable(R.drawable.facebook);
 	    drawable.setAlpha(0);
-	    CustomItemizedOverlay itemizedoverlay = new CustomItemizedOverlay(drawable,this);
+	    itemizedoverlay = new CustomItemizedOverlay(drawable,this);
 	    GeoPoint point;
 	    OverlayItem overlayitem;
 
 	    // Iterate the list and get all the route points, duration, distance, instructoins
-	    
+	    System.out.println("MAPS ACTIVITY On search completed 222 ");
 	    for(int i =0;i<list.size();i++)
 	    {
 	    	point = new GeoPoint((int)(list.get(i).latitude * 1E6),(int)(list.get(i).longitude * 1E6));
@@ -107,8 +123,12 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 		myMapController = mapView.getController();
 	    myMapController.animateTo(new GeoPoint((int)(list.get(0).latitude * 1E6),(int)(list.get(0).longitude * 1E6)));
 	    myMapController.setZoom(17); //Fixed Zoom Level
+		}
+	}
 	
-
+	
+	public void moveTo(int item) {
+		myMapController.animateTo(itemizedoverlay.getOverlayItem(item).getPoint());		
 	}
 	
 	protected Dialog onCreateDialog(int id)

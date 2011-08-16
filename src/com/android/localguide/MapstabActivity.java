@@ -38,7 +38,7 @@ public class MapstabActivity extends TabActivity{
 	    tabHost.addTab(spec);
 
 	    TabSpec ts1 = tabHost.newTabSpec("Directions");
-	    ts1.setIndicator("Directions", res.getDrawable(R.drawable.car));
+	    ts1.setIndicator("Directions", res.getDrawable(R.drawable.directions));
         ts1.setContent(new TabHost.TabContentFactory(){
         	 
             public View createTabContent(String tag)

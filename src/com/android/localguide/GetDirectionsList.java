@@ -17,13 +17,14 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
+import org.apache.http.conn.ConnectTimeoutException;
 public class GetDirectionsList {
 	
 	public interface SearchResultCallBack {
-		public void OnSearchCompleted(ArrayList<DirectionItem> list);
+		public void OnSearchCompleted(ArrayList<DirectionItem> list,int code);
 		public static final int SUCCESS 	= 1;
 		public static final int NETWORK_FAILURE		= 2;
+		public static final int NO_ROUTE		= 3;
 	}
 	
 	public class DirectionItem
@@ -48,7 +49,7 @@ public class GetDirectionsList {
 		startLocation = start;
 		destination = dest;
 		mCB = aCB;
-		DirectionItemList = new ArrayList<DirectionItem>();
+		
 	}
 	
 	public void searchRoutes()
@@ -60,26 +61,26 @@ public class GetDirectionsList {
 				URL url = new URL(query);
 				URI uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
 				HttpGet request = new HttpGet(uri);
-				HttpParams httpParameters = new BasicHttpParams();
 				// Set the timeout in milliseconds until a connection is established.
 				int timeoutConnection = 3000;
-				HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+				HttpConnectionParams.setConnectionTimeout(client.getParams(), timeoutConnection);
 				// Set the default socket timeout (SO_TIMEOUT) 
 				// in milliseconds which is the timeout for waiting for data.
-				int timeoutSocket = 5000;
-				HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+				int timeoutSocket = 3000;
+				HttpConnectionParams.setSoTimeout(client.getParams(), timeoutSocket);
 				
 				HttpResponse response = client.execute(request);
 				Userrequest(response);
-			}catch (URISyntaxException e){
-				
-			}
-			catch(Exception ex){
-				System.out.println("Neetworj error 1 ************8 ");
-		          //txtResult.setText("Failed!");
+			} catch ( ConnectTimeoutException e) {
+				 mCB.OnSearchCompleted(null,SearchResultCallBack.NETWORK_FAILURE);
+			} catch (java.net.SocketTimeoutException e) {
+				 mCB.OnSearchCompleted(null,SearchResultCallBack.NETWORK_FAILURE);
+			}catch(Exception ex){
+				System.out.println("Getdirections error 1 ************8 "+ex.toString());
+				 mCB.OnSearchCompleted(null,SearchResultCallBack.NETWORK_FAILURE);
 			}
 			
-		   }
+		}
 		 public  void Userrequest(HttpResponse response){
 		    
 		    	try{
@@ -93,9 +94,8 @@ public class GetDirectionsList {
 		    	        in.close();
 		    	        result = str.toString();
 		    	        updateData(result);
-		    	   }catch(Exception ex){
-		    		   System.out.println("Neetworj error 2 ************8 ");
-		    	        result = "Error";
+		    	   }catch(Exception ex) {
+		    	        mCB.OnSearchCompleted(null,SearchResultCallBack.NO_ROUTE);
 		    	   }
 		    	    
     	   }
@@ -108,52 +108,81 @@ public class GetDirectionsList {
 		         JSONObject json=new JSONObject(result);
 		         JSONArray ja;
 		         ja = json.getJSONArray("routes");
-		         json = ja.getJSONObject(0);
-		         ja=json.getJSONArray("legs");   
-                 json = ja.getJSONObject(0);
-                 ja = json.getJSONArray("steps");
+		         
+		         if(ja.length() > 0 )
+		        	 json = ja.getJSONObject(0);
+		         else  {
+		        	 mCB.OnSearchCompleted(null,SearchResultCallBack.NO_ROUTE);
+		        	 return;
+		         }
+		         
+		         if(json.length() > 0 )
+			         ja=json.getJSONArray("legs");   
+			     else  {
+			        	 mCB.OnSearchCompleted(null,SearchResultCallBack.NO_ROUTE);
+			        	 return;
+			         }
+		         
+		         if(ja.length() > 0 )
+	                 json = ja.getJSONObject(0);
+			         else  {
+			        	 mCB.OnSearchCompleted(null,SearchResultCallBack.NO_ROUTE);
+			        	 return;
+			         }
+
+		         if(json.length() > 0 )
+	                 ja = json.getJSONArray("steps");
+			         else  {
+			        	 mCB.OnSearchCompleted(null,SearchResultCallBack.NO_ROUTE);
+			        	 return;
+			         }
+
 		         	         
 		         int resultCount = ja.length();
-		         
-		         for (int i = 0; i < resultCount; i++)
-		           {
-		           JSONObject resultObject = ja.getJSONObject(i);
-		           DirectionItem item = new DirectionItem();
-		           JSONObject obj;
-		           
-		           // Get the distance
-		           obj = resultObject.getJSONObject("distance");
-		           item.distance = obj.getString("text");
-		           
-		           // Get the duration
-		           obj = resultObject.getJSONObject("duration");
-		           item.duration = obj.getString("text");
-		           
-		           // Get the lat,long
-		           obj = resultObject.getJSONObject("start_location");
-		           
-		           item.latitude = Double.parseDouble(obj.getString("lat"));
-		           item.longitude = Double.parseDouble(obj.getString("lng"));
-		           
-		           // Get the instruction
-		           item.instructions = resultObject.getString("html_instructions"); 
-		           
-		           System.out.println("Latitude Longitude is "+item.latitude+"::"+item.longitude);
-		           System.out.println("Instructions are ****** "+item.instructions);
-		           System.out.println("Distance are ****** "+item.distance);
-		           System.out.println("Durations are ****** "+item.duration);
-		           DirectionItemList.add(item);
-		           
-		           //System.out.println("REsult steps is "+resultObject.toString());
-		           
+		         if(resultCount > 0 ) {
+			         DirectionItemList = new ArrayList<DirectionItem>();
+			         for (int i = 0; i < resultCount; i++)
+			           {
+			           JSONObject resultObject = ja.getJSONObject(i);
+			           DirectionItem item = new DirectionItem();
+			           JSONObject obj;
+			           
+			           // Get the distance
+			           obj = resultObject.getJSONObject("distance");
+			           item.distance = obj.getString("text");
+			           
+			           // Get the duration
+			           obj = resultObject.getJSONObject("duration");
+			           item.duration = obj.getString("text");
+			           
+			           // Get the lat,long
+			           obj = resultObject.getJSONObject("start_location");
+			           
+			           item.latitude = Double.parseDouble(obj.getString("lat"));
+			           item.longitude = Double.parseDouble(obj.getString("lng"));
+			           
+			           // Get the instruction
+			           item.instructions = resultObject.getString("html_instructions"); 
+			           
+			           System.out.println("Latitude Longitude is "+item.latitude+"::"+item.longitude);
+			           System.out.println("Instructions are ****** "+item.instructions);
+			           System.out.println("Distance are ****** "+item.distance);
+			           System.out.println("Durations are ****** "+item.duration);
+			           DirectionItemList.add(item);
+			           
+			           //System.out.println("REsult steps is "+resultObject.toString());
+			           
 		           }
-		         mCB.OnSearchCompleted(DirectionItemList);
+			         mCB.OnSearchCompleted(DirectionItemList,SearchResultCallBack.SUCCESS);
+		         } else {
+		        	 mCB.OnSearchCompleted(null,SearchResultCallBack.NO_ROUTE);
+		         }
 		        }
 		         catch(Exception e)
 		         {
 		         	
 		         System.out.println("Exception is "+e.toString());
-		         mCB.OnSearchCompleted(null);
+		         mCB.OnSearchCompleted(null,SearchResultCallBack.NO_ROUTE);
 		         }
 		    }
 }

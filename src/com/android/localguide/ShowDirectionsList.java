@@ -3,21 +3,16 @@ package com.android.localguide;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.Bitmap.Config;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,13 +39,21 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		mNoContentDisplay.setText("Loading the directions....");
 	
 		mListView = new ListView(context);
+		mListView.setPadding(3,5,3,3);
 		mListView.setCacheColorHint(Color.argb(0, 0, 0, 0));
-		mListView.setDividerHeight(5);
-		ColorDrawable d = new ColorDrawable(0x00000000);
+		mListView.setDividerHeight(1);
+		Drawable d = context.getResources().getDrawable(R.drawable.car);
+		d.setAlpha(0);
 		mListView.setDivider(d);
 		mListView.setDrawSelectorOnTop(false);
 		mListView.setSelector(context.getResources().getDrawable(R.color.app_background_color));
-		
+
+		mListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
+				
+			}
+			
+		});
 		
 		LinearLayout.LayoutParams levelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 		
@@ -62,7 +65,7 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		this.setBackgroundDrawable(context.getResources().getDrawable(R.color.app_background_color));
 		
 		}
-	public void OnSearchCompleted(ArrayList<DirectionItem> list)
+	public void OnSearchCompleted(ArrayList<DirectionItem> list,int code)
 	{
 		System.out.println("on show directions search completed ****************** ");
 		if(list != null)
@@ -81,7 +84,7 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		    mListView.setAdapter(mListAdapter);
 		}
 		else {
-			
+			System.out.println("on show directions search completed ******************LIST NULL "+list);
 		}
 	}
 	
@@ -116,62 +119,20 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 	            	
 	                holder = new ViewHolder();
 	                holder.direction = (TextView) convertView.findViewById(R.id.direction);
+	                holder.icon = (MarkerIcon)convertView.findViewById(R.id.markerIcon);
+	                
 	                convertView.setTag(holder);
 	            } else {
 	                holder = (ViewHolder) convertView.getTag();
 	            }
-	            
-	            holder.direction.setText(mData.get(position));
+	            holder.icon.createMarkerIcon(position);
+	            holder.direction.setText(Html.fromHtml(mData.get(position)));
 	            return convertView;
 	        }
 	         class ViewHolder {
-	            ImageView icon;
+	            //ImageView icon;
+	            MarkerIcon icon;
 	            TextView direction;
 	        }
 	    }
-	   
-	   
-	   private class MarkerIcon extends View {
-		   
-		   private Bitmap mMarker;
-		   private Bitmap mRequiredMarker;
-		   String markers[] = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-		   Rect  mMarkerRect;
-		   Paint mTextPaint;
-		   
-		   MarkerIcon(Context context,int pos ) {
-			   super(context);
-				mMarkerRect = new Rect(0,0,18,32);
-				mMarker = BitmapFactory.decodeResource(context.getResources(), R.drawable.marker);
-				mTextPaint = new Paint();
-				mTextPaint.setAntiAlias(true);
-				mTextPaint.setDither(true);
-				mTextPaint.setColor(Color.rgb(0x12, 0x10, 0x5E));
-				createMarkerIcon(pos);
-		   }
-		
-		   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-			   
-			    int width = MeasureSpec.getSize(widthMeasureSpec);	
-			    int height = MeasureSpec.getSize(heightMeasureSpec);	
-				this.setMeasuredDimension(width, height);   
-		   }
-		   
-		   public void createMarkerIcon(int mOveryLayItemsCount ) {
-			    mRequiredMarker = Bitmap.createBitmap(18,32, Config.ARGB_8888);
-				Canvas drawcanvas = new Canvas(mRequiredMarker);
-				drawcanvas.drawBitmap(mMarker,null,mMarkerRect,mTextPaint);
-
-				if(mOveryLayItemsCount == 8 ||mOveryLayItemsCount == 9 ||mOveryLayItemsCount == 14 ||mOveryLayItemsCount == 15)
-					drawcanvas.drawText(markers[mOveryLayItemsCount], 8, 16, mTextPaint);
-				else
-					drawcanvas.drawText(markers[mOveryLayItemsCount], 6, 16, mTextPaint);
-			   
-			   
-		   }
-		   public void onDraw(Canvas canvas ) {
-			   canvas.drawBitmap(mRequiredMarker,0,0,mTextPaint);
-		   }
-		   
-	   }
 }
