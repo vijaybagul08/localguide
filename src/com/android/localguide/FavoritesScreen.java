@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
+import android.widget.Adapter;
 import android.widget.AdapterView;
-import   android.widget.BaseAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -23,24 +23,28 @@ public class FavoritesScreen extends Activity{
 	
 	LocalGuideApplication app;
 	ArrayList<favoriteItem> mList;
+	ListView mListView;
+	BaseAdapter mAdapter;
 	
 	public void onCreate(Bundle savedInstance)
 	{
+		System.out.println("On create favorites screen ********* ");
 		super.onCreate(savedInstance);
 		setContentView(R.layout.favorites);
 		app = (LocalGuideApplication)this.getApplication();
 		
 		mList = app.getFavoritesList();
 
-		ListView list = (ListView)findViewById(R.id.list);
-		list.setAdapter(new ListAdapter(this));
+		mListView = (ListView)findViewById(R.id.list);
+		mAdapter = new ListAdapter(this);
+		mListView.setAdapter(mAdapter);
 		
-        list.setOnItemClickListener(new OnItemClickListener() { 
+		mListView.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 
             	Intent intent = new Intent();
-        		//intent.setClass(FavoritesScreen.this, FavoritesResults.class);
-            	intent.setClass(FavoritesScreen.this, OptionsScreen.class);
+        		intent.setClass(FavoritesScreen.this, FavoritesResults.class);
+            	//intent.setClass(FavoritesScreen.this, OptionsScreen.class);
             	intent.setAction("com.mani.favorites");
         		Bundle bun = new Bundle();
                 bun.putInt("position", position);
@@ -51,12 +55,20 @@ public class FavoritesScreen extends Activity{
         	
         }); 
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		System.out.println("Favorites screen ********** on resume");
+		mList = app.getFavoritesList();
+		mAdapter.notifyDataSetChanged();
+	}
+	
 	public void onBackPressed ()
 	{
 		System.out.println("On back key pressed ************* ");
 		 app.saveToDataBase();
 		 this.finish();
-		 
 	}
 
 	private  class ListAdapter extends BaseAdapter {
@@ -83,8 +95,6 @@ public class FavoritesScreen extends Activity{
             ViewHolder holder;
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.listview, null);
-                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, 100);
-                convertView.setLayoutParams(params);
                 holder = new ViewHolder();
                 holder.title = (TextView) convertView.findViewById(R.id.title);
                 holder.address = (TextView) convertView.findViewById(R.id.address);
@@ -93,12 +103,10 @@ public class FavoritesScreen extends Activity{
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.title.setText(mList.get(position).title);
-            holder.title.setTextColor(Color.rgb(0xbf, 0x6e, 0x46));
-            holder.title.setTextSize(20);
+            holder.title.setTextColor(Color.rgb(0xff, 0xff, 0xff));
 
             holder.address.setText(mList.get(position).streetAddress);
-            holder.address.setTextColor(Color.rgb(0xbf, 0x6e, 0x46));
-            holder.address.setTextSize(18);
+            holder.address.setTextColor(Color.rgb(0xff, 0xff, 0xff));
             
             return convertView;
         }

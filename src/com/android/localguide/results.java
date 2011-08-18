@@ -123,14 +123,14 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 			URL url = new URL(query);
 			URI uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
 			HttpGet request = new HttpGet(uri);
-			HttpParams httpParameters = new BasicHttpParams();
+			
 			// Set the timeout in milliseconds until a connection is established.
-			int timeoutConnection = 3000;
-			HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+			int timeoutConnection = 5000;
+			HttpConnectionParams.setConnectionTimeout(client.getParams(), timeoutConnection);
 			// Set the default socket timeout (SO_TIMEOUT) 
 			// in milliseconds which is the timeout for waiting for data.
 			int timeoutSocket = 5000;
-			HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+			HttpConnectionParams.setSoTimeout(client.getParams(), timeoutSocket);
 			
 			HttpResponse response = client.execute(request);
 			Userrequest(response);

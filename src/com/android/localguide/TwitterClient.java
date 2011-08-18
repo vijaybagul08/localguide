@@ -93,8 +93,8 @@ public class TwitterClient {
     	try {
     		
     		List<BasicNameValuePair> qparams = new ArrayList<BasicNameValuePair>();
-	    	qparams.add(new BasicNameValuePair("status","@vinothg123 Visint next week bangkok"));
-    		qparams.add(new BasicNameValuePair("in_reply_to_status_id", "9100592710418432"));
+	    	qparams.add(new BasicNameValuePair("status","tweetMessage"));
+    		//qparams.add(new BasicNameValuePair("in_reply_to_status_id", "9100592710418432"));
 
 	        URI uri = URIUtils.createURI(null,UPDATE_STATUS_URI, -1, null, URLEncodedUtils.format(qparams, "UTF-8"), null);
 	        
@@ -103,10 +103,9 @@ public class TwitterClient {
 	        post.setEntity(new UrlEncodedFormEntity(qparams, HTTP.UTF_8)); 
 	        post.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
 	        mConsumer = new CommonsHttpOAuthConsumer(mConsumerKey, mConsumerSecret);
-	        //52681808-hq1bD2QMMxmASKRqNUp4B6LW1rO4U7uvDVFh2DAy6
-	        	//myywAFkhViAphog5wkzaYdiTWDdPdrCEzOjkZ4fVAzo
-//	        mConsumer.setTokenWithSecret(mAccessKey, mAccessSecret); // Working properly key, secret is the order.
-	        mConsumer.setTokenWithSecret("52681808-hq1bD2QMMxmASKRqNUp4B6LW1rO4U7uvDVFh2DAy6", "myywAFkhViAphog5wkzaYdiTWDdPdrCEzOjkZ4fVAzo");
+
+	        mConsumer.setTokenWithSecret(mAccessKey, mAccessSecret); // Working properly key, secret is the order.
+	        //mConsumer.setTokenWithSecret("52681808-hq1bD2QMMxmASKRqNUp4B6LW1rO4U7uvDVFh2DAy6", "myywAFkhViAphog5wkzaYdiTWDdPdrCEzOjkZ4fVAzo");
 	        // sign the request
 	        mConsumer.sign(post);
 	        // send the request
