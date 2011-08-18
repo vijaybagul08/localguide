@@ -124,6 +124,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     
     if(this.getIntent().getAction().equals("com.mani.favorites") == true )
     {
+    	System.out.println("faqvoites options screen ********* ");
     	app = (LocalGuideApplication)this.getApplication();
     	mFavList = app.getFavoritesList();
     	for(int count=0;count<mFavList.size();count++)
@@ -150,8 +151,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     				   {
     					   Toast.makeText(mContext, "Failed to delete favorites", 4000).show();
     				   }
-    				   
-    				   
     		    }
     	     });
     	}
@@ -687,7 +686,9 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 			});
                 
 			builder.setView(layout);
-			dialog = builder.create();   
+			//dialog = builder.create();   
+			dialog = new CustomDialog(mContext);
+			dialog.setContentView(layout);
 			return dialog;
 	  case FACEBOOK_ID:
 		  	builder = new AlertDialog.Builder(mContext);
@@ -714,6 +715,9 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
                 
 			builder.setView(layout);
 			dialog = builder.create();   
+			dialog = new CustomDialog(mContext);
+			dialog.setContentView(layout);
+
 			return dialog;
 	  }  
 	  return null;

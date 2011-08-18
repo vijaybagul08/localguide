@@ -3,6 +3,7 @@
 			android:id="@+id/MainLayout"
               android:layout_width="fill_parent" 
               android:layout_height="fill_parent"
+	      android:padding="5px"
               android:background="@color/app_background_color"
               android:orientation="vertical">
 

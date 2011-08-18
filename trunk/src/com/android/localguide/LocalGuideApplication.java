@@ -119,6 +119,7 @@ public class LocalGuideApplication extends Application {
 
 	public boolean addToFavorites(String title,String address,String phoneNumber,String lat,String along)
 	{
+		System.out.println("Add to favorites *********** ");
 		/*Check if the user has already added the item to favorites list*/
 		
 		for(int i=0;i<favoritesList.size();i++)
@@ -138,6 +139,7 @@ public class LocalGuideApplication extends Application {
 	
 	public boolean deleteFavorites(String title)
 	{
+		System.out.println("Delete to favorites *********** ");
 		int position=-1;
 		for(int i=0;i<favoritesList.size();i++)
 		{
