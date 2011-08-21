@@ -127,7 +127,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     	System.out.println("faqvoites options screen ********* ");
     	app = (LocalGuideApplication)this.getApplication();
     	mFavList = app.getFavoritesList();
-    	totalCount = mFavList.size();
+    	totalcount = mFavList.size();
     	for(int count=0;count<mFavList.size();count++)
     	{
     		System.out.println("title is "+mFavList.get(count).title);
@@ -147,7 +147,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     				   if( 	app.deleteFavorites(title.get(currentaddress)) == true )
     				   {
     					   Toast.makeText(mContext, "Successfully delted from favorites list", 4000).show();
-    					   moveRight();
+    					   //moveRight();
+    					   deleteAddress();
     				   }
     				   else
     				   {
@@ -308,15 +309,18 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     		layout.setTitle(title.get(currentaddress));
     		layout.setAddress(text);	
     		nextArrow.setVisibility(View.VISIBLE);
+    		if(currentaddress < 1)
+    			nextArrow.setVisibility(View.INVISIBLE);
     	}
-    	else
-    		previousArrow.setVisibility(View.INVISIBLE);
 	}
 	
 	public void moveRight()
 	{
     	if(currentaddress < totalcount-1)
     	{
+    		if(currentaddress == totalcount-2)
+    			previousArrow.setVisibility(View.INVISIBLE);
+
     		currentaddress++;
     		String text;
     		text = streetaddress.get(currentaddress);
@@ -326,15 +330,37 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     		layout.setAddress(text);	
     		previousArrow.setVisibility(View.VISIBLE);
     	}
-    	else
-    		nextArrow.setVisibility(View.INVISIBLE);
 	}
 
 	public void deleteAddress() {
+		System.out.println("Delete address ****************** "+currentaddress+"::"+totalcount);
 		// If currentaddress > totalcount bring the next element in.
-		
+		if(currentaddress <totalcount) {
+    		currentaddress++;
+    		totalcount = mFavList.size();
+    		String text;
+    		text = streetaddress.get(currentaddress);
+    		text+="\n";
+    		text += phonenumbers.get(currentaddress);
+    		layout.setTitle(title.get(currentaddress));
+    		layout.setAddress(text);	
+    		previousArrow.setVisibility(View.VISIBLE);			
+		} else {
+			if(totalcount < 0) {
+				currentaddress=totalcount;
+				totalcount = mFavList.size();
+	    		String text;
+	    		text = streetaddress.get(currentaddress);
+	    		text+="\n";
+	    		text += phonenumbers.get(currentaddress);
+	    		layout.setTitle(title.get(currentaddress));
+	    		layout.setAddress(text);	
+	    		previousArrow.setVisibility(View.VISIBLE);			
+			} else {
+				layout.setTitle("No elements to display ........ ");
+			}
+		}
 		// Else show the previous element.
-		
 	}
 	
 	public void onButtonOkPressed(boolean isCurrentLocation,String alocation)

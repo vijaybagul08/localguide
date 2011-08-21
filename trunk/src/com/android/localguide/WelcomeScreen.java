@@ -61,7 +61,11 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	        setContentView(R.layout.welcome);
 	        
 	        app = (LocalGuideApplication) this.getApplication();
-	        app.loadFromDataBase();
+	        
+	        if(app.isLoaded == false) {
+	        	app.loadFromDataBase();
+	        	app.isLoaded = true;
+	        }
 	        System.out.println("on facebook authentication complete set token is **** "+app.getFacebookToken());
 	        System.out.println("Accesskey for Twitter is ************* "+app.getTwitterAccessKey()+"::::"+app.getTwitterAccessSecret());
 	        mContext = getApplicationContext();

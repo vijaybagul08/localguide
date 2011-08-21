@@ -13,14 +13,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -40,7 +38,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class results extends ListActivity implements SpinnerButton.SpinnerButtonCallback {
+public class results extends Activity implements SpinnerButton.SpinnerButtonCallback {
 
 	static String result="";
 	private ArrayList<String> title;
@@ -54,6 +52,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 	SpinnerButton moreButton;
     Context mContext;
     Dialog mDialog;
+    ListView mListView;
 	private Runnable mDelayedTask = new Runnable() {
         public void run() {
         	sendSearchRequest(mCurrentResultCount);
@@ -76,20 +75,20 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
         mHandler.postDelayed(mDelayedTask, 2000);
         
         mScreenLayout = (LinearLayout) findViewById(R.id.resultsLayout);
-
+        mListView = (ListView)findViewById(R.id.result_list);
         mDialog.show();
         animation = new MyAnimation();
         mScreenLayout.startAnimation(animation);
-        ListView list =  getListView();
+
         AnimationSet set = new AnimationSet(true);
         Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
         animation1.setDuration(300);
         set.addAnimation(animation1);
         LayoutAnimationController controller = new LayoutAnimationController(set,1.0f);
         
-        list.setLayoutAnimation(controller);
+        mListView.setLayoutAnimation(controller);
 
-        list.setOnItemClickListener(new OnItemClickListener() { 
+        mListView.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
         		  Intent intent = new Intent();
         		  intent.setClass(results.this, OptionsScreen.class);
@@ -190,7 +189,7 @@ public class results extends ListActivity implements SpinnerButton.SpinnerButton
 	           }
 	           address.add(addrr);
 	           }
-	         setListAdapter(new EfficientAdapter(this));
+	         mListView.setAdapter(new EfficientAdapter(this));
 	         }
 	         catch(Exception e)
 	         {

@@ -15,7 +15,7 @@ public class LocalGuideApplication extends Application {
 	String mTwitterAccessKey;
 	String mTwitterAccessSecret;
 	String mFacebookAccessToken;
-	
+	boolean isLoaded = false;
 	ArrayList<favoriteItem> favoritesList;
 	
 	class favoriteItem
@@ -43,12 +43,13 @@ public class LocalGuideApplication extends Application {
 		mFacebookAccessToken = null;
 	System.out.println("On create application *********** ");
         favoritesList = new ArrayList<favoriteItem>();
-	    loadFromDataBase();
+	    //loadFromDataBase();
 	}
 	public void onTerminate()
 	{
 		super.onTerminate();
-		saveToDataBase();
+		System.out.println("On terminate application *********** ");
+		//saveToDataBase();
 	}
 	
 	public void updateTwitterToken(String key,String secret)
@@ -57,6 +58,10 @@ public class LocalGuideApplication extends Application {
 		mTwitterAccessSecret = secret;
 	}
 
+	public void setLoaded(boolean load) {
+		isLoaded = load;
+	}
+	
 	public String getTwitterAccessKey()
 	{
 		return mTwitterAccessKey;
@@ -189,11 +194,13 @@ public class LocalGuideApplication extends Application {
         int count = prefs.getInt("FavoritesCount", 0);
         
         for (int i = 0; i < count; i++) {
+        	
         	String title = prefs.getString("title" + i, "");
         	String address = prefs.getString("streetaddress" + i, "");
         	String phonenumber = prefs.getString("phonenumber" + i, "");
         	String lat= prefs.getString("latitude" + i, "");
         	String along= prefs.getString("longitude" + i, "");
+        	System.out.println("load from data base ******** "+ title+":::"+phonenumber);
         	favoriteItem item = new favoriteItem(title,address,phonenumber,lat,along);
         	favoritesList.add(item);
         }
@@ -202,6 +209,7 @@ public class LocalGuideApplication extends Application {
 	
 	public void saveToDataBase()
 	{
+		System.out.println("save to data base ********* ");
 	 	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = null;;
         editor = prefs.edit();
@@ -219,6 +227,7 @@ public class LocalGuideApplication extends Application {
        for (int i = 0; i < count; i++) {
         	favoriteItem data = favoritesList.get(i);
         	if(count != 0) {
+        		System.out.println("save to data base ******** "+data.title+"::"+data.phoneNumber);
         		// TODO:
                 editor.putString("title" + i, data.title);
                 editor.putString("streetaddress" + i, data.streetAddress);
@@ -230,5 +239,6 @@ public class LocalGuideApplication extends Application {
         
         editor.commit();
         favoritesList.clear();		
+        isLoaded = false;
 	}
 }

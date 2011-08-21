@@ -35,7 +35,7 @@ public class FavoritesScreen extends Activity{
 		
 		mList = app.getFavoritesList();
 
-		mListView = (ListView)findViewById(R.id.list);
+		mListView = (ListView)findViewById(R.id.fav_list);
 		mAdapter = new ListAdapter(this);
 		mListView.setAdapter(mAdapter);
 		
@@ -61,7 +61,8 @@ public class FavoritesScreen extends Activity{
 		super.onResume();
 		System.out.println("Favorites screen ********** on resume");
 		mList = app.getFavoritesList();
-		mAdapter.notifyDataSetChanged();
+		mListView.setAdapter(mAdapter);
+		//mAdapter.notifyDataSetChanged();
 	}
 	
 	public void onBackPressed ()
