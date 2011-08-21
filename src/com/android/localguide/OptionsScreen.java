@@ -268,6 +268,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    {
 	    	if( app.isTwitterAutheticated() == false)
 	    	{
+	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your twitter account",false).show();
+	    		
 	    		AlertDialog alertDialog = new AlertDialog.Builder(OptionsScreen.this).create();
 	    		alertDialog.setTitle("Not authenticated");
 	    		alertDialog.setMessage("Please go to help page and authenticate with your twitter account");
@@ -278,7 +280,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    		 
 	    		    } });
 	    		alertDialog.setIcon(R.drawable.icon);
-	    		alertDialog.show();
+	    		//alertDialog.show();
 	    	}
 	    	else
 	    	{
@@ -300,6 +302,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    {
 	    	if( app.isFacebookAuthenticated() == false)
 	    	{
+	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your facebook account",false).show();
 	    		AlertDialog alertDialog = new AlertDialog.Builder(OptionsScreen.this).create();
 	    		alertDialog.setTitle("Not authenticated");
 	    		alertDialog.setMessage("Please go to help page and authenticate with your facebook account");
@@ -310,7 +313,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    		 
 	    		    } });
 	    		alertDialog.setIcon(R.drawable.icon);
-	    		alertDialog.show();
+	    		//alertDialog.show();
 	    		
 	    	}
 	    	else
@@ -374,8 +377,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		 
 		    } });
 		alertDialog.setIcon(R.drawable.icon);
-		alertDialog.show();	    		
-
+		//alertDialog.show();	    		
+		new ErrorDialog(this,"No Internet Connection","Please enable the internet connection",false).show();
 	}
 	
 	private boolean checkInternetConnection() {
@@ -418,15 +421,20 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     		layout.setTitle(title.get(currentaddress));
     		layout.setAddress(text);	
     		nextArrow.setVisibility(View.VISIBLE);
+    		if(currentaddress < 1)
+    			previousArrow.setVisibility(View.INVISIBLE);
+
     	}
-    	else
-    		previousArrow.setVisibility(View.INVISIBLE);
-	}
+ 	}
 	
 	public void moveRight()
 	{
     	if(currentaddress < totalcount-1)
     	{
+    		
+    		if(currentaddress == totalcount-2)
+    			nextArrow.setVisibility(View.INVISIBLE);
+
     		currentaddress++;
     		String text;
     		text = streetaddress.get(currentaddress);
@@ -436,9 +444,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     		layout.setAddress(text);	
     		previousArrow.setVisibility(View.VISIBLE);
     	}
-    	else
-    		nextArrow.setVisibility(View.INVISIBLE);
-	}
+ 	}
 
 	
 	public void onMovementDetected(boolean isLeftMovement)
@@ -653,6 +659,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	  
 	  case TWITTER_ID:
 		  	builder = new AlertDialog.Builder(mContext);
+		  	
 		  	layout = inflater.inflate(R.layout.twitterlayout,(ViewGroup) findViewById(R.id.twitterLayout));
 		  	hintTitle = (TextView ) layout.findViewById(R.id.hint);
 		  	hintTitle.setText("Message (Less than 140 characters)");
