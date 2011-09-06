@@ -17,6 +17,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +56,14 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	boolean isLocationChkBoxChecked = true;
 	List<Address> mAddressList = null;
 	public final static int ACTIVITY_INVOKE = 0;
+	private Handler mHandler = new Handler();
 	
+	private Runnable mTask = new Runnable(){
+		public void run() {
+			checkLocation();
+		}
+		
+	};
 	public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.welcome);
@@ -197,43 +205,55 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 		}
 
 	} 
+	 
+	  private Location mLocation;
+	  
 	   public void gotLocation(Location aLocation)
 	   {
-		   if(aLocation != null)
+		   mLocation = aLocation;
+		   mHandler.post(mTask);
+	   }
+	   
+	   public void checkLocation() {
+		   
+		   if(mLocation != null)
 		   {
-			   System.out.println("latitude and longitude is ************ "+aLocation.getLatitude()+";;;"+ aLocation.getLongitude());
+			   System.out.println("latitude and longitude is ************ "+mLocation.getLatitude()+";;;"+ mLocation.getLongitude());
 			   //Reverse Geo coding
 			   String currlocation=null;
 			   try
 			   {
-			   mAddressList = mReverseGeoCoder.getFromLocation(aLocation.getLatitude(), aLocation.getLongitude(), 1);
+			   mAddressList = mReverseGeoCoder.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
 			   if (mAddressList.size()> 0){
 				   currlocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
 				   System.out.println("Currlocations is *************** "+currlocation);
 	               Toast.makeText(mContext, currlocation, 4000).show();
-			   }	
+				   // Check fo currlocation is null... if null dont trigger start activity.
+				   Intent intent = new Intent();
+		           intent.putExtra("categoryString", category);
+		           location = locationTextbox.getText().toString();
+		           intent.putExtra("locationString", location);
+		           Bundle bun = new Bundle();
+		           bun.putString("categoryString", category); 
+		           bun.putString("locationString", currlocation);
+		           intent.putExtras(bun);
+		           intent.setClass(mContext, results.class);
+		           startActivity(intent);
+		           dialog.dismiss();
+	               
+			   	}	
 			   }
 			   catch(Exception e)
 			   {
 				   System.out.println("Couldnt find the location *************");
-				   Toast.makeText(mContext, "Sorry, Couldnt fetch the current location, due to unavailability of network or GPS provider", 4000).show();
+				   Toast.makeText(mContext, "Sorry, Couldnt fetch the current location, due to reveres geocoding error", 4000).show();
+				   dialog.dismiss();
 			   }
-			   // Check fo currlocation is null... if null dont trigger start activity.
-			   Intent intent = new Intent();
-	           intent.putExtra("categoryString", category);
-	           location = locationTextbox.getText().toString();
-	           intent.putExtra("locationString", location);
-	           Bundle bun = new Bundle();
-	           bun.putString("categoryString", category); 
-	           bun.putString("locationString", currlocation);
-	           intent.putExtras(bun);
-	           intent.setClass(mContext, results.class);
-	           startActivity(intent);
-	           dialog.dismiss();
 		   }
 		   else
 		   {
 			   Toast.makeText(mContext, "Sorry, Couldnt fetch the current location, due to unavailability of network or GPS provider", 4000).show();
+			   dialog.dismiss();
 		   }
 	   }
 	     protected Dialog onCreateDialog(int id) {   

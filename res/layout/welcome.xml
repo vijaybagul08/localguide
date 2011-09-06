@@ -3,87 +3,87 @@
 			android:id="@+id/MainLayout"
               android:layout_width="fill_parent" 
               android:layout_height="fill_parent"
-	      android:padding="5px"
+		      android:padding="5px"
               android:background="@color/app_background_color"
               android:orientation="vertical">
 
             
-<TextView android:id="@+id/text"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:textAppearance="?android:attr/textAppearanceLarge"
-android:textColor="#ffffffff"
-android:padding="3dip"
-android:text="Enter category :" />
+	<TextView android:id="@+id/text"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:textColor="#ffffffff"
+	android:padding="3dip"
+	android:text="Enter category :" />
 
-<LinearLayout 
+	<LinearLayout 
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="3dip"
+				android:orientation="horizontal">
+				
+			<EditText android:id="@+id/categotytextbox"
+			android:hint="eg. pubs,restuarants "
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="3dip"
-			android:orientation="horizontal">
+			android:layout_height="fill_parent"
+			android:layout_weight="0.2"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textColor="#12105E"
+			android:textColorHint="#AA12105E"
+			android:background="@color/edittext_bkg"
+			android:singleLine="true"
+			android:layout_marginLeft="5dip"
+			android:maxLines="1"/>
 			
-<EditText android:id="@+id/categotytextbox"
-android:hint="eg. pubs,restuarants "
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:layout_weight="0.2"
-android:textAppearance="?android:attr/textAppearanceLarge"
-android:textColor="#12105E"
-android:textColorHint="#AA12105E"
-android:background="@color/edittext_bkg"
-android:singleLine="true"
-android:layout_marginLeft="5dip"
-android:maxLines="1"/>
+			<ImageView android:id="@+id/search"
+			android:layout_marginLeft="10dip"
+			android:layout_weight="0.8"
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent"
+			android:src="@drawable/find"/>
+	
+	</LinearLayout>
 
-<ImageView android:id="@+id/search"
-android:layout_marginLeft="10dip"
-android:layout_weight="0.8"
-android:layout_width="fill_parent" 
-android:layout_height="fill_parent"
-android:src="@drawable/find"/>
-
-</LinearLayout>
-
-<Button android:id="@+id/categories"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:layout_gravity="right"
-android:layout_marginTop="10dip"
-android:layout_marginRight="10dip"
-android:padding="5px"
-android:text="Choose categories"
-android:textSize="18sp"
-android:background="@drawable/search_button"
-android:textColor="#ffffff"/>
-            
-<TextView android:id="@+id/text1"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:visibility="gone"
-android:textColor="#ffffffff"
-android:textAppearance="?android:attr/textAppearanceLarge"
-android:padding="3dip"
-android:text="Enter Location :" />
-			
-<EditText android:id="@+id/locationtextbox"
-android:hint="eg. Liverpool,uk "
-android:layout_width="250dip"
-android:layout_height="wrap_content"
-android:textColor="#12105E"
-android:textColorHint="#AA12105E"
-android:textAppearance="?android:attr/textAppearanceLarge"
-android:layout_marginLeft="5dip"
-android:background="@color/edittext_bkg"
-android:visibility="gone"
-android:singleLine="true"
-android:maxLines="1"/>
- 
-<CheckBox android:id="@+id/checkbox"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:textAppearance="?android:attr/textAppearanceLarge"
-android:layout_marginLeft="3dip"
-android:checked="true"
-android:text="Current Location"/>
+	<Button android:id="@+id/categories"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_gravity="right"
+	android:layout_marginTop="10dip"
+	android:layout_marginRight="10dip"
+	android:padding="5px"
+	android:text="Choose categories"
+	android:textSize="18sp"
+	android:background="@drawable/search_button"
+	android:textColor="#ffffff"/>
+	            
+	<TextView android:id="@+id/text1"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:visibility="gone"
+	android:textColor="#ffffffff"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:padding="3dip"
+	android:text="Enter Location :" />
+				
+	<EditText android:id="@+id/locationtextbox"
+	android:hint="eg. Liverpool,uk "
+	android:layout_width="250dip"
+	android:layout_height="wrap_content"
+	android:textColor="#12105E"
+	android:textColorHint="#AA12105E"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:layout_marginLeft="5dip"
+	android:background="@color/edittext_bkg"
+	android:visibility="gone"
+	android:singleLine="true"
+	android:maxLines="1"/>
+	 
+	<CheckBox android:id="@+id/checkbox"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:layout_marginLeft="3dip"
+	android:checked="true"
+	android:text="Current Location"/>
       
 </LinearLayout>
