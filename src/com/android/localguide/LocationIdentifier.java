@@ -41,6 +41,7 @@ public class LocationIdentifier{
 		//exceptions will be thrown if provider is not permitted.
 		try{
 			isGPSenabled=locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			System.out.println("Locaiton manager gps enabled ********* "+isGPSenabled);
 		}
 		catch(Exception ex){
 			
@@ -48,6 +49,7 @@ public class LocationIdentifier{
 
 		try{
 			isNetworkenabled=locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+			System.out.println("Locaiton manager network enabled ********* "+isNetworkenabled);
 		}
 		catch(Exception ex){
 			
@@ -69,7 +71,8 @@ public class LocationIdentifier{
 
 	LocationListener locationListenerNetwork = new LocationListener() {
 		public void onLocationChanged(Location location) {
-			timer.cancel();
+			System.out.println("Locaiton manager locationListenerNetwork ********** called ");
+			timer.cancel(); 
 			mParent.gotLocation(location);
 			isSearching = false;
 			locationManager.removeUpdates(this);
@@ -86,6 +89,7 @@ public class LocationIdentifier{
 	
 	LocationListener locationListenerGps = new LocationListener() {
 		public void onLocationChanged(Location location) {
+			System.out.println("Locaiton manager locationListenerGps ********** called ");
 			timer.cancel();
 			mParent.gotLocation(location);
 			isSearching = false;
@@ -109,6 +113,7 @@ public class LocationIdentifier{
 	class GetLastLocation extends TimerTask {
 	@Override
 	public void run() {
+		System.out.println("Locaiton manager GetLastLocation timertask ********** ");
 		locationManager.removeUpdates(locationListenerGps);
 		locationManager.removeUpdates(locationListenerNetwork);
 		Location networkLocation=null, gpsLocation=null;
@@ -139,6 +144,7 @@ public class LocationIdentifier{
 			mParent.gotLocation(networkLocation);
 			return;
 		}
+		System.out.println("Locaiton manager GetLastLocation timertask ********** null ");
 		mParent.gotLocation(null);
 	    }
 	}
