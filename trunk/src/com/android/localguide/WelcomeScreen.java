@@ -163,31 +163,31 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
         if(checkInternetConnection())
         {
       	
-        if(isLocationChkBoxChecked)
+	        if(isLocationChkBoxChecked)
+	        {
+	            showDialog(LOCATION_ID);	                    	  
+	            locationIdentifier.getLocation();
+	        }
+	        else
+	        {
+	      	  // Start the results activity with location from location text box.
+	 		 Intent intent = new Intent();
+	         intent.putExtra("categoryString", category);
+	         location = locationTextbox.getText().toString();
+	         System.out.println("Location is ******************** "+location);
+	         Bundle bun = new Bundle();
+	         bun.putString("categoryString", category); 
+	         bun.putString("locationString", location);
+	         intent.putExtras(bun);
+	         intent.setClass(mContext, results.class);
+	         startActivity(intent);
+	      	  
+	        }
+        }
+    	else
         {
-            showDialog(LOCATION_ID);	                    	  
-            locationIdentifier.getLocation();
+      	  showDialog(INTERNET_ALERT); 
         }
-        else
-        {
-      	  // Start the results activity with location from location text box.
- 		 Intent intent = new Intent();
-         intent.putExtra("categoryString", category);
-         location = locationTextbox.getText().toString();
-         System.out.println("Location is ******************** "+location);
-         Bundle bun = new Bundle();
-         bun.putString("categoryString", category); 
-         bun.putString("locationString", location);
-         intent.putExtras(bun);
-         intent.setClass(mContext, results.class);
-         startActivity(intent);
-      	  
-        }
-        }
-        	else
-            {
-          	  showDialog(INTERNET_ALERT); 
-            }
            
 	}
 	private boolean checkInternetConnection() {

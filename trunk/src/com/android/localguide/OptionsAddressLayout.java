@@ -13,7 +13,7 @@ public class OptionsAddressLayout extends LinearLayout{
 	Context mContext;
 	TextView title;
 	TextView address;
-	final int THRESHHOLD_MOVEMENT = 100;
+	final int THRESHHOLD_MOVEMENT = 50;
 	MovementIndicator mCallBack;
 	boolean isMovementDetected = false;
 	int currX;
