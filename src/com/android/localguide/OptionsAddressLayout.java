@@ -6,18 +6,21 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class OptionsAddressLayout extends LinearLayout{
+public class OptionsAddressLayout extends RelativeLayout{
 
 	Context mContext;
 	TextView title;
 	TextView address;
+	TextView resultcount;
 	final int THRESHHOLD_MOVEMENT = 50;
 	MovementIndicator mCallBack;
 	boolean isMovementDetected = false;
 	int currX;
 	int currY;
+	int totalcount;
 	
 	public interface MovementIndicator
 	{
@@ -32,23 +35,38 @@ public class OptionsAddressLayout extends LinearLayout{
 		title.setTextSize(22);
 		title.setTextColor(Color.rgb(0xff, 0xff, 0xff));
 		title.setText("Title");
-
+		title.setId(4);
+		
 		address = new TextView(context);
 		address.setTextSize(20);
 		address.setTextColor(Color.rgb(0xff, 0xff, 0xff));
 		address.setText("address");
+		address.setId(5);
 		
-		LinearLayout.LayoutParams levelParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		LinearLayout.LayoutParams percentageParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		resultcount = new TextView(context);
+		resultcount.setTextSize(20);
+		resultcount.setTextColor(Color.rgb(0xff, 0xff, 0xff));
+		resultcount.setText("Result: ");
 		
-		title.setLayoutParams(levelParams);
-		address.setLayoutParams(percentageParams);
 		
-		this.setOrientation(VERTICAL);
+		RelativeLayout.LayoutParams titleParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams addressParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams countParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		
+		title.setLayoutParams(titleParams);
+		addressParams.addRule(RelativeLayout.BELOW, title.getId());
+		address.setLayoutParams(addressParams);
+
+		countParams.addRule(RelativeLayout.BELOW, address.getId());
+		countParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+		resultcount.setLayoutParams(countParams);
+
+		
 		this.setPadding(3,3,3,3);
 		this.setGravity(Gravity.CENTER_VERTICAL);
 		this.addView(title);
 		this.addView(address);
+		this.addView(resultcount);		
 		}
 
 	   public void setTitle(String atitle)
@@ -59,6 +77,14 @@ public class OptionsAddressLayout extends LinearLayout{
 	   public void setAddress(String aAddress)
 	   {
 		   address.setText(aAddress);
+	   }
+	   
+	   public void setCurrentPosition(int pos) {
+		   resultcount.setText("Result: "+pos+"/"+totalcount);
+	   }
+	   
+	   public void setTotalCount(int count) {
+		   totalcount = count;
 	   }
 	   
 	   public void setParent(MovementIndicator aCB)
