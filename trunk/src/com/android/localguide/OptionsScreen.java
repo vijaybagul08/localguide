@@ -49,11 +49,13 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	String result;
 	String location;
 	OptionsAddressLayout layout;
+	private ArrayList<String> resultArray;
 	private ArrayList<String> title;
 	private ArrayList<String> streetaddress;
 	private ArrayList<String> phonenumbers;
 	private ArrayList<String> latitude;
 	private ArrayList<String> longitude;
+
 	TwitterClient mTwitterClient;
 	FaceBookClient mFacebookClient;
 	GetDirectionsDialog mGetDirectionsDialog;
@@ -71,8 +73,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	private final int FACEBOOK_ID = 4;
 	
 	private Dialog dialog;
-	static int totalcount = 0;
-	static int currentaddress =0;
+	int totalcount = 0;
+	int currentaddress =0;
     TableLayout layout1;
     TableLayout layout2;
     MyAnimation animation;
@@ -107,6 +109,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     mTwitterClient = new TwitterClient(this,app.getTwitterAccessKey(),app.getTwitterAccessSecret());
     System.out.println("Accesskey for Twitter is ************* "+app.getTwitterAccessKey()+"::::"+app.getTwitterAccessSecret());
     layout.setParent(this);
+    totalcount = 0;
     animation = new MyAnimation();
     
     /* get the results and position of list where user clicked from results activity */
@@ -120,7 +123,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     longitude = new ArrayList<String>();
     
     Bundle bundle= getIntent().getExtras();
-    System.out.println("Result is ********* "+bundle.getString("resultString"));
+   // System.out.println("Result is ********* "+bundle.getString("resultString"));
     
     if(this.getIntent().getAction().equals("com.mani.favorites") == true )
     {
@@ -158,8 +161,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     else if(this.getIntent().getAction().equals("com.mani.results") == true)
     {
     	 	System.out.println("welcome is ********* "+this.getIntent().getStringExtra("welcome"));
-    	    result = bundle.getString("resultString");
-    	    
+    	    //result = bundle.getString("resultString");
+    	    resultArray = bundle.getStringArrayList("resultString");
     	    updateAllDetails();
     		button7.setOnClickListener( new View.OnClickListener(){
     		    public void onClick(View v)
@@ -218,12 +221,13 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	System.out.println("Position is *************************************** "+text);
 	layout.setTitle(title.get(currentaddress));
 	layout.setAddress(text);
+	layout.setCurrentPosition(currentaddress+1);
 	layout1.startAnimation(animation);
     layout2.startAnimation(animation);
     
     /* Hide the previous arrow if the user selected first item in the result page */
     if(currentaddress == 0)
-    	previousArrow.setVisibility(View.INVISIBLE);
+    	nextArrow.setVisibility(View.INVISIBLE);
     
     if(currentaddress == totalcount-1)
     	previousArrow.setVisibility(View.INVISIBLE);
@@ -419,10 +423,11 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     		text+="\n";
     		text += phonenumbers.get(currentaddress);
     		layout.setTitle(title.get(currentaddress));
+    		layout.setCurrentPosition(currentaddress+1);
     		layout.setAddress(text);	
-    		nextArrow.setVisibility(View.VISIBLE);
+    		previousArrow.setVisibility(View.VISIBLE);
     		if(currentaddress < 1)
-    			previousArrow.setVisibility(View.INVISIBLE);
+    			nextArrow.setVisibility(View.INVISIBLE);
 
     	}
  	}
@@ -433,7 +438,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     	{
     		
     		if(currentaddress == totalcount-2)
-    			nextArrow.setVisibility(View.INVISIBLE);
+    			previousArrow.setVisibility(View.INVISIBLE);
 
     		currentaddress++;
     		String text;
@@ -441,8 +446,9 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     		text+="\n";
     		text += phonenumbers.get(currentaddress);
     		layout.setTitle(title.get(currentaddress));
+    		layout.setCurrentPosition(currentaddress+1);
     		layout.setAddress(text);	
-    		previousArrow.setVisibility(View.VISIBLE);
+    		nextArrow.setVisibility(View.VISIBLE);
     	}
  	}
 
@@ -462,13 +468,15 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	{
 		try
 		{
-		    JSONObject json=new JSONObject(result);
+			for(int l =0;l<resultArray.size();l++ )
+			{
+		    JSONObject json=new JSONObject(resultArray.get(l));
 		    JSONArray ja;
 		    json = json.getJSONObject("responseData");
 		    ja = json.getJSONArray("results");
 		    
 		    int resultCount = ja.length();
-		    totalcount = ja.length();
+		    totalcount += ja.length();
 //		    System.out.println("Totol count is ::::::::::::: "+totalcount+":::"+ja.toString());
 		    for (int i = 0; i < resultCount; i++)
 		      {
@@ -538,6 +546,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		      }
 		    
 	    }
+			layout.setTotalCount(totalcount);
+		}
 	    catch(Exception e)
 	    {
 	    	System.out.println("Exception happened **************************"+e.toString());
@@ -652,8 +662,10 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 			 
 			builder = new AlertDialog.Builder(mContext);   
 			builder.setView(layout);   
-	
-			dialog = builder.create();   
+//			dialog = builder.create();   
+			dialog = new CustomDialog(mContext);
+			dialog.setContentView(layout);
+			
 			return dialog;
 	  
 	  
@@ -760,7 +772,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	            ViewHolder holder;
 	            if (convertView == null) {
 	                convertView = mInflater.inflate(R.layout.callview, null);
-	                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, 50);
+	                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.FILL_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
 	                convertView.setLayoutParams(params);
 	                holder = new ViewHolder();
 	                holder.title = (TextView) convertView.findViewById(R.id.phonenumber);

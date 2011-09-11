@@ -71,7 +71,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	private final int FACEBOOK_ID = 4;
 	
 	private Dialog dialog;
-	static int totalcount = 0;
+	int totalcount = 0;
 	static int currentaddress =0;
     TableLayout layout1;
     TableLayout layout2;
@@ -128,6 +128,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     	app = (LocalGuideApplication)this.getApplication();
     	mFavList = app.getFavoritesList();
     	totalcount = mFavList.size();
+    	layout.setTotalCount(totalcount);
     	for(int count=0;count<mFavList.size();count++)
     	{
     		System.out.println("title is "+mFavList.get(count).title);
@@ -170,12 +171,13 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	System.out.println("Position is *************************************** "+text);
 	layout.setTitle(title.get(currentaddress));
 	layout.setAddress(text);
+	layout.setCurrentPosition(currentaddress);
 	layout1.startAnimation(animation);
     layout2.startAnimation(animation);
     
     /* Hide the previous arrow if the user selected first item in the result page */
     if(currentaddress == 0)
-    	previousArrow.setVisibility(View.INVISIBLE);
+    	nextArrow.setVisibility(View.INVISIBLE);
     
     if(currentaddress == totalcount-1)
     	previousArrow.setVisibility(View.INVISIBLE);
@@ -220,6 +222,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    {
 	    	if( app.isTwitterAutheticated() == false)
 	    	{
+	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your twitter account",false).show();
 	    		AlertDialog alertDialog = new AlertDialog.Builder(FavoritesResults.this).create();
 	    		alertDialog.setTitle("Not authenticated");
 	    		alertDialog.setMessage("Please go to help page and authenticate with your twitter account");
@@ -230,7 +233,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    		 
 	    		    } });
 	    		alertDialog.setIcon(R.drawable.icon);
-	    		alertDialog.show();
+	    		//alertDialog.show();
 	    	}
 	    	else
 	    	{
@@ -252,6 +255,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    {
 	    	if( app.isFacebookAuthenticated() == false)
 	    	{
+	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your facebook account",false).show();
 	    		AlertDialog alertDialog = new AlertDialog.Builder(FavoritesResults.this).create();
 	    		alertDialog.setTitle("Not authenticated");
 	    		alertDialog.setMessage("Please go to help page and authenticate with your facebook account");
@@ -262,7 +266,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    		 
 	    		    } });
 	    		alertDialog.setIcon(R.drawable.icon);
-	    		alertDialog.show();
+	    		//alertDialog.show();
 	    		
 	    	}
 	    	else
@@ -307,17 +311,20 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     		text+="\n";
     		text += phonenumbers.get(currentaddress);
     		layout.setTitle(title.get(currentaddress));
+    		layout.setCurrentPosition(currentaddress+1);
     		layout.setAddress(text);	
-    		nextArrow.setVisibility(View.VISIBLE);
+    		previousArrow.setVisibility(View.VISIBLE);
     		if(currentaddress < 1)
     			nextArrow.setVisibility(View.INVISIBLE);
+
     	}
-	}
+ 	}
 	
 	public void moveRight()
 	{
     	if(currentaddress < totalcount-1)
     	{
+    		
     		if(currentaddress == totalcount-2)
     			previousArrow.setVisibility(View.INVISIBLE);
 
@@ -327,10 +334,11 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     		text+="\n";
     		text += phonenumbers.get(currentaddress);
     		layout.setTitle(title.get(currentaddress));
+    		layout.setCurrentPosition(currentaddress+1);
     		layout.setAddress(text);	
-    		previousArrow.setVisibility(View.VISIBLE);
+    		nextArrow.setVisibility(View.VISIBLE);
     	}
-	}
+ 	}
 
 	public void deleteAddress() {
 		System.out.println("Delete address ****************** "+currentaddress+"::"+totalcount);
@@ -392,8 +400,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		 
 		    } });
 		alertDialog.setIcon(R.drawable.icon);
-		alertDialog.show();	    		
-
+		//alertDialog.show();	    		
+		new ErrorDialog(this,"No Internet Connection","Please enable the internet connection",false).show();
 	}
 	
 	private boolean checkInternetConnection() {
@@ -545,8 +553,11 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 			 
 			builder = new AlertDialog.Builder(mContext);   
 			builder.setView(layout);   
+
+			dialog = new CustomDialog(mContext);
+			dialog.setContentView(layout);
 	
-			dialog = builder.create();   
+//			dialog = builder.create();   
 			return dialog;
 	  
 	  

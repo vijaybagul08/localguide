@@ -16,21 +16,24 @@
         </activity>
         
 		<activity android:name=".MaintabActivity">
-          android:theme="@android:style/Theme.NoTitleBar">      
+          android:theme="@android:style/Theme.NoTitleBar"
+          android:configChanges="orientation">      
            <intent-filter>
 		        <action android:name="com.android.localguideTabScreen" />
 		        <category android:name="android.intent.category.DEFAULT" />
 		    </intent-filter>
 		</activity>  
 		
-		<activity android:name=".WelcomeScreen">
+		<activity android:name=".WelcomeScreen"
+		android:configChanges="orientation">
 		    <intent-filter>
 		        <action android:name="com.android.localguideMainScreen" />
 		        <category android:name="android.intent.category.DEFAULT" />
 		    </intent-filter>
 		</activity>
 		
-		<activity android:name=".results">
+		<activity android:name=".results"
+		android:configChanges="orientation">
 			<intent-filter>
 				<action android:name="android.intent.action.GET_RESULT"/>
 				<category android:name="android.intent.category.DEFAULT"/>

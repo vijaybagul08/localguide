@@ -33,14 +33,17 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class results extends Activity implements SpinnerButton.SpinnerButtonCallback {
+public class results extends Activity{
 
 	static String result="";
+	static String totalresult="";
+	ArrayList<String> resultsArray;
 	private ArrayList<String> title;
 	private ArrayList<String> address;
 	String searchString;
@@ -49,10 +52,11 @@ public class results extends Activity implements SpinnerButton.SpinnerButtonCall
     String location;
 	Handler mHandler = new Handler();
 	private int mCurrentResultCount = 0;
-	SpinnerButton moreButton;
     Context mContext;
     Dialog mDialog;
     ListView mListView;
+    boolean isMoreResults = false;
+    
 	private Runnable mDelayedTask = new Runnable() {
         public void run() {
         	sendSearchRequest(mCurrentResultCount);
@@ -65,6 +69,7 @@ public class results extends Activity implements SpinnerButton.SpinnerButtonCall
         setContentView(R.layout.results);
         mContext = this;
         Bundle bundle= getIntent().getExtras();
+        resultsArray = new ArrayList<String>();
         mDialog = new ErrorDialog(this,"","Searching...",true);
         searchString = bundle.getString("categoryString");
         searchString += " ";
@@ -72,11 +77,25 @@ public class results extends Activity implements SpinnerButton.SpinnerButtonCall
         location = bundle.getString("locationString");
         title = new ArrayList<String>();
         address = new ArrayList<String>();
+        mDialog.show();
         mHandler.postDelayed(mDelayedTask, 2000);
         
         mScreenLayout = (LinearLayout) findViewById(R.id.resultsLayout);
         mListView = (ListView)findViewById(R.id.result_list);
-        mDialog.show();
+        Button header = (Button) findViewById(R.id.header);
+        header.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v) {
+            	if(isMoreResults == false) {
+            		 mDialog = null;
+            		 mDialog = new ErrorDialog(mContext,"","Searching...",true);
+            		 mDialog.show();
+            		 startMoreResults();
+	            	isMoreResults = true;
+            	}
+            }
+        });
+        
+        
         animation = new MyAnimation();
         mScreenLayout.startAnimation(animation);
 
@@ -94,7 +113,8 @@ public class results extends Activity implements SpinnerButton.SpinnerButtonCall
         		  intent.setClass(results.this, OptionsScreen.class);
         		  intent.setAction("com.mani.results");
         		  Bundle bun = new Bundle();
-                  bun.putString("resultString", result);
+        		  bun.putStringArrayList("resultString", resultsArray);
+                  //bun.putString("resultString", totalresult);
                   bun.putString("location", location);
                   bun.putInt("position", position); 
                   intent.putExtras(bun);
@@ -104,10 +124,6 @@ public class results extends Activity implements SpinnerButton.SpinnerButtonCall
         }); 
 	  }
 	
-	public void onButtonPress()
-	{
-		mHandler.postDelayed(mDelayedTask, 2000);
-	}
 	public void startMoreResults()
 	{
 		mHandler.postDelayed(mDelayedTask, 2000);
@@ -154,7 +170,11 @@ public class results extends Activity implements SpinnerButton.SpinnerButtonCall
 	    	            str.append(line + "\n");
 	    	        }
 	    	        in.close();
-	    	        result = str.toString();
+	    	        
+	    	        result= str.toString();
+	    	        resultsArray.add(result);
+	    	        System.out.println("Result is ********* "+result);
+	    	        isMoreResults = false;
 	    	        mDialog.dismiss();
 	    	        updateData(result);
 	    	   }catch(Exception ex){

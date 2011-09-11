@@ -8,13 +8,21 @@
     android:paddingTop="5px"
     android:background="@color/app_background_color"
 >
-<com.android.localguide.SpinnerButton
-    android:id="@+id/morebutton"
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent" 
-    android:visibility="gone"
-/>
- 
+
+<Button  xmlns:android="http://schemas.android.com/apk/res/android" 
+android:id="@+id/header"
+android:layout_marginBottom="5px"
+android:layout_marginTop="5px"
+android:layout_marginLeft="8px"
+android:layout_marginRight="8px"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:text="More"
+android:padding="15px"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:background="@drawable/rowselector"
+android:textColor="#ffffff"/>
+
 <ListView 
 android:id="@+id/result_list"
 android:layout_marginLeft="3dip"
