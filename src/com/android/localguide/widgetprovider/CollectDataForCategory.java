@@ -27,7 +27,7 @@ public class CollectDataForCategory {
 	int resultCount;
 	int currentResultCount;
 	private ArrayList<DataItem> itemsList;
-	
+	public boolean isResultsFound = false;
 	boolean isStarted;
 	class DataItem {
 		String title;
@@ -135,11 +135,11 @@ public class CollectDataForCategory {
 			HttpParams httpParameters = new BasicHttpParams();
 			// Set the timeout in milliseconds until a connection is established.
 			int timeoutConnection = 3000;
-			HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+			HttpConnectionParams.setConnectionTimeout(client.getParams(), timeoutConnection);
 			// Set the default socket timeout (SO_TIMEOUT) 
 			// in milliseconds which is the timeout for waiting for data.
 			int timeoutSocket = 5000;
-			HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+			HttpConnectionParams.setSoTimeout(client.getParams(), timeoutSocket);
 			
 			HttpResponse response = client.execute(request);
 			Userrequest(response);
@@ -184,6 +184,13 @@ public class CollectDataForCategory {
 	         
 	         ja = json.getJSONArray("results");
 	         resultCount = ja.length();
+	         if(resultCount == 0 ) {
+    	         isResultsFound = false;
+    	         isStarted = false;
+	             return ;
+	         } else
+	             isResultsFound = true;
+	         
 	         System.out.println("update result resultcount is  ********** "+resultCount);
 	         for (int i = 0; i < resultCount; i++)
 	           {
