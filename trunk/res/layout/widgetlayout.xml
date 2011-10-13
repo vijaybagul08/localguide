@@ -7,109 +7,77 @@
   android:id="@+id/widgetlayout"
   android:background="@android:color/transparent"
   >
-  <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:orientation="vertical"
-  android:layout_marginTop="5dip"
-  android:layout_marginLeft="10dip"
-  android:layout_marginRight="10dip"
-  android:background="@drawable/widgetbackground1"
-  android:layoutAnimation="@anim/layout_anim"
-  >
-  <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content"
-  android:orientation="vertical"
-  android:layout_weight="0.8"
-  >
-  <TextView android:id="@+id/title"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content"
-  android:textAppearance="?android:attr/textAppearanceMedium"
-  android:textColor="#ffffff"
-  android:layout_marginTop="5dip"
-  android:paddingLeft="5dip"
-  android:paddingRight="5dip"
-  android:text=""></TextView>
-  
-  <TextView android:id="@+id/address"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content"
-  android:textAppearance="?android:attr/textAppearanceSmall"
-  android:textColor="#ffffff"
-  android:paddingLeft="5dip"
-  android:paddingRight="5dip"
-  android:text=""></TextView>
-
-<TextView android:id="@+id/phonenumber"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content"
-  android:textAppearance="?android:attr/textAppearanceSmall"
-  android:textColor="#ffffff"
-  android:paddingLeft="5dip"
-  android:paddingRight="5dip"
-  android:text=""></TextView>
-</LinearLayout>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:orientation="vertical"
-  android:layout_height="wrap_content"
-  android:layout_weight="1"
-  >
-  
-<Button
-android:layout_width="fill_parent" 
-android:layout_height="3dip"
-android:padding="5dip"
-android:layout_margin="5dip"
-android:background="#FFFFFFFF" />
-
-
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content"
-  android:layout_weight="1"
-  >
-  <ImageView 
-  android:id="@+id/call"
-  android:layout_width="30px"
-  android:layout_height="fill_parent"
-  android:padding="3dip"
-  android:layout_weight="0.1"
-  android:src="@drawable/phone"
-  />
-     <ImageView 
-  android:id="@+id/message"
-  android:layout_width="30px"
-  android:layout_height="fill_parent"
-  android:padding="3dip"
-  android:layout_weight="0.1"
-  android:src="@drawable/message"
-  />
-  <Button android:id="@+id/button"
-  android:layout_width="wrap_content"
-  android:layout_height="fill_parent"
-  android:layout_weight="0.8"
-  android:padding="3dip"
-  android:textSize="20sp"
-  android:layout_marginTop="8dip"
-  android:layout_marginBottom="10dip"
-  android:layout_marginLeft="55dip"
-  android:layout_marginRight="10dip"
-  android:text="More"
-  android:textColor="#aaffffff"
-  android:background="@drawable/widgetbuttonpress"
-  />
-   
-</LinearLayout>   
-
-</LinearLayout>
-   
-</LinearLayout>  
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical"
+android:padding="10dp"
+android:background="@drawable/widgetbackground1"
+android:layoutAnimation="@anim/layout_anim"
+>
+	  <LinearLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_weight="0.7"
+	  android:orientation="vertical"
+	  >
+			  <TextView android:id="@+id/title"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:textAppearance="?android:attr/textAppearanceLarge"
+			  android:textColor="#ffffff"
+			  android:layout_marginTop="5dip"
+			  android:text=""/>
+			  
+			  <TextView android:id="@+id/address"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:textAppearance="?android:attr/textAppearanceMedium"
+			  android:textColor="#ffffff"
+			  android:text=""/>
+			
+			<TextView android:id="@+id/phonenumber"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:textAppearance="?android:attr/textAppearanceMedium"
+			  android:textColor="#ffffff"
+			  android:text=""/>
+	</LinearLayout>
+		 
+			<Button
+			android:layout_width="fill_parent" 
+			android:layout_height="3dip"
+			android:layout_margin="5dip"
+			android:background="#FFFFFFFF" />
+		
+		
+			<RelativeLayout
+			  xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_marginTop="5px"
+			  android:layout_weight="0.3"
+			  >
+				  <ImageView 
+				  android:id="@+id/call"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_alignParentLeft="true"
+				  android:src="@drawable/phone"
+				  />
+				  <ImageView 
+				  android:id="@+id/message"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_marginLeft="5px"
+				  android:layout_toRightOf="@id/call"
+				  android:src="@drawable/message"
+				  />
+			  
+			</RelativeLayout>   
+		
+		</LinearLayout>  
 
 </LinearLayout>

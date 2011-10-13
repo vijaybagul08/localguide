@@ -10,6 +10,7 @@ import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -24,14 +25,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.provider.Contacts.People;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.android.localguide.LocationIdentifier;
 import com.android.localguide.OptionsScreen;
@@ -430,7 +434,7 @@ System.out.println("Network is connectivity is changed ****************** ");
 							pendingIntent = PendingIntent.getService(mContext,
 			                        position/* no requestCode */, serviceIntent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
 			                
-			                view.setOnClickPendingIntent(R.id.button, pendingIntent);
+			                //view.setOnClickPendingIntent(R.id.button, pendingIntent);
 			            
 			                /* To make call options */
 			                
@@ -448,9 +452,10 @@ System.out.println("Network is connectivity is changed ****************** ");
 			        		sendIntent.putExtra("sms_body", smsBody); 
 			        		sendIntent.setType("vnd.android-dir/mms-sms");
 			                pendingIntent = PendingIntent.getActivity(mContext,
-			                        (position*appWidgetsList.get(i).AppWidgetId) /* no requestCode */, sendIntent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
-			                view.setOnClickPendingIntent(R.id.message, pendingIntent);
+			                        (position*appWidgetsList.get(i).AppWidgetId), sendIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+			                view.setOnClickPendingIntent(R.id.message, pendingIntent); 
 
+		                
   						    mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						}
 					}

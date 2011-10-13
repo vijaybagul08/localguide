@@ -25,6 +25,7 @@
   android:textAppearance="?android:attr/textAppearanceMedium"
   android:textColor="#ffffff"
   android:layout_gravity="center_vertical|center_horizontal"
+  android:gravity="center_vertical"
   android:layout_marginTop="5dip"
   android:paddingLeft="5dip"
   android:paddingRight="5dip"

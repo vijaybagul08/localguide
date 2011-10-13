@@ -5,63 +5,64 @@
     android:orientation="vertical"
     android:layout_width="match_parent" 
     android:layout_height="match_parent"
+    android:padding="8px"
     android:background="@color/app_background_color">
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent" 
     android:layout_height="wrap_content"
-	android:layout_marginTop="10dp"
-	android:layout_marginLeft="3dp"
-	android:layout_marginRight="3dp"
-	android:layout_marginBottom="3dp"
-    android:background="@color/list_elements_bkg"
-    android:padding="10dp">
+	android:padding="5px"
+    android:background="@color/list_elements_bkg">
         
 <TextView android:id="@+id/text"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
-android:textSize="25sp"
+android:textAppearance="?android:attr/textAppearanceLarge"
 android:textColor="#ffffffff"
-android:paddingTop="3dip"
+android:layout_marginTop="3dip"
 android:text="Enter category :" />
 
-<LinearLayout 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="3dip"
+			android:padding="3px"
 			android:orientation="horizontal">
-			
+    
 <EditText android:id="@+id/category"
 android:hint="eg. pubs,restuarants "
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:layout_weight="0.2"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignParentLeft="true"
 android:textColor="#12105E"
+android:inputType="text"
+android:imeOptions="actionGo"
+android:paddingLeft="10px"
+android:textAppearance="?android:attr/textAppearanceLarge"
 android:textColorHint="#AA12105E"
 android:background="@color/app_background_color"
 android:singleLine="true"
 android:maxLines="1"/>
 
 <ImageView android:id="@+id/search"
-android:layout_marginLeft="10dip"
-android:layout_weight="0.8"
-android:layout_width="fill_parent" 
-android:layout_height="fill_parent"
+android:layout_alignParentRight="true"
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"
+android:layout_marginRight="5px"
 android:src="@drawable/find"/>
 
-</LinearLayout>
+
+</RelativeLayout>
 
 </LinearLayout>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:layout_marginTop="3dip"
     android:layout_width="match_parent" 
     android:layout_height="wrap_content"
-    android:background="@color/list_elements_bkg"
-    
-    android:layout_marginRight="3dp"
-android:layout_marginLeft="3dp">
+    android:background="@color/list_elements_bkg">
     
 <TextView android:id="@+id/text1"
               android:layout_width="wrap_content"
@@ -70,18 +71,17 @@ android:layout_marginLeft="3dp">
               android:layout_alignParentLeft="true"
 			  android:padding="5dip"
               android:textColor="#FFF"
-              android:textSize="25sp"
+              android:textAppearance="?android:attr/textAppearanceLarge"
               android:text="Select a category"/>
 </LinearLayout>
  
 <ListView 
 android:id="@+id/categories_list"
-android:layout_marginLeft="3dip"
-android:layout_marginRight="3dip"
 android:layout_width="match_parent" 
 android:layout_height="fill_parent"
 android:dividerHeight="3dip"
 android:divider="#00000000"
+android:layout_marginTop="3dip"
 android:listSelector="@color/app_background_color"
 android:padding="3px"
 android:layout_weight="1"
