@@ -17,7 +17,12 @@ import android.view.View.MeasureSpec;
 		   
 		   private Bitmap mMarker;
 		   private Bitmap mRequiredMarker;
-		   String markers[] = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+		   private Context mContext;
+		   int mMarkersResourceIds[] = {R.drawable.a,R.drawable.b,R.drawable.c,R.drawable.d,R.drawable.e,R.drawable.f,R.drawable.g,
+					 R.drawable.h,R.drawable.i,R.drawable.j,R.drawable.k,R.drawable.l,R.drawable.m,R.drawable.n,
+					 R.drawable.o,R.drawable.p,R.drawable.q,R.drawable.r,R.drawable.s,R.drawable.t,R.drawable.u,
+					 R.drawable.v,R.drawable.w,R.drawable.x,R.drawable.y,R.drawable.z};
+		   
 		   Rect  mMarkerRect;
 		   Paint mTextPaint;
 		   Canvas drawcanvas;
@@ -25,12 +30,7 @@ import android.view.View.MeasureSpec;
 		   public MarkerIcon(Context context,AttributeSet attrs ) {
 			   super(context,attrs);
 				mMarkerRect = new Rect(0,0,32,32);
-				mMarker = BitmapFactory.decodeResource(context.getResources(), R.drawable.marker);
-				mTextPaint = new Paint();
-				mTextPaint.setTextSize(18);
-				mTextPaint.setAntiAlias(true);
-				mTextPaint.setDither(true);
-				mTextPaint.setColor(Color.rgb(0x12, 0x10, 0x5E));
+				mContext = context;
 			    mRequiredMarker = Bitmap.createBitmap(32,32, Config.ARGB_8888);
 			    drawcanvas = new Canvas(mRequiredMarker);
 		   }
@@ -43,13 +43,8 @@ import android.view.View.MeasureSpec;
 		   }
 		   
 		   public void createMarkerIcon(int mOveryLayItemsCount ) {
-
+			    mMarker = BitmapFactory.decodeResource(mContext.getResources(), mMarkersResourceIds[mOveryLayItemsCount]);
 				drawcanvas.drawBitmap(mMarker,null,mMarkerRect,mTextPaint);
-
-				if(mOveryLayItemsCount == 8 ||mOveryLayItemsCount == 9 ||mOveryLayItemsCount == 14 ||mOveryLayItemsCount == 15)
-					drawcanvas.drawText(markers[mOveryLayItemsCount], 14, 16, mTextPaint);
-				else
-					drawcanvas.drawText(markers[mOveryLayItemsCount], 12, 16, mTextPaint);
 		   }
 
 		   public void onDraw(Canvas canvas ) {

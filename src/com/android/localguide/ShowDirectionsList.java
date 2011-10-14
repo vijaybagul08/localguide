@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
@@ -39,12 +40,12 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		mNoContentDisplay.setText("Loading the directions....");
 	
 		mListView = new ListView(context);
-		mListView.setPadding(3,5,3,3);
+		mListView.setPadding(3,5,3,5);
 		mListView.setCacheColorHint(Color.argb(0, 0, 0, 0));
-		mListView.setDividerHeight(1);
-		Drawable d = context.getResources().getDrawable(R.drawable.car);
-		d.setAlpha(0);
-		mListView.setDivider(d);
+		mListView.setDividerHeight(5);
+		ColorDrawable cd = new ColorDrawable(0x00000000);
+		//cd.setAlpha(0);
+		mListView.setDivider(cd);
 		mListView.setDrawSelectorOnTop(false);
 		mListView.setSelector(context.getResources().getDrawable(R.color.app_background_color));
 
@@ -112,9 +113,9 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 	            ViewHolder holder;
 	           
 	            if (convertView == null) {
-	            	if((position+1)%2 == 0 )
-	            		convertView = mInflater.inflate(R.layout.showdirectionlist_right_icon, null);
-	            	else
+	            	//if((position+1)%2 == 0 )
+	            		//convertView = mInflater.inflate(R.layout.showdirectionlist_right_icon, null);
+	            	//else
 	            		convertView = mInflater.inflate(R.layout.showdirectionlist_left_icon, null);
 	            	
 	                holder = new ViewHolder();
