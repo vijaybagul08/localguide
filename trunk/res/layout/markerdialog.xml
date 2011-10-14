@@ -26,8 +26,12 @@ android:textColor="#ffffffff"
 android:textAppearance="?android:attr/textAppearanceLarge"/>
               
 <Button android:id="@+id/ok"
-android:layout_width="100px"
+android:layout_width="fill_parent"
 android:layout_height="50px"
+android:layout_marginTop="10px"
+android:layout_marginLeft="10px"
+android:layout_marginRight="10px"
+android:layout_marginBottom="10px"
 android:layout_gravity="center_horizontal"
 android:layout_weight="1"
 android:text="OK"

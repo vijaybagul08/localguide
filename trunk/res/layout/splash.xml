@@ -3,18 +3,34 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:gravity="center"
+    android:padding="20px"
+    android:background="@color/app_background_color"
     >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:layout_gravity="center_vertical"
-    android:textSize="30px"
-    android:text="Local Guide"
-    />
-<ImageView android:id="@+id/logo" 
-android:layout_gravity="center_vertical"
-android:layout_width="fill_parent" 
-android:layout_height="fill_parent" 
-android:src="@drawable/localguide"
-/> 
+	<TextView  
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:gravity="center"
+		android:textSize="45px"
+		android:textColor="#ffffff"
+		android:layout_weight="0.2"
+	    android:text="Local Guide"
+	    />
+	<ImageView android:id="@+id/logo" 
+	android:layout_gravity="center_vertical"
+	android:layout_width="fill_parent" 
+	android:layout_height="wrap_content" 
+	android:layout_weight="0.8"
+	android:src="@drawable/localguide"
+	/>
+	<TextView  
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:gravity="center"
+		android:textSize="45px"
+		android:textColor="#ffffff"
+		android:layout_weight="0.2"
+	    android:text=" - Mani.S "
+	    />
+ 
 </LinearLayout>
