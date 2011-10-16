@@ -26,29 +26,24 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 	private ListView mListView;
 	private ArrayList<String> mData;
 	private EfficientAdapter mListAdapter;
-	
+	private LinearLayout mMainLayout;
 	public ShowDirectionsList(Context context,Bundle bundle) {
 		super(context);
 		
 		mNoContentDisplay = new TextView(context);
 		mData = new ArrayList<String>();
 		mListAdapter = new EfficientAdapter(context);
+
+		LayoutInflater inflater = (LayoutInflater)context.getSystemService(
+		        Context.LAYOUT_INFLATER_SERVICE);		 
+		mMainLayout = (LinearLayout)inflater.inflate(R.layout.directions_list,mMainLayout);
+		mListView = (ListView)mMainLayout.findViewById(R.id.directions_list);
 		
 		mNoContentDisplay.setTextColor(Color.rgb(0x12, 0x10, 0x35e));
 		mNoContentDisplay.setTextSize(40);
 		mNoContentDisplay.setGravity(Gravity.CENTER);
 		mNoContentDisplay.setText("Loading the directions....");
 	
-		mListView = new ListView(context);
-		mListView.setPadding(3,5,3,5);
-		mListView.setCacheColorHint(Color.argb(0, 0, 0, 0));
-		mListView.setDividerHeight(5);
-		ColorDrawable cd = new ColorDrawable(0x00000000);
-		//cd.setAlpha(0);
-		mListView.setDivider(cd);
-		mListView.setDrawSelectorOnTop(false);
-		mListView.setSelector(context.getResources().getDrawable(R.color.app_background_color));
-
 		mListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 				
@@ -81,7 +76,7 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		    	mData.add(infoString);
 		    }
 		    LinearLayout.LayoutParams Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-		    this.addView(mListView,Params);
+		    this.addView(mMainLayout,Params);
 		    mListView.setAdapter(mListAdapter);
 		}
 		else {

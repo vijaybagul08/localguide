@@ -55,7 +55,7 @@ android:visibility="gone"
 android:singleLine="true"
 android:maxLines="1"/>
  
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:layout_width="fill_parent" 
               android:layout_height="fill_parent"
               android:paddingTop="10dip" 
@@ -64,21 +64,24 @@ android:maxLines="1"/>
               android:paddingBottom="10dip">
 
 <Button android:id="@+id/ok"
-android:layout_width="wrap_content"
-android:layout_height="50px"
-android:layout_marginRight="2px"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_alignParentLeft="true"
 android:text="OK"
 android:layout_weight="0.5"
+android:textAppearance="?android:attr/textAppearanceLarge"
 android:background="@drawable/error_dialog_button"
 android:textColor="#ffffff"/>
 
 <Button android:id="@+id/cancel"
-android:layout_width="wrap_content"
-android:layout_height="50px"
-android:layout_weight="0.5"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
 android:text="CANCEL"
+android:layout_weight="0.5"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:layout_alignParentRight="true"
 android:background="@drawable/error_dialog_button"
 android:textColor="#ffffff"/>
-</LinearLayout>
+</RelativeLayout>
                            
 </LinearLayout>              

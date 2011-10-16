@@ -79,14 +79,7 @@ public class FaceBookClient {
     	}
     	else
     	{
-    		AlertDialog.Builder builder =  new AlertDialog.Builder(mActivity);
-    		builder.setMessage("Please enable the internet connection");
-    		builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-	            public void onClick(DialogInterface dialog, int id) {
-	                //Do nothing
-	            }
-    		});
-    		builder.create().show();
+    		new ErrorDialog(mActivity,"No Internet Connection","Please enable the internet connection",false).show();    		
     	}
     }
     
@@ -138,17 +131,16 @@ public class FaceBookClient {
           	String accessKey = mFacebook.getAccessToken();
         	String userName = null;
         	mFacebook.setAccessExpires(0);
-
+        	mCB.onFaceBookAuthenticateCompleted(FaceBookAuthenticationCallBack.AUTHENTICAION_SUCCESSFULL,accessKey,userName);
         	
         	System.out.println("Access key facebook is "+accessKey);
-        	
-        	//PostWallMessage("Welcome to FB from my test application - Android");
+        	mFacebook.setAccessToken(accessKey);
             try {
                 // process the response here: executed in background thread
             	JSONObject json = Util.parseJson(response);
                 userName = json.getString("name");
                 System.out.println("username is "+userName);
-            	mCB.onFaceBookAuthenticateCompleted(FaceBookAuthenticationCallBack.AUTHENTICAION_SUCCESSFULL,accessKey,userName);
+            	//mCB.onFaceBookAuthenticateCompleted(FaceBookAuthenticationCallBack.AUTHENTICAION_SUCCESSFULL,accessKey,userName);
             } catch (JSONException e) {
                 System.out.println( "JSON Error in response");
             } catch (FacebookError e) {
@@ -182,50 +174,36 @@ public class FaceBookClient {
         }
     }
     public void PostWallMessage(String message) {
+    	mFacebook.setAccessExpires(0);
+    	mFacebook.setAccessToken(mToken);
 		Bundle args = new Bundle();
     	args.putString("message", message);
     	mAsyncRunner.request(GRAPH_FEED, args, "POST", new WallMessagePostRequestListener(),null);
 	}
 	public static class WallMessagePostRequestListener extends BaseRequestListener {
         public void onComplete(final String response) {
-        	 try {
-                 // process the response here: executed in background thread
-        		 Log.e("Mani", "Response: " + response.toString());
-                 JSONObject json = Util.parseJson(response);
-                 
-                 String id = json.getString("id");
-                 mPostCB.onFaceBookmessagePostCompleted(FaceBookPostMessageCallBack.POST_SUCCESSFULL);
-             } catch (JSONException e) {
-            	 System.out.println( "JSON Error in response");
-             } catch (FacebookError e) {
-                 System.out.println("Facebook Error: " + e.getMessage());
-             }
+        		 System.out.println("Wallmessage Response: " + response.toString());
+        		 mPostCB.onFaceBookmessagePostCompleted(FaceBookPostMessageCallBack.POST_SUCCESSFULL);
         }
     }
 	
 	public static class BaseRequestListener implements RequestListener {
         public void onComplete(final String response,Object o) {
         	System.out.println("OnComplete: BaseRequestListener" + response);
+        	mPostCB.onFaceBookmessagePostCompleted(FaceBookPostMessageCallBack.POST_SUCCESSFULL);        	
         }
         
         public void onFacebookError(FacebookError e,Object o) {
-        	System.out.println("Facebook Error: " + e.getMessage());
-            e.printStackTrace();
+        	mPostCB.onFaceBookmessagePostCompleted(FaceBookPostMessageCallBack.POST_FAILURE);
         }
 
         public void onFileNotFoundException(FileNotFoundException e,Object o) {
-        	System.out.println("Facebook Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+        	mPostCB.onFaceBookmessagePostCompleted(FaceBookPostMessageCallBack.POST_FAILURE);        }
 
         public void onIOException(IOException e,Object o) {
-        	System.out.println("Facebook Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+        	mPostCB.onFaceBookmessagePostCompleted(FaceBookPostMessageCallBack.POST_FAILURE);        }
 
         public void onMalformedURLException(MalformedURLException e,Object o) {
-        	System.out.println("Facebook Error:  " + e.getMessage());
-            e.printStackTrace();
-        }
+        	mPostCB.onFaceBookmessagePostCompleted(FaceBookPostMessageCallBack.POST_FAILURE);        }
     }
  }

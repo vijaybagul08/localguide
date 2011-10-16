@@ -42,11 +42,6 @@
 
 </TableLayout>
 
-<View
- android:layout_width="fill_parent"
- android:layout_height="2dip"
- android:background="#FFFFFFFF" />
- 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/myTableLayout"
     android:layout_width="fill_parent"

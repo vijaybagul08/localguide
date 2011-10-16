@@ -40,9 +40,11 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.localguide.FaceBookClient.FaceBookPostMessageCallBack;
 import com.android.localguide.LocalGuideApplication.favoriteItem;
+import android.os.Handler;
 
 public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,
-FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack ,GetDirectionsDialog.GetDirectionsDialogListener{
+FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack ,GetDirectionsDialog.GetDirectionsDialogListener,
+FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterkDialogListener{
 	
 	Context mContext;
 	LocalGuideApplication app;
@@ -59,6 +61,9 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	TwitterClient mTwitterClient;
 	FaceBookClient mFacebookClient;
 	GetDirectionsDialog mGetDirectionsDialog;
+	FacebookDialog mFacebookDialog;
+	TwitterDialog mTwitterDialog;
+	
 	Button button1;
 	Button button2;
 	Button button3;
@@ -69,9 +74,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	
 	private final int CALL_ID = 1;
 	private final int MESSAGING_ID = 2;
-	private final int TWITTER_ID = 3;
-	private final int FACEBOOK_ID = 4;
-	
+	private Handler mHandler = new Handler();
 	private Dialog dialog;
 	int totalcount = 0;
 	int currentaddress =0;
@@ -101,6 +104,9 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     button6 = (Button)findViewById(R.id.button6);
     button7 = (Button)findViewById(R.id.button7);
     mGetDirectionsDialog = new GetDirectionsDialog(this,this);
+    mFacebookDialog = new FacebookDialog(this,this);
+    mTwitterDialog = new TwitterDialog(this,this);
+    
     mFacebookClient  = new FaceBookClient(this,this);
     System.out.println("Accesskey for facbook is ************* "+app.getFacebookToken());
     mFacebookClient.setAccessToken(app.getFacebookToken());
@@ -114,8 +120,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     
     /* get the results and position of list where user clicked from results activity */
     
-    System.out.println("Options screen calle with intent action********* "+this.getIntent().getAction());
-    
     title = new ArrayList<String>();
     streetaddress = new ArrayList<String>();
     phonenumbers = new ArrayList<String>();
@@ -123,7 +127,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     longitude = new ArrayList<String>();
     
     Bundle bundle= getIntent().getExtras();
-   // System.out.println("Result is ********* "+bundle.getString("resultString"));
     
     if(this.getIntent().getAction().equals("com.mani.favorites") == true )
     {
@@ -161,7 +164,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     else if(this.getIntent().getAction().equals("com.mani.results") == true)
     {
     	 	System.out.println("welcome is ********* "+this.getIntent().getStringExtra("welcome"));
-    	    //result = bundle.getString("resultString");
     	    resultArray = bundle.getStringArrayList("resultString");
     	    updateAllDetails();
     		button7.setOnClickListener( new View.OnClickListener(){
@@ -210,15 +212,12 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
     }
 
     currentaddress =  bundle.getInt("position");
-    System.out.println("Position is *************************************** "+currentaddress);
     location = bundle.getString("location");
-    System.out.println("location is ********* "+location);
         
 	String text;
 	text = streetaddress.get(currentaddress);
 	text+="\n";
 	text += phonenumbers.get(currentaddress);
-	System.out.println("Position is *************************************** "+text);
 	layout.setTitle(title.get(currentaddress));
 	layout.setAddress(text);
 	layout.setCurrentPosition(currentaddress+1);
@@ -273,30 +272,21 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    	if( app.isTwitterAutheticated() == false)
 	    	{
 	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your twitter account",false).show();
-	    		
-	    		AlertDialog alertDialog = new AlertDialog.Builder(OptionsScreen.this).create();
-	    		alertDialog.setTitle("Not authenticated");
-	    		alertDialog.setMessage("Please go to help page and authenticate with your twitter account");
-	    		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-	    		      public void onClick(DialogInterface dialog, int which) {
-	    		 
-	    		       //here you can add functions
-	    		 
-	    		    } });
-	    		alertDialog.setIcon(R.drawable.icon);
-	    		//alertDialog.show();
 	    	}
 	    	else
-	    	{
+	    	{ 
 		    	if(checkInternetConnection() == true )
 		    	{
-		    		showDialog(TWITTER_ID);
+		    		String text;
+		    		text = title.get(currentaddress);
+		    		text+= ","+streetaddress.get(currentaddress);
+		    		mTwitterDialog.setMessage(text);
+		    		mTwitterDialog.show();
 		    	}
 		    	else
 		    	{
 		    		showInternetErrorDialog();
 		    	}
-
 	    	}
 	    }
      });
@@ -307,24 +297,16 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    	if( app.isFacebookAuthenticated() == false)
 	    	{
 	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your facebook account",false).show();
-	    		AlertDialog alertDialog = new AlertDialog.Builder(OptionsScreen.this).create();
-	    		alertDialog.setTitle("Not authenticated");
-	    		alertDialog.setMessage("Please go to help page and authenticate with your facebook account");
-	    		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-	    		      public void onClick(DialogInterface dialog, int which) {
-	    		 
-	    		       //here you can add functions
-	    		 
-	    		    } });
-	    		alertDialog.setIcon(R.drawable.icon);
-	    		//alertDialog.show();
-	    		
 	    	}
 	    	else
 	    	{
 		    	if(checkInternetConnection() == true )
 		    	{
-		    		showDialog(FACEBOOK_ID);
+				  	String FBtext;
+		    		FBtext = title.get(currentaddress);
+		    		FBtext+= ","+streetaddress.get(currentaddress);
+		    		mFacebookDialog.setMessage(FBtext);
+		    		mFacebookDialog.show();
 		    	}
 		    	else
 		    	{
@@ -340,8 +322,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    {
 	    	if(checkInternetConnection() == true )
 	    	{
-
-	    	mGetDirectionsDialog.show();
+	    		mGetDirectionsDialog.show();
 	    	}
 	    	else
 	    	{
@@ -351,37 +332,45 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	    }
      });
 	}
-
+	
+	public void onFBButtonOkPressed(String msg) {
+		mFacebookClient.PostWallMessage(msg);
+	}
+	
+	public void onTwitterButtonOkPressed(String msg) {
+    	try
+    	{
+    		mTwitterClient.postTweet("test message from sample android app");
+    	}
+    	catch (JSONException e) {
+			e.printStackTrace();
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void onButtonOkPressed(boolean isCurrentLocation,String alocation)
 	{
     	Intent intent = new Intent();
     	Bundle bun = new Bundle();
     	bun.putString("currentaddress",streetaddress.get(currentaddress));
-    	  System.out.println("location is ********* "+location);
+
   		if(isCurrentLocation == true)
   			bun.putString("location",location);
   		else
   			bun.putString("location",alocation);
   		
     	intent.putExtras(bun);
-    	//intent.setClass(mContext, MapsActivity.class);
     	intent.setClass(mContext, MapstabActivity.class);
     	startActivity(intent);
 	}
 
 	public void showInternetErrorDialog()
 	{
-		AlertDialog alertDialog = new AlertDialog.Builder(OptionsScreen.this).create();
-		alertDialog.setTitle("No Internet ");
-		alertDialog.setMessage("Please enable internet connection");
-		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-		      public void onClick(DialogInterface dialog, int which) {
-		 
-		       //here you can add functions
-		 
-		    } });
-		alertDialog.setIcon(R.drawable.icon);
-		//alertDialog.show();	    		
 		new ErrorDialog(this,"No Internet Connection","Please enable the internet connection",false).show();
 	}
 	
@@ -406,10 +395,20 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		switch(response)
 		{
 		case FaceBookPostMessageCallBack.POST_SUCCESSFULL:
-			 Toast.makeText(mContext, "Post to FB successful", 4000).show();
+			 mHandler.post(new Runnable() {
+				public void run() {
+					 mFacebookDialog.dismiss();
+					 Toast.makeText(mContext, "Successfully posted to your wall", 4000).show();					
+				}
+			 });
 			break;
 		case FaceBookPostMessageCallBack.POST_FAILURE:
-			Toast.makeText(mContext, "Post to FB failure", 4000).show();
+			 mHandler.post(new Runnable() {
+					public void run() {
+						 mFacebookDialog.dismiss();
+						 Toast.makeText(mContext, "Post to Facebook failure", 4000).show();					
+					}
+				 });
 			break;
 		}
 	}
@@ -477,7 +476,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		    
 		    int resultCount = ja.length();
 		    totalcount += ja.length();
-//		    System.out.println("Totol count is ::::::::::::: "+totalcount+":::"+ja.toString());
+
 		    for (int i = 0; i < resultCount; i++)
 		      {
 	
@@ -485,7 +484,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		      
 		      /* Add the title */
 		      title.add(resultObject.get("titleNoFormatting").toString());
-		      System.out.println("Title is *************** "+resultObject.get("titleNoFormatting").toString());
 		      /* Add Address */
 		      JSONArray addr;
 		      addr = resultObject.getJSONArray("addressLines");
@@ -498,7 +496,7 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		        	  temp+=',';
 		      }
 		      streetaddress.add(temp);
-		      System.out.println("Title is *************** "+temp);
+
 		      /* Parse the phone numbers JSONobject */
 		      JSONObject phone;
 		      JSONArray numbers;
@@ -535,7 +533,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 
 		      phNumber+= temp;
 		      phonenumbers.add(phNumber);
-		      System.out.println("Title is *************** "+phNumber);
 		      /* Add latitude and longitude */
 		      if(resultObject.has("lat"))
 		    	  latitude.add(resultObject.get("lat").toString());
@@ -559,8 +556,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		
 		String delims = "[,]";
 		String[] numbers = phonenumbers.get(currentaddress).split(delims);
-		for(int i =0;i< numbers.length ;i++)
-			System.out.println("The numbers are *********** "+numbers[i]);
 		
 		if(numbers.length == 1)
 		{
@@ -568,7 +563,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 		        Intent callIntent = new Intent(Intent.ACTION_CALL);
 		        String numberString ="tel:";
 		        numberString+=numbers[0];
-		        System.out.println("The number is ******************* "+numberString);
 		        callIntent.setData(Uri.parse(numberString));
 		        startActivity(callIntent);
 		    } catch (ActivityNotFoundException e) {
@@ -581,11 +575,6 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	
 	public void showMessagingDialog()
 	{
-		//showDialog(MESSAGING_ID);
-		/* Opening the default android messaging activity to send message. User can type in the extra information
-		 * they like to share it to their friends
-		 */
-		
 		Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 		String smsBody=title.get(currentaddress);
 		smsBody+=", "+streetaddress.get(currentaddress);
@@ -660,83 +649,8 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 				}
 			});
 			 
-			builder = new AlertDialog.Builder(mContext);   
-			builder.setView(layout);   
-//			dialog = builder.create();   
 			dialog = new CustomDialog(mContext);
 			dialog.setContentView(layout);
-			
-			return dialog;
-	  
-	  
-	  case TWITTER_ID:
-		  	builder = new AlertDialog.Builder(mContext);
-		  	
-		  	layout = inflater.inflate(R.layout.twitterlayout,(ViewGroup) findViewById(R.id.twitterLayout));
-		  	hintTitle = (TextView ) layout.findViewById(R.id.hint);
-		  	hintTitle.setText("Message (Less than 140 characters)");
-		  	message = (EditText)layout.findViewById(R.id.twitter_message_edit);
-    		String text;
-    		text = title.get(currentaddress);
-    		text+= ","+streetaddress.get(currentaddress);
-    		message.setText(text);
-			builder.setPositiveButton("Post Tweet", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-        	    	try
-        	    	{
-        	    		mTwitterClient.postTweet("test message from sample android app");
-        	    	}
-        	    	catch (JSONException e) {
-        				e.printStackTrace();
-        			} catch (AuthenticationException e) {
-        				e.printStackTrace();
-        			} catch (UnsupportedEncodingException e) {
-        				e.printStackTrace();
-        			} catch (IOException e) {
-        				e.printStackTrace();
-        			}
-                }
-            });
-			
-			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                	// Do nothing. Cancel the dialog
-                }
-			});
-                
-			builder.setView(layout);
-			//dialog = builder.create();   
-			dialog = new CustomDialog(mContext);
-			dialog.setContentView(layout);
-			return dialog;
-	  case FACEBOOK_ID:
-		  	builder = new AlertDialog.Builder(mContext);
-		  	layout = inflater.inflate(R.layout.twitterlayout,(ViewGroup) findViewById(R.id.twitterLayout));
-		  	hintTitle = (TextView ) layout.findViewById(R.id.hint);
-		  	hintTitle.setText("Post to Wall");
-		  	message = (EditText)layout.findViewById(R.id.twitter_message_edit);
-    		String FBtext;
-    		FBtext = title.get(currentaddress);
-    		FBtext+= ","+streetaddress.get(currentaddress);
-    		message.setText(FBtext);
-    		
-			builder.setPositiveButton("Post", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                	mFacebookClient.PostWallMessage("Test message from my application - development");
-                }
-            });
-			
-			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                	// Do nothing. Cancel the dialog
-                }
-			});
-                
-			builder.setView(layout);
-			dialog = builder.create();   
-			dialog = new CustomDialog(mContext);
-			dialog.setContentView(layout);
-
 			return dialog;
 	  }  
 	  return null;
@@ -789,5 +703,4 @@ FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallB
 	            TextView title;
 	            }
 	    }
-	 
 }

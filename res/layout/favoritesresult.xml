@@ -5,10 +5,6 @@
               android:padding="3dip"
               android:background="#e4bebf"
               android:orientation="vertical">
-<View
-android:layout_width="fill_parent" 
-android:layout_height="8dip"
-android:background="#FFFFFFFF" />
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/myTableLayout1"
@@ -41,9 +37,7 @@ android:background="#FFFFFFFF" />
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/next_arrow"/>
      </TableRow>
-<View
- android:layout_height="2dip"
- android:background="#FFFFFFFF" />
+
 </TableLayout>
 
 </LinearLayout>
