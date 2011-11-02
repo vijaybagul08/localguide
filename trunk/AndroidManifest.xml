@@ -64,9 +64,19 @@
 				</intent-filter>
 			</activity>
 
-			<activity android:name=".TwitterActivity">
+			<activity android:name=".TwitterActivity"
+						android:configChanges="orientation">
 				<intent-filter>
 					<category android:name="android.intent.category.DEFAULT"/>
+				</intent-filter>
+			</activity>
+
+			<activity android:name=".PrepareRequestTokenActivity" android:launchMode="singleTask">
+				<intent-filter>
+					<action android:name="android.intent.action.VIEW" />
+					<category android:name="android.intent.category.DEFAULT" />
+					<category android:name="android.intent.category.BROWSABLE" />
+					<data android:scheme="x-oauthflow-twitter" android:host="callback" />
 				</intent-filter>
 			</activity>
 			

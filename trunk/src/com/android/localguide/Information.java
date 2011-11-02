@@ -81,9 +81,15 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			{
 				System.out.println("Handle message is TWITTER**************** ");
 			
-				Intent twitterIntent= new Intent();
-				twitterIntent.setClass(Information.this, TwitterActivity.class);
-				startActivityForResult(twitterIntent,TWITTER_AUTHENTICATE);
+//				Intent twitterIntent= new Intent();
+//				twitterIntent.setClass(Information.this, TwitterActivity.class);
+//				startActivityForResult(twitterIntent,TWITTER_AUTHENTICATE);
+            	if (app.isTwitterAutheticated() == false) {
+	
+					Intent i = new Intent(getApplicationContext(), PrepareRequestTokenActivity.class);
+					i.putExtra("tweet_msg","hello");
+					startActivity(i);
+            	}
 		        
 			}
 			else if(m.what == FACEBOOK)

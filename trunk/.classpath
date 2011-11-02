@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="assets/signpost-commonshttp4-1.2.1.1.jar"/>
 	<classpathentry kind="lib" path="assets/signpost-core-1.2.1.1.jar"/>
 	<classpathentry kind="lib" path="assets/facebook.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/mani/workspace/localguide/assets/twitter4j-core-2.1.11.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

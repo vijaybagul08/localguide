@@ -44,7 +44,7 @@ import android.os.Handler;
 
 public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,
 FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack ,GetDirectionsDialog.GetDirectionsDialogListener,
-FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterkDialogListener{
+FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	
 	Context mContext;
 	LocalGuideApplication app;
@@ -338,20 +338,48 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterkDialogListener{
 	}
 	
 	public void onTwitterButtonOkPressed(String msg) {
-    	try
-    	{
-    		mTwitterClient.postTweet("test message from sample android app");
-    	}
-    	catch (JSONException e) {
-			e.printStackTrace();
-		} catch (AuthenticationException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+    	if (TwitterUtils.isAuthenticated(app)) {
+    		sendTweet(msg);
+    	} 
+//    	try
+//    	{
+//    		mTwitterClient.postTweet("test message from sample android app");
+//    	}
+//    	catch (JSONException e) {
+//			e.printStackTrace();
+//		} catch (AuthenticationException e) {
+//			e.printStackTrace();
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
+	
+	public void sendTweet(String msg) {
+		final String msgg = msg;
+		Thread t = new Thread() {
+	        public void run() {
+	        	
+	        	try {
+	        		TwitterUtils.sendTweet(app,msgg);
+	        		mHandler.post(new Runnable() {
+						public void run() {
+							 mTwitterDialog.dismiss();
+							 Toast.makeText(mContext, "Post to Twitter success", 4000).show();					
+						}
+					 });
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+	        }
+
+	    };
+	    t.start();
+	}
+
 	
 	public void onButtonOkPressed(boolean isCurrentLocation,String alocation)
 	{
