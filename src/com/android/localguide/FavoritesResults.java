@@ -44,7 +44,7 @@ import android.os.Handler;
 
 public class FavoritesResults extends Activity implements OptionsAddressLayout.MovementIndicator,
 FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack ,
-GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterkDialogListener{
+GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	
 	Context mContext;
 	LocalGuideApplication app;

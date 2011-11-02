@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 public class TwitterDialog extends Dialog  {
 
-    interface TwitterkDialogListener {
+    interface TwitterDialogListener {
     	public void onTwitterButtonOkPressed(String msg);
     }
 
@@ -29,8 +29,8 @@ public class TwitterDialog extends Dialog  {
 	TextView mTitle;
 	Button mOK;
 	Button mCancel;
-	TwitterkDialogListener mCB;
-	public TwitterDialog(Context context,TwitterkDialogListener aCB )
+	TwitterDialogListener mCB;
+	public TwitterDialog(Context context,TwitterDialogListener aCB )
 	{
 
 		super(context, R.style.getdirectionsdialog);	
