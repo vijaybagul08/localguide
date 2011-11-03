@@ -15,6 +15,9 @@ public class TwitterUtils {
 		//String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
 		String token = app.getTwitterAccessKey();
 		String secret = app.getTwitterAccessSecret();
+		if( token.length() == 0 || secret.length() == 0) 
+			return false;
+		
 		AccessToken a = new AccessToken(token,secret);
 		Twitter twitter = new TwitterFactory().getInstance();
 		twitter.setOAuthConsumer(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);

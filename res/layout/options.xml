@@ -1,90 +1,336 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  android:layout_width="fill_parent" 
-              android:layout_height="fill_parent"
-              android:padding="5dip"
-              android:background="@color/app_background_color"
-              android:orientation="vertical">
+android:layout_width="fill_parent" 
+android:layout_height="fill_parent"
+android:padding="5dip"
+android:background="@color/app_background_color"
+android:orientation="vertical">
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/myTableLayout1"
-    android:padding="10px"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/list_normal">
+android:id="@+id/myTableLayout1"
+android:padding="10px"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:background="@drawable/list_normal">
 
-    <TableRow
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content">
-      
-				<ImageView android:id="@+id/previous"
-				android:layout_width="30dip" 
-				android:layout_height="30dip" 
-				android:layout_weight="0.25"
-				android:layout_gravity="center_vertical"
-				android:src="@drawable/previous_arrow"/>
-				
-				<com.android.localguide.OptionsAddressLayout
-				android:id="@+id/addressLayout"
-				android:padding="10px"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="0.75"
-				/>	
-				
-				<ImageView android:id="@+id/next"
-				android:layout_width="30dip" 
-				android:layout_height="30dip"
-				android:layout_weight="0.25"
-				android:layout_gravity="center_vertical"
-				android:src="@drawable/next_arrow"/>
-     </TableRow>
+	<TableRow
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+
+	<ImageView android:id="@+id/previous"
+	android:layout_width="30dip" 
+	android:layout_height="30dip" 
+	android:layout_weight="0.25"
+	android:layout_gravity="center_vertical"
+	android:src="@drawable/previous_arrow"/>
+
+	<com.android.localguide.OptionsAddressLayout
+	android:id="@+id/addressLayout"
+	android:padding="10px"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.75"
+	/>	
+
+	<ImageView android:id="@+id/next"
+	android:layout_width="30dip" 
+	android:layout_height="30dip"
+	android:layout_weight="0.25"
+	android:layout_gravity="center_vertical"
+	android:src="@drawable/next_arrow"/>
+	</TableRow>
 
 </TableLayout>
 
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/myTableLayout"
+<ScrollView
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:stretchColumns="*"
-    android:layout_marginTop="3px"
-    >
-     <TableRow
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content">
-			<Button  android:id="@+id/button1"
-			android:text="call"/>
-			<Button  android:id="@+id/button2" 
-			android:text="Message"/>
-			<Button  android:id="@+id/button3"
-			 android:text="Save to Phonebook"/>
-     </TableRow>
+    android:layout_height="fill_parent">
+    
+<LinearLayout 
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:id="@+id/myTableLayout"
+android:layout_marginTop="10px"
+android:orientation="vertical">
 
-	<View
-	android:layout_height="2dip"
-	android:background="#FF909090" />
+<RelativeLayout 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="5px"
+android:padding="5px"
+android:layout_weight="1"
+android:gravity="center_vertical|left"
+android:background="@drawable/rowselector">
 
-     <TableRow
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content">
-          
-			<Button android:id="@+id/button4" 
-			android:text="Twitter"/>
-			<Button android:id="@+id/button5" 
-			android:text="Facebook"/>
-			<Button android:id="@+id/button6"
-			android:text="Map"/>
-     </TableRow>
-        <View
-        android:layout_height="2dip"
-        android:background="#FF909090" />
-        <View
-        android:layout_height="2dip"
-        android:background="#FF909090" />
+	<ImageView android:id="@+id/icon1"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:src="@drawable/telephone"/>
+	
+	<TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/icon1"
+	android:layout_marginLeft="5px" 
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:textColor="#ffffff"
+	android:text=" - Call"/>
+		
+</RelativeLayout>
 
-</TableLayout>
-		<Button android:id="@+id/button7"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="Save to Favorties"/>
+
+	<Button  android:id="@+id/button1"
+	android:layout_width="fill_parent"
+	android:layout_height="0dip"
+	android:layout_marginTop="5px"
+	android:padding="5px"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:background="@drawable/rowselector"
+	android:textColor="#ffffff"
+	android:layout_weight="1"
+	android:gravity="center_vertical|left"
+	android:drawableLeft="@drawable/telephone"
+	android:visibility="gone"	
+	android:text="Call"/>
+
+<RelativeLayout 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="5px"
+android:padding="5px"
+android:layout_weight="1"
+android:gravity="center_vertical|left"
+android:background="@drawable/rowselector">
+
+	<ImageView android:id="@+id/icon1"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:src="@drawable/message"/>
+	
+	<TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/icon1"
+	android:layout_marginLeft="5px" 
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:textColor="#ffffff"
+	android:text=" - Message"/>
+		
+</RelativeLayout>
+
+	<Button  android:id="@+id/button2" 
+	android:layout_width="fill_parent"
+	android:layout_height="0dip"
+	android:layout_marginTop="5px"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:background="@drawable/rowselector"
+	android:textColor="#ffffff"	
+	android:layout_weight="1"
+	android:paddingLeft="5px"
+	android:visibility="gone"
+	android:gravity="center_vertical|left"
+	android:drawableLeft="@drawable/message"
+	android:text="Message"/>
+
+<RelativeLayout 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="5px"
+android:padding="5px"
+android:layout_weight="1"
+android:gravity="center_vertical|left"
+android:background="@drawable/rowselector">
+
+	<ImageView android:id="@+id/icon1"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:src="@drawable/phonebook"/>
+	
+	<TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/icon1"
+	android:layout_marginLeft="5px" 
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:textColor="#ffffff"
+	android:text=" - Save to PhoneBook"/>
+		
+</RelativeLayout>
+
+	<Button  android:id="@+id/button3"
+	android:layout_width="fill_parent"
+	android:layout_height="0dip"
+	android:layout_marginTop="5px"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:background="@drawable/rowselector"
+	android:textColor="#ffffff"
+	android:layout_weight="1"
+	android:paddingLeft="5px"
+	android:visibility="gone"
+	android:gravity="center_vertical|left"
+	android:drawableLeft="@drawable/phonebook"
+	android:text="Save to Phonebook"/>
+
+<RelativeLayout 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="5px"
+android:padding="5px"
+android:layout_weight="1"
+android:gravity="center_vertical|left"
+android:background="@drawable/rowselector">
+
+	<ImageView android:id="@+id/icon1"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:src="@drawable/twitter_icon"/>
+	
+	<TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/icon1"
+	android:layout_marginLeft="5px" 
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:textColor="#ffffff"
+	android:text=" - Twitter"/>
+		
+</RelativeLayout>
+
+	<Button android:id="@+id/button4" 
+	android:layout_width="fill_parent"
+	android:layout_height="0dip"
+	android:layout_marginTop="5px"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:background="@drawable/rowselector"
+	android:textColor="#ffffff"
+	android:layout_weight="1"
+	android:visibility="gone"
+	android:paddingLeft="5px"
+	android:gravity="center_vertical|left"
+	android:drawableLeft="@drawable/twitter_icon"
+	android:text="Twitter"/>
+
+<RelativeLayout 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="5px"
+android:padding="5px"
+android:layout_weight="1"
+android:gravity="center_vertical|left"
+android:background="@drawable/rowselector">
+
+	<ImageView android:id="@+id/icon1"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:src="@drawable/facebook"/>
+	
+	<TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/icon1"
+	android:layout_marginLeft="5px" 
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:textColor="#ffffff"
+	android:text=" - Facebook"/>
+		
+</RelativeLayout>
+
+	<Button android:id="@+id/button5" 
+	android:layout_width="fill_parent"
+	android:layout_height="0dip"
+	android:layout_marginTop="5px"
+	android:paddingLeft="5px"
+	android:gravity="center_vertical|left"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:background="@drawable/rowselector"
+	android:textColor="#ffffff"
+	android:layout_weight="1"
+	android:visibility="gone"
+	android:drawableLeft="@drawable/facebook"
+	android:text="Facebook"/>
+
+<RelativeLayout 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="5px"
+android:padding="5px"
+android:layout_weight="1"
+android:gravity="center_vertical|left"
+android:background="@drawable/rowselector">
+
+	<ImageView android:id="@+id/icon1"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:src="@drawable/globe"/>
+	
+	<TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/icon1"
+	android:layout_marginLeft="5px" 
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:textColor="#ffffff"
+	android:text=" - Get directions"/>
+		
+</RelativeLayout>
+
+
+	<Button android:id="@+id/button6"
+	android:layout_width="fill_parent"
+	android:layout_height="0dip"
+	android:layout_marginTop="5px"
+	android:paddingLeft="5px"
+	android:gravity="center_vertical|left"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:background="@drawable/rowselector"
+	android:textColor="#ffffff"
+	android:layout_weight="1"
+	android:visibility="gone"
+	android:drawableLeft="@drawable/globe"
+	android:text="Map"/>
+
+<RelativeLayout 
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:layout_marginTop="5px"
+android:padding="5px"
+android:layout_weight="1"
+android:gravity="center_vertical|left"
+android:background="@drawable/rowselector">
+
+	<ImageView android:id="@+id/icon1"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:src="@drawable/favorite"/>
+	
+	<TextView
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_toRightOf="@id/icon1"
+	android:layout_marginLeft="5px" 
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:textColor="#ffffff"
+	android:text=" - Favorites"/>
+		
+</RelativeLayout>
+
+	<Button android:id="@+id/button7"
+	android:layout_width="fill_parent"
+	android:layout_height="0dip"
+	android:layout_marginTop="5px"
+	android:layout_marginBottom="5px"
+	android:paddingLeft="5px"
+	android:gravity="center_vertical|left"
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:background="@drawable/rowselector"
+	android:textColor="#ffffff"	
+	android:visibility="gone"
+	android:layout_weight="1"
+	android:drawableLeft="@drawable/favorite"
+	android:text="Save to Favorties"/>
+
+</LinearLayout>
+
+</ScrollView>
+
 </LinearLayout>
