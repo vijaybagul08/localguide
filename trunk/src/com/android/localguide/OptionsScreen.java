@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TableLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -79,7 +80,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	int totalcount = 0;
 	int currentaddress =0;
     TableLayout layout1;
-    TableLayout layout2;
+    LinearLayout layout2;
     MyAnimation animation;
     ImageView nextArrow;
     ImageView previousArrow;
@@ -92,7 +93,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
     
     mContext = this;
     layout1 = (TableLayout)findViewById(R.id.myTableLayout1);
-    layout2 = (TableLayout)findViewById(R.id.myTableLayout);
+    layout2 = (LinearLayout)findViewById(R.id.myTableLayout);
     nextArrow = (ImageView)findViewById(R.id.next);
     previousArrow = (ImageView)findViewById(R.id.previous);
     layout = (OptionsAddressLayout)findViewById(R.id.addressLayout);

@@ -34,6 +34,7 @@ public class PrepareRequestTokenActivity extends Activity {
     private OAuthConsumer consumer; 
     private OAuthProvider provider;
     LocalGuideApplication app;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,7 +63,7 @@ public class PrepareRequestTokenActivity extends Activity {
 			Log.i(TAG, "Callback received : " + uri);
 			Log.i(TAG, "Retrieving Access Token");
 			new RetrieveAccessTokenTask(this,consumer,provider,prefs).execute(uri);
-			finish();	
+			//finish();	
 		}
 	}
 	
@@ -106,10 +107,11 @@ public class PrepareRequestTokenActivity extends Activity {
 				String secret = app.getTwitterAccessSecret();
 				
 				consumer.setTokenWithSecret(token, secret);
-				context.startActivity(new Intent(context,Information.class));
+
+				//context.startActivity(new Intent(context,Information.class));
 
 				//executeAfterAccessTokenRetrieval();
-				
+				finish();
 				Log.i(TAG, "OAuth - Access Token Retrieved");
 				
 			} catch (Exception e) {

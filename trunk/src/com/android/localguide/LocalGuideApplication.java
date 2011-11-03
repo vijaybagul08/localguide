@@ -56,6 +56,7 @@ public class LocalGuideApplication extends Application {
 	{
 		mTwitterAccessKey = key;
 		mTwitterAccessSecret = secret;
+		System.out.println("Update twitter token ********** "+mTwitterAccessKey);
 	}
 
 	public void setLoaded(boolean load) {

@@ -21,6 +21,7 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 
 	private int TWITTER = 1;
 	private int FACEBOOK = 2;
+	private int FACEBOOK_SUCCESSFUL =3;
 	private int TWITTER_AUTHENTICATE = 3;
 	LocalGuideApplication app;
 	TextView twitterText;
@@ -73,6 +74,13 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 //		client.authenticate();	
 	}
 
+	public void onResume() {
+		super.onResume();
+		System.out.println("On Resume information ********* ");
+		if (app.isTwitterAutheticated() == true) {
+			twitterButton.setText("Try different user");
+		}
+	}
 	class H extends Handler
 	{
 		public void handleMessage(Message m)
@@ -88,7 +96,8 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 	
 					Intent i = new Intent(getApplicationContext(), PrepareRequestTokenActivity.class);
 					i.putExtra("tweet_msg","hello");
-					startActivity(i);
+					//startActivity(i);
+					startActivityForResult(i,TWITTER_AUTHENTICATE);
             	}
 		        
 			}
@@ -97,6 +106,8 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 				System.out.println("Handle message is facebook**************** ");
 				FaceBookClient client = new FaceBookClient(Information.this,Information.this);
 				client.initialize();
+			}else if(m.what == FACEBOOK_SUCCESSFUL){
+				facebookButton.setText("Try Different User");
 			}
 		}
 	}
@@ -105,13 +116,13 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
              Intent data) {
 		 if (requestCode == TWITTER_AUTHENTICATE) {
              if (resultCode == RESULT_OK) {
-            	 
-            	 Bundle bundle= data.getExtras();
-            	 String key = bundle.getString("AccessKey");
-            	 String secret = bundle.getString("AccessSecret");
-            	 String username = bundle.getString("UserName");
-            	 System.out.println("Key and secret is "+key +":::"+secret);
-            	 app.updateTwitterToken(key, secret);
+            	 System.out.println("Information ************* on activity result ******* ");
+//            	 Bundle bundle= data.getExtras();
+//            	 String key = bundle.getString("AccessKey");
+//            	 String secret = bundle.getString("AccessSecret");
+//            	 String username = bundle.getString("UserName");
+//            	 System.out.println("Key and secret is "+key +":::"+secret);
+//            	 app.updateTwitterToken(key, secret);
             	 twitterButton.setText("Try different user");
              }
 		 }
@@ -127,7 +138,7 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			text+=username;
 			System.out.println("on facebook authentication complete set token is **** "+app.getFacebookToken());
 		//	facebookText.setText(text);
-		//	facebookButton.setText("Try Different User");
+			mHandler.sendEmptyMessage(FACEBOOK_SUCCESSFUL);
 			break;
 		case FaceBookAuthenticationCallBack.AUTHENTICAION_FAILURE:
 			break;
