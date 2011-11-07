@@ -46,7 +46,7 @@ public class OptionsAddressLayout extends RelativeLayout{
 		resultcount = new TextView(context);
 		resultcount.setTextSize(20);
 		resultcount.setTextColor(Color.rgb(0xff, 0xff, 0xff));
-		resultcount.setText("Result: ");
+		resultcount.setText(mContext.getString(R.string.result));
 		
 		
 		RelativeLayout.LayoutParams titleParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -80,7 +80,7 @@ public class OptionsAddressLayout extends RelativeLayout{
 	   }
 	   
 	   public void setCurrentPosition(int pos) {
-		   resultcount.setText("Result: "+pos+"/"+totalcount);
+		   resultcount.setText(mContext.getString(R.string.result)+": "+pos+"/"+totalcount);
 	   }
 	   
 	   public void setTotalCount(int count) {
@@ -94,7 +94,6 @@ public class OptionsAddressLayout extends RelativeLayout{
 	   @Override
 		public final boolean onTouchEvent(MotionEvent event) {
 		   
-		   System.out.println("In on touch event address layout");
 		   int pointerX = (int) event.getX();
 		   		   
 			switch(event.getAction()) {
@@ -105,7 +104,6 @@ public class OptionsAddressLayout extends RelativeLayout{
 			case MotionEvent.ACTION_MOVE:
 				
 				int deltaX = Math.abs(currX - pointerX);
-				System.out.println("Action move isss ****** "+currX+"::"+pointerX+":::"+deltaX);
 				if(!isMovementDetected)
 				{
 				if(deltaX > THRESHHOLD_MOVEMENT)

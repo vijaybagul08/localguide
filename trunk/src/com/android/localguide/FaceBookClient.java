@@ -37,13 +37,14 @@ public class FaceBookClient {
 		public static final int POST_SUCCESSFULL = 1;
 		public static final int POST_FAILURE = 2;
 	}
+	
 	Activity mActivity;
 	FaceBookAuthenticationCallBack mCB;
 	static FaceBookPostMessageCallBack mPostCB;
 	String mToken;
     private Facebook mFacebook;
     private AsyncFacebookRunner mAsyncRunner;
-    public static final String APP_ID = "175729095772478";
+    public static final String APP_ID = "272060966168522"; // LocalGuide app ID.
     public static final String PERMISSION_READ_STREAM		= "read_stream";
     public static final String PERMISSION_PUBLISH_STREAM	= "publish_stream";
     public static final String PERMISSION_READ_MAILBOX		= "read_mailbox";
@@ -100,7 +101,6 @@ public class FaceBookClient {
 	} 
     private final class LoginDialogListener implements DialogListener {
         public void onComplete(Bundle values) {
-        	System.out.println("On compelete dialog listener **************** ");
             onAuthenticationComplete(values);
         }
 
@@ -189,7 +189,6 @@ public class FaceBookClient {
 	
 	public static class BaseRequestListener implements RequestListener {
         public void onComplete(final String response,Object o) {
-        	System.out.println("OnComplete: BaseRequestListener" + response);
         	mPostCB.onFaceBookmessagePostCompleted(FaceBookPostMessageCallBack.POST_SUCCESSFULL);        	
         }
         

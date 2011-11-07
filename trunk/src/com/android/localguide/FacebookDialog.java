@@ -66,12 +66,13 @@ public class FacebookDialog extends Dialog  {
 	public void setMessage(String msg) {
 		locationTextbox.setText(msg);
 	}
-		public void show()
-		{
-			super.show();
-		    WindowManager.LayoutParams lp = this.getWindow().getAttributes();
-		    lp.width = screenWidth-10;
-		    this.getWindow().setAttributes(lp);
-	    }		
+
+	public void show()
+	{
+		super.show();
+	    WindowManager.LayoutParams lp = this.getWindow().getAttributes();
+	    lp.width = screenWidth-10;
+	    this.getWindow().setAttributes(lp);
+    }		
 	    
 }

@@ -25,26 +25,23 @@ public class FavoritesScreen extends Activity{
 	ArrayList<favoriteItem> mList;
 	ListView mListView;
 	BaseAdapter mAdapter;
+	TextView mNoElements;
 	
 	public void onCreate(Bundle savedInstance)
 	{
-		System.out.println("On create favorites screen ********* ");
 		super.onCreate(savedInstance);
 		setContentView(R.layout.favorites);
 		app = (LocalGuideApplication)this.getApplication();
 		
 		mList = app.getFavoritesList();
-
+		mNoElements = (TextView) findViewById(R.id.no_element);
 		mListView = (ListView)findViewById(R.id.fav_list);
 		mAdapter = new ListAdapter(this);
-		mListView.setAdapter(mAdapter);
-		
 		mListView.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 
             	Intent intent = new Intent();
         		intent.setClass(FavoritesScreen.this, FavoritesResults.class);
-            	//intent.setClass(FavoritesScreen.this, OptionsScreen.class);
             	intent.setAction("com.mani.favorites");
         		Bundle bun = new Bundle();
                 bun.putInt("position", position);
@@ -59,15 +56,21 @@ public class FavoritesScreen extends Activity{
 	@Override
 	protected void onResume() {
 		super.onResume();
-		System.out.println("Favorites screen ********** on resume");
+		
 		mList = app.getFavoritesList();
-		mListView.setAdapter(mAdapter);
-		//mAdapter.notifyDataSetChanged();
+
+		if(mList.size() == 0) {
+			mNoElements.setVisibility(View.VISIBLE);
+			mListView.setVisibility(View.GONE);
+		}else {
+			mNoElements.setVisibility(View.GONE);
+			mListView.setVisibility(View.VISIBLE);
+			mListView.setAdapter(mAdapter);
+		}
 	}
 	
 	public void onBackPressed ()
 	{
-		System.out.println("On back key pressed ************* ");
 		 app.saveToDataBase();
 		 this.finish();
 	}

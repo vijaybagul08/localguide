@@ -41,22 +41,18 @@ public class LocalGuideApplication extends Application {
     	mTwitterAccessKey = null;
 		mTwitterAccessSecret= null;
 		mFacebookAccessToken = null;
-	System.out.println("On create application *********** ");
         favoritesList = new ArrayList<favoriteItem>();
-	    //loadFromDataBase();
 	}
+
 	public void onTerminate()
 	{
 		super.onTerminate();
-		System.out.println("On terminate application *********** ");
-		//saveToDataBase();
 	}
 	
 	public void updateTwitterToken(String key,String secret)
 	{
 		mTwitterAccessKey = key;
 		mTwitterAccessSecret = secret;
-		System.out.println("Update twitter token ********** "+mTwitterAccessKey);
 	}
 
 	public void setLoaded(boolean load) {
@@ -105,7 +101,6 @@ public class LocalGuideApplication extends Application {
 
 	public boolean isTwitterAutheticated()
 	{
-		System.out.println("Is twitter authenticated *** "+mTwitterAccessKey);
 		if(mTwitterAccessKey == null && mTwitterAccessSecret == null)
 			return false;
 		else
@@ -115,7 +110,6 @@ public class LocalGuideApplication extends Application {
 	
 	public boolean isFacebookAuthenticated()
 	{
-		System.out.println("Is facebook authenticated *** "+mFacebookAccessToken);
 		if(mFacebookAccessToken == null)
 			return false;
 		else
@@ -125,7 +119,6 @@ public class LocalGuideApplication extends Application {
 
 	public boolean addToFavorites(String title,String address,String phoneNumber,String lat,String along)
 	{
-		System.out.println("Add to favorites *********** ");
 		/*Check if the user has already added the item to favorites list*/
 		
 		for(int i=0;i<favoritesList.size();i++)
@@ -145,7 +138,7 @@ public class LocalGuideApplication extends Application {
 	
 	public boolean deleteFavorites(String title)
 	{
-		System.out.println("Delete to favorites *********** ");
+
 		int position=-1;
 		for(int i=0;i<favoritesList.size();i++)
 		{
@@ -182,15 +175,6 @@ public class LocalGuideApplication extends Application {
         
         System.out.println("Facebook token in loadfromdatabase *********"+mFacebookAccessToken+"***");
         
-		if(mTwitterAccessKey == null && mTwitterAccessSecret == null)
-			System.out.println("Twitter token is nullllll");
-		else
-			System.out.println("Twitter token is having value");
-		
-		if(mFacebookAccessToken == null)
-			System.out.println("Facebook token is null");
-		else
-			System.out.println("Facebook is having value");
        
         int count = prefs.getInt("FavoritesCount", 0);
         
@@ -201,7 +185,6 @@ public class LocalGuideApplication extends Application {
         	String phonenumber = prefs.getString("phonenumber" + i, "");
         	String lat= prefs.getString("latitude" + i, "");
         	String along= prefs.getString("longitude" + i, "");
-        	System.out.println("load from data base ******** "+ title+":::"+phonenumber);
         	favoriteItem item = new favoriteItem(title,address,phonenumber,lat,along);
         	favoritesList.add(item);
         }
@@ -210,7 +193,6 @@ public class LocalGuideApplication extends Application {
 	
 	public void saveToDataBase()
 	{
-		System.out.println("save to data base ********* ");
 	 	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Editor editor = null;;
         editor = prefs.edit();
@@ -220,7 +202,6 @@ public class LocalGuideApplication extends Application {
         editor.putString("twitteraccesssecret", mTwitterAccessSecret);
         editor.putString("facebookusername", mFacebookUserName);
         editor.putString("facebooktoken", mFacebookAccessToken);
-        System.out.println("Facebook token in savetodatabase ********* "+mFacebookAccessToken);
         
         int count = favoritesList.size();
         editor.putInt("FavoritesCount", count);
@@ -228,8 +209,6 @@ public class LocalGuideApplication extends Application {
        for (int i = 0; i < count; i++) {
         	favoriteItem data = favoritesList.get(i);
         	if(count != 0) {
-        		System.out.println("save to data base ******** "+data.title+"::"+data.phoneNumber);
-        		// TODO:
                 editor.putString("title" + i, data.title);
                 editor.putString("streetaddress" + i, data.streetAddress);
                 editor.putString("phonenumber" + i, data.phoneNumber);

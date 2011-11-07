@@ -11,8 +11,6 @@ public class TwitterUtils {
 
 	public static boolean isAuthenticated(LocalGuideApplication app ) {
 
-		//String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
-		//String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
 		String token = app.getTwitterAccessKey();
 		String secret = app.getTwitterAccessSecret();
 		if( token.length() == 0 || secret.length() == 0) 
@@ -32,8 +30,7 @@ public class TwitterUtils {
 	}
 	
 	public static void sendTweet(LocalGuideApplication app,String msg) throws Exception {
-//		String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
-//		String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
+
 		String token = app.getTwitterAccessKey();
 		String secret = app.getTwitterAccessSecret();
 		

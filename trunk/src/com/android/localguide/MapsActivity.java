@@ -37,8 +37,6 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	{
 		public void run()
 		{
-			System.out.println("MTask runnable calling search routes ********** ");
-					    //GetDirectionsList obj = new GetDirectionsList("Hougang Avenue 8,Singapore",address,MapsActivity.this);
 			GetDirectionsList obj = new GetDirectionsList(startLocation,address,MapsActivity.this);
 			obj.searchRoutes();
 		}
@@ -61,11 +59,9 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	
 	public void OnSearchCompleted(ArrayList<DirectionItem> list,int code)
 	{
-		System.out.println("MAPS ACTIVITY On search completed ");
 		
 		if(list == null)
 		{
-			System.out.println("MAPS ACTIVITY On search completed LIST NULL ");
 			if(code == GetDirectionsList.SearchResultCallBack.NETWORK_FAILURE) {
 				dialog.dismiss();
 				AlertDialog.Builder builder =  new AlertDialog.Builder(this);
@@ -90,8 +86,6 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	 	} else {
 		dialog.dismiss();
 		
-		System.out.println("MAPS ACTIVITY On search completed 1111 ");
-		
 		MapView mapView = (MapView) findViewById(R.id.mapview);
 
 	    mapView.setBuiltInZoomControls(true);
@@ -106,7 +100,6 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	    OverlayItem overlayitem;
 
 	    // Iterate the list and get all the route points, duration, distance, instructoins
-	    System.out.println("MAPS ACTIVITY On search completed 222 ");
 	    for(int i =0;i<list.size();i++)
 	    {
 	    	point = new GeoPoint((int)(list.get(i).latitude * 1E6),(int)(list.get(i).longitude * 1E6));

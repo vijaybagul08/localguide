@@ -61,7 +61,7 @@
 				android:textColor="#ffffff"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_gravity="center_vertical"
-				android:text="Call"/>
+				android:text="@string/call"/>
      </TableRow>
      
          
@@ -83,7 +83,7 @@
 				android:textColor="#ffffff"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_gravity="center_vertical"
-				android:text="Save to PhoneBook"/>
+				android:text="@string/phonebook"/>
 
      </TableRow>
      
@@ -107,7 +107,7 @@
 				android:textColor="#ffffff"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_gravity="center_vertical"
-				android:text="Send an SMS/Message"/>
+				android:text="@string/message"/>
 
      </TableRow>
      
@@ -131,7 +131,7 @@
 				android:textColor="#ffffff"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_gravity="center_vertical"
-				android:text="Get Directions"/>
+				android:text="@string/direction"/>
 >
      </TableRow>
      
@@ -146,7 +146,7 @@
 				android:layout_height="30dip" 
 				android:layout_weight="0.2"
 				android:layout_gravity="center_vertical"
-				android:src="@drawable/twitter"/>
+				android:src="@drawable/twitter_icon"/>
 				
 				<TextView android:id="@+id/next"
 				android:layout_width="fill_parent" 
@@ -155,7 +155,7 @@
 				android:textColor="#ffffff"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_gravity="center_vertical"
-				android:text="Tweet the location"/>
+				android:text="@string/twitter"/>
 
      </TableRow>
      
@@ -179,7 +179,7 @@
 				android:textColor="#ffffff"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_gravity="center_vertical"
-				android:text="Update your status msg"/>
+				android:text="@string/facebook"/>
 
      </TableRow>
      
@@ -205,7 +205,7 @@
 				android:textColor="#ffffff"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_gravity="center_vertical"
-				android:text="Save as favorites"/>
+				android:text="@string/fav_description"/>
      </TableRow>
      
 
@@ -256,6 +256,7 @@ android:layout_width="fill_parent"
  android:layout_width="wrap_content"
  android:layout_height="40px"
  android:layout_weight="0.6"
+ android:paddingLeft="3px"
  android:background="@drawable/search_button"
  android:textAppearance="?android:attr/textAppearanceMedium"
  android:drawableLeft="@drawable/twitter_icon"
@@ -279,6 +280,7 @@ android:layout_width="fill_parent"
 			 android:layout_width="wrap_content"
 			 android:layout_height="40px" 
 			 android:layout_weight="0.6"
+			 android:paddingLeft="3px"
 			 android:textColor="#ffffff"
 			 android:drawableLeft="@drawable/facebook"
 			 android:textAppearance="?android:attr/textAppearanceMedium"
@@ -290,11 +292,28 @@ android:layout_width="fill_parent"
  
  <View
 android:layout_width="fill_parent"
- android:layout_height="15px"
- android:padding="3px" />
+ android:layout_height="3px"
+ android:paddingTop="10px"
+ android:background="#FFFFFFFF" />
+ 
+ <TextView 
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:textAppearance="?android:attr/textAppearanceMedium"
+  android:textStyle="bold"
+  android:paddingLeft="2px"
+  android:paddingTop="10px"
+  android:text="Identifying Location"/>
+ 
+  <TextView 
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:paddingLeft="5px"
+  android:textAppearance="?android:attr/textAppearanceMedium"
+  android:text="@string/location_detail"/>
   
  </LinearLayout>
- 
+
  
 </ScrollView>
   

@@ -77,7 +77,6 @@ public class GetDirectionsDialog extends Dialog implements OnClickListener {
 					}
 					else
 					{
-					System.out.println("Dialog on click ***************** 2");
 						if(locationTextbox.getText().toString().length() > 0)
 						{
 							mCB.onButtonOkPressed(false,locationTextbox.getText().toString());
@@ -85,10 +84,9 @@ public class GetDirectionsDialog extends Dialog implements OnClickListener {
 						}
 						else
 						{
-						System.out.println("Dialog on click ***************** 3 ");
 				    		AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
 				    		alertDialog.setTitle("Error");
-				    		alertDialog.setMessage("Please enter a valid from location");
+				    		alertDialog.setMessage("Please enter a valid start location");
 				    		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
 				    		      public void onClick(DialogInterface dialog, int which) {
 				    		 
@@ -120,22 +118,19 @@ public class GetDirectionsDialog extends Dialog implements OnClickListener {
 	    }		
 	    
 		public void onClick(View v) {
-		System.out.println("Dialog on click ***************** ");
+		
 			if(v == mCancel )
 				this.dismiss();
 			else if(v == mOK)
 			{
-			System.out.println("Dialog on click ***************** 11");
 				if(locationCheckbox.isChecked() == true)
 					mCB.onButtonOkPressed(true,null);
 				else
 				{
-				System.out.println("Dialog on click ***************** 2");
 					if(locationTextbox.getText().toString().length() > 0)
 						mCB.onButtonOkPressed(false,locationTextbox.getText().toString());
 					else
 					{
-					System.out.println("Dialog on click ***************** 3 ");
 			    		AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
 			    		alertDialog.setTitle("Error");
 			    		alertDialog.setMessage("Please enter a valid from location");

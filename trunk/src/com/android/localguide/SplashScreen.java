@@ -7,12 +7,11 @@ import android.os.Bundle;
 public class SplashScreen extends Activity{
 
 	protected boolean _active = true;
-	protected int _splashTime = 2000; // time to display the splash screen in ms
+	protected int _splashTime = 2000; 
 	public void onCreate(Bundle savedInstanceState)
 	{
 		  super.onCreate(savedInstanceState);
 		    setContentView(R.layout.splash);
-		 // thread for displaying the SplashScreen
 		    Thread splashTread = new Thread() {
 		        @Override
 		        public void run() {
@@ -29,7 +28,6 @@ public class SplashScreen extends Activity{
 		            } finally {
 		                finish();
 		                startActivity(new Intent("com.android.localguideTabScreen"));
-		               // stop();
 		            }
 		        }
 		    };

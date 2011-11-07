@@ -76,7 +76,6 @@ public class GetDirectionsList {
 			} catch (java.net.SocketTimeoutException e) {
 				 mCB.OnSearchCompleted(null,SearchResultCallBack.NETWORK_FAILURE);
 			}catch(Exception ex){
-				System.out.println("Getdirections error 1 ************8 "+ex.toString());
 				 mCB.OnSearchCompleted(null,SearchResultCallBack.NETWORK_FAILURE);
 			}
 			
@@ -102,7 +101,6 @@ public class GetDirectionsList {
 		 public  void updateData(String result)
 		    {
 			 
-			// System.out.println("Routes are ****** "+result);
 		   	 try
 		        {
 		         JSONObject json=new JSONObject(result);
@@ -163,15 +161,7 @@ public class GetDirectionsList {
 			           
 			           // Get the instruction
 			           item.instructions = resultObject.getString("html_instructions"); 
-			           
-			           System.out.println("Latitude Longitude is "+item.latitude+"::"+item.longitude);
-			           System.out.println("Instructions are ****** "+item.instructions);
-			           System.out.println("Distance are ****** "+item.distance);
-			           System.out.println("Durations are ****** "+item.duration);
 			           DirectionItemList.add(item);
-			           
-			           //System.out.println("REsult steps is "+resultObject.toString());
-			           
 		           }
 			         mCB.OnSearchCompleted(DirectionItemList,SearchResultCallBack.SUCCESS);
 		         } else {

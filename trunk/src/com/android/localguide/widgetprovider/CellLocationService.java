@@ -324,7 +324,10 @@ System.out.println("Network is connectivity is changed ****************** ");
 		mLooperThreadHandler.removeCallbacks(updateWidgetsRunnable);
 		
 	}
-	
+	   public void settingsDisabled() {
+		   
+	   
+	   }
 	public void gotLocation(Location location)
 	{
 		if(location !=null)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/twitterLayout"
+	android:id="@+id/settingslayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 	android:padding="10dip"    
@@ -20,21 +20,13 @@ android:layout_width="fill_parent"
  android:layout_height="2dip"
  android:background="#FFFFFFFF" />
              
-    <EditText
-        android:id="@+id/message_edit"
+    <TextView 
+    	android:id="@+id/message"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:layout_marginTop="10dip"
-        android:autoText="false"
-		android:paddingLeft="3px"
-		android:background="@color/edittext_bkg"
-		android:textColor="#12105E"        
-        android:lines="5"
-        android:capitalize="none"
-        android:gravity="fill_horizontal"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_width="fill_parent"
+        android:gravity="left"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffff" />
         
 <LinearLayout
    android:layout_width="match_parent"

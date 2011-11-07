@@ -15,6 +15,7 @@ public class LocationIdentifier{
 	
 	public interface LocationIdentifierCallBack{
 		public void gotLocation(Location location);
+		public void settingsDisabled();
 	}
 	
 	Context mContext;
@@ -31,40 +32,64 @@ public class LocationIdentifier{
 		mContext = context;
 		mParent = parent;
 	}
-	
+	public boolean settingsEnabled() {
+		if(locationManager == null)
+			locationManager = (LocationManager)mContext.getSystemService(mContext.LOCATION_SERVICE);
+		
+		//exceptions will be thr own if provider is not permitted.
+		try{
+			isGPSenabled=locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		}
+		catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
+
+		try{
+			isNetworkenabled=locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+		}
+		catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
+
+		if(!isGPSenabled && !isNetworkenabled)
+		{
+			return false;
+		}else {
+			return true;
+		}
+	}
 	public void getLocation()
 	{
 		isSearching= true;
+		
 		if(locationManager == null)
 			locationManager = (LocationManager)mContext.getSystemService(mContext.LOCATION_SERVICE);
 
 		//exceptions will be thrown if provider is not permitted.
 		try{
 			isGPSenabled=locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-			System.out.println("Locaiton manager gps enabled ********* "+isGPSenabled);
 		}
 		catch(Exception ex){
-			
+			throw new RuntimeException(ex);
 		}
 
 		try{
 			isNetworkenabled=locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-			System.out.println("Locaiton manager network enabled ********* "+isNetworkenabled);
 		}
 		catch(Exception ex){
-			
+			throw new RuntimeException(ex);
 		}
 
 		if(!isGPSenabled && !isNetworkenabled)
 		{
-			mParent.gotLocation(null);
+			mParent.settingsDisabled();
 		}
 		else
 		{
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListenerNetwork);
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGps);
 			timer=new Timer();
-			timer.schedule(new GetLastLocation(), 20000);
+			timer.schedule(new GetLastLocation(), 60000);
 		}
 	}
 	
@@ -129,23 +154,23 @@ public class LocationIdentifier{
 		//if there are both values use the latest one
 		if(gpsLocation!=null && networkLocation!=null){
 			if(gpsLocation.getTime()>networkLocation.getTime())
-			mParent.gotLocation(gpsLocation);
+				mParent.gotLocation(gpsLocation);
 			else
-			mParent.gotLocation(networkLocation);
-		return;
-
+				mParent.gotLocation(networkLocation);
+			return;
 		}
 
 		if(gpsLocation!=null){
 			mParent.gotLocation(gpsLocation);
 			return;
 		}
-		if(networkLocation!=null){
+		else if(networkLocation!=null){
 			mParent.gotLocation(networkLocation);
 			return;
 		}
-		System.out.println("Locaiton manager GetLastLocation timertask ********** null ");
+		
 		mParent.gotLocation(null);
+		
 	    }
 	}
     

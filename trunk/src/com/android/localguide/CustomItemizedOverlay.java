@@ -59,7 +59,6 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 		
 		mTextPaint = new Paint();
 		mTextPaint.setAntiAlias(true);
-		//mTextPaint.setColor(Color.WHITE);
 		mTextPaint.setColor(Color.rgb(0x12, 0x10, 0x5E));
 		
 		mTextPaint.setTextSize(12);
@@ -71,7 +70,6 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> implemen
 	}
 	
 	public CustomItemizedOverlay(Drawable defaultMarker, TrackBallFocusListener listener) {
-		// if you don't use boundCenterBottom(), somehow it doesn't show up
 		super(boundCenterBottom(defaultMarker));
 		setOnFocusChangeListener(this);
 		this.listener = listener;
