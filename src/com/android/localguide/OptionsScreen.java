@@ -15,8 +15,8 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -41,6 +41,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.localguide.FaceBookClient.FaceBookPostMessageCallBack;
 import com.android.localguide.LocalGuideApplication.favoriteItem;
+
 import android.os.Handler;
 
 public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,
@@ -59,19 +60,12 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	private ArrayList<String> latitude;
 	private ArrayList<String> longitude;
 
-	TwitterClient mTwitterClient;
 	FaceBookClient mFacebookClient;
 	GetDirectionsDialog mGetDirectionsDialog;
 	FacebookDialog mFacebookDialog;
 	TwitterDialog mTwitterDialog;
 	
-	Button button1;
-	Button button2;
-	Button button3;
-	Button button4;
-	Button button5;
-	Button button6;
-	Button button7;
+	ListView mListView;
 	
 	private final int CALL_ID = 1;
 	private final int MESSAGING_ID = 2;
@@ -85,6 +79,8 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
     ImageView nextArrow;
     ImageView previousArrow;
     ArrayList<favoriteItem> mFavList;
+    ArrayList<String> options;
+    
 	public void onCreate(Bundle savedInstanceState) {
 		
 	super.onCreate(savedInstanceState);
@@ -93,32 +89,29 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
     
     mContext = this;
     layout1 = (TableLayout)findViewById(R.id.myTableLayout1);
-    layout2 = (LinearLayout)findViewById(R.id.myTableLayout);
+    mListView = (ListView)findViewById(R.id.options_list);
     nextArrow = (ImageView)findViewById(R.id.next);
     previousArrow = (ImageView)findViewById(R.id.previous);
     layout = (OptionsAddressLayout)findViewById(R.id.addressLayout);
-    button1 = (Button)findViewById(R.id.button1);
-    button2 = (Button)findViewById(R.id.button2);
-    button3 = (Button)findViewById(R.id.button3);
-    button4 = (Button)findViewById(R.id.button4);
-    button5 = (Button)findViewById(R.id.button5);
-    button6 = (Button)findViewById(R.id.button6);
-    button7 = (Button)findViewById(R.id.button7);
     mGetDirectionsDialog = new GetDirectionsDialog(this,this);
     mFacebookDialog = new FacebookDialog(this,this);
     mTwitterDialog = new TwitterDialog(this,this);
     
     mFacebookClient  = new FaceBookClient(this,this);
-    System.out.println("Accesskey for facbook is ************* "+app.getFacebookToken());
     mFacebookClient.setAccessToken(app.getFacebookToken());
-    
-    
-    mTwitterClient = new TwitterClient(this,app.getTwitterAccessKey(),app.getTwitterAccessSecret());
-    System.out.println("Accesskey for Twitter is ************* "+app.getTwitterAccessKey()+"::::"+app.getTwitterAccessSecret());
+
     layout.setParent(this);
     totalcount = 0;
     animation = new MyAnimation();
     
+    options = new ArrayList<String>();
+    options.add("- "+this.getString(R.string.call));
+    options.add("- "+this.getString(R.string.message));
+    options.add("- "+this.getString(R.string.phonebook));
+    options.add("- "+this.getString(R.string.twitter));
+    options.add("- "+this.getString(R.string.facebook));
+    options.add("- "+this.getString(R.string.direction));
+    options.add("- "+this.getString(R.string.fav_description));
     /* get the results and position of list where user clicked from results activity */
     
     title = new ArrayList<String>();
@@ -131,85 +124,26 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
     
     if(this.getIntent().getAction().equals("com.mani.favorites") == true )
     {
-    	System.out.println("faqvoites options screen ********* ");
     	app = (LocalGuideApplication)this.getApplication();
     	mFavList = app.getFavoritesList();
     	for(int count=0;count<mFavList.size();count++)
     	{
-    		System.out.println("title is "+mFavList.get(count).title);
-    		System.out.println("title is "+mFavList.get(count).streetAddress);
-    		System.out.println("title is "+mFavList.get(count).phoneNumber);
-    		System.out.println("title is "+mFavList.get(count).latitude);
-    		System.out.println("title is "+mFavList.get(count).longitude);
     		title.add(mFavList.get(count).title);
     		streetaddress.add(mFavList.get(count).streetAddress);
     		phonenumbers.add(mFavList.get(count).phoneNumber);
     		latitude.add(mFavList.get(count).latitude);
     		longitude.add(mFavList.get(count).longitude);
-    		button7.setText("Delete favorites");
-    		button7.setOnClickListener( new View.OnClickListener(){
-    		    public void onClick(View v)
-    		    {
-    				   if( 	app.deleteFavorites(title.get(currentaddress)) == true )
-    				   {
-    					   Toast.makeText(mContext, "Successfully delted from favorites list", 4000).show();
-    				   }
-    				   else
-    				   {
-    					   Toast.makeText(mContext, "Failed to delete favorites", 4000).show();
-    				   }
-    		    }
-    	     });
     	}
     }
     else if(this.getIntent().getAction().equals("com.mani.results") == true)
     {
-    	 	System.out.println("welcome is ********* "+this.getIntent().getStringExtra("welcome"));
     	    resultArray = bundle.getStringArrayList("resultString");
     	    updateAllDetails();
-    		button7.setOnClickListener( new View.OnClickListener(){
-    		    public void onClick(View v)
-    		    {
-    				   if( 	app.addToFavorites(title.get(currentaddress),
-    				    				streetaddress.get(currentaddress),
-    				    				phonenumbers.get(currentaddress),
-    				    				latitude.get(currentaddress), 
-    				    				longitude.get(currentaddress)) == false )
-    				   {
-    					   Toast.makeText(mContext, "Already present in favorites list", 4000).show();
-    				   }
-    				   else
-    				   {
-    					   Toast.makeText(mContext, "Succesfully added to favorites", 4000).show();
-    				   }
-    		    }
-    	     });
-    	    	
     }
     else if(this.getIntent().getAction().equals("com.mani.widgetprodiver") == true)
     {
-    	 	System.out.println("welcome is ********* "+this.getIntent().getStringExtra("welcome"));
     	    result = bundle.getString("resultString");
-    	        	    
     	    updateAllDetails();
-    		button7.setOnClickListener( new View.OnClickListener(){
-    		    public void onClick(View v)
-    		    {
-    				   if( 	app.addToFavorites(title.get(currentaddress),
-    				    				streetaddress.get(currentaddress),
-    				    				phonenumbers.get(currentaddress),
-    				    				latitude.get(currentaddress), 
-    				    				longitude.get(currentaddress)) == false )
-    				   {
-    					   Toast.makeText(mContext, "Already present in favorites list", 4000).show();
-    				   }
-    				   else
-    				   {
-    					   Toast.makeText(mContext, "Succesfully added to favorites", 4000).show();
-    				   }
-    		    }
-    	     });
-    	    	
     }
 
     currentaddress =  bundle.getInt("position");
@@ -223,7 +157,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	layout.setAddress(text);
 	layout.setCurrentPosition(currentaddress+1);
 	layout1.startAnimation(animation);
-    layout2.startAnimation(animation);
     
     /* Hide the previous arrow if the user selected first item in the result page */
     if(currentaddress == 0)
@@ -245,95 +178,109 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	    	moveRight();
 	    }
     });
-    
-	button1.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	showCallOptions();
-	    }
-     });
+
+    mListView.setOnItemClickListener(new OnItemClickListener() { 
+        public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+        	switch(position){
+	        	case 0:
+	        		showCallOptions();	        		
+	        		break;
+	        	case 2:
+	        		saveToPhoneBook();
+	        	    break;
+	        	case 1:
+	        		showMessagingDialog();
+	        		break;
+	        	case 3:
+	        		showtwitterDialog();
+	        		break;
+	        	case 4:
+	        		showfacebookDialog();
+	        		break;
+	        	case 5:
+	    	    	if(checkInternetConnection() == true )
+	    	    	{
+	    	    		mGetDirectionsDialog.show();
+	    	    	}
+	    	    	else
+	    	    	{
+	    	    		showInternetErrorDialog();
+	    	    	}
+
+	        		break;
+	        	case 6:
+		        	{
+	 				   if( 	app.addToFavorites(title.get(currentaddress),
+			    				streetaddress.get(currentaddress),
+			    				phonenumbers.get(currentaddress),
+			    				latitude.get(currentaddress), 
+			    				longitude.get(currentaddress)) == false )
+					   {
+						   Toast.makeText(mContext, mContext.getString(R.string.fav_already_present), 4000).show();
+					   }
+					   else
+					   {
+						   Toast.makeText(mContext, mContext.getString(R.string.fav_added), 4000).show();
+					   }
+		        	}
+	        		break;
+        	}
+        }
+    });
 	
-	button2.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	showMessagingDialog();
-	    }
-     });
+	 mHandler.post(new Runnable() {
+			public void run() {
+				mListView.setAdapter(new OptionsAdapter(OptionsScreen.this));
+			}
+	 });
+	 
+	}
 	
-	button3.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	saveToPhoneBook();
-	    }
-     });
-	
-	button4.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	if( app.isTwitterAutheticated() == false)
-	    	{
-	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your twitter account",false).show();
-	    	}
-	    	else
-	    	{ 
-		    	if(checkInternetConnection() == true )
-		    	{
-		    		String text;
-		    		text = title.get(currentaddress);
-		    		text+= ","+streetaddress.get(currentaddress);
-		    		mTwitterDialog.setMessage(text);
-		    		mTwitterDialog.show();
-		    	}
-		    	else
-		    	{
-		    		showInternetErrorDialog();
-		    	}
-	    	}
-	    }
-     });
-	
-	button5.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	if( app.isFacebookAuthenticated() == false)
-	    	{
-	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your facebook account",false).show();
-	    	}
-	    	else
-	    	{
-		    	if(checkInternetConnection() == true )
-		    	{
-				  	String FBtext;
-		    		FBtext = title.get(currentaddress);
-		    		FBtext+= ","+streetaddress.get(currentaddress);
-		    		mFacebookDialog.setMessage(FBtext);
-		    		mFacebookDialog.show();
-		    	}
-		    	else
-		    	{
-		    		showInternetErrorDialog();
-		    	}
-	    	}
-	    }
-     });
-	
-	
-	button6.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
+	public void showtwitterDialog() {
+    	if( app.isTwitterAutheticated() == false)
+    	{
+    		new ErrorDialog(mContext,mContext.getString(R.string.not_authenticated),mContext.getString(R.string.twitter_auth_pls),false).show();
+    	}
+    	else
+    	{ 
 	    	if(checkInternetConnection() == true )
 	    	{
-	    		mGetDirectionsDialog.show();
+	    		String text;
+	    		text = title.get(currentaddress);
+	    		text+= ","+streetaddress.get(currentaddress);
+	    		mTwitterDialog.setMessage(text);
+	    		mTwitterDialog.show();
 	    	}
 	    	else
 	    	{
 	    		showInternetErrorDialog();
 	    	}
+    	}
 
-	    }
-     });
 	}
 	
+	public void showfacebookDialog() {
+    	if( app.isFacebookAuthenticated() == false)
+    	{
+    		new ErrorDialog(mContext,mContext.getString(R.string.not_authenticated),mContext.getString(R.string.facebook_auth_pls),false).show();
+    	}
+    	else
+    	{
+	    	if(checkInternetConnection() == true )
+	    	{
+			  	String FBtext;
+	    		FBtext = title.get(currentaddress);
+	    		FBtext+= ","+streetaddress.get(currentaddress);
+	    		mFacebookDialog.setMessage(FBtext);
+	    		mFacebookDialog.show();
+	    	}
+	    	else
+	    	{
+	    		showInternetErrorDialog();
+	    	}
+    	}
+		
+	}
 	public void onFBButtonOkPressed(String msg) {
 		mFacebookClient.PostWallMessage(msg);
 	}
@@ -343,19 +290,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
     	if (TwitterUtils.isAuthenticated(app)) {
     		sendTweet(msg);
     	} 
-//    	try
-//    	{
-//    		mTwitterClient.postTweet("test message from sample android app");
-//    	}
-//    	catch (JSONException e) {
-//			e.printStackTrace();
-//		} catch (AuthenticationException e) {
-//			e.printStackTrace();
-//		} catch (UnsupportedEncodingException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 	}
 	
 	public void sendTweet(String msg) {
@@ -368,7 +302,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	        		mHandler.post(new Runnable() {
 						public void run() {
 							 mTwitterDialog.dismiss();
-							 Toast.makeText(mContext, "Post to Twitter success", 4000).show();					
+							 Toast.makeText(mContext, mContext.getString(R.string.twitter_success), 4000).show();					
 						}
 					 });
 
@@ -400,7 +334,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 
 	public void showInternetErrorDialog()
 	{
-		new ErrorDialog(this,"No Internet Connection","Please enable the internet connection",false).show();
+		new ErrorDialog(this,mContext.getString(R.string.no_internet),mContext.getString(R.string.enable_internet),false).show();
 	}
 	
 	private boolean checkInternetConnection() {
@@ -427,7 +361,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 			 mHandler.post(new Runnable() {
 				public void run() {
 					 mFacebookDialog.dismiss();
-					 Toast.makeText(mContext, "Successfully posted to your wall", 4000).show();					
+					 Toast.makeText(mContext, mContext.getString(R.string.facebook_success), 4000).show();					
 				}
 			 });
 			break;
@@ -435,7 +369,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 			 mHandler.post(new Runnable() {
 					public void run() {
 						 mFacebookDialog.dismiss();
-						 Toast.makeText(mContext, "Post to Facebook failure", 4000).show();					
+						 Toast.makeText(mContext, mContext.getString(R.string.facebook_failure), 4000).show();					
 					}
 				 });
 			break;
@@ -595,7 +529,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 		        callIntent.setData(Uri.parse(numberString));
 		        startActivity(callIntent);
 		    } catch (ActivityNotFoundException e) {
-		        System.out.println("Call activity not FOUND FATAL error");
+		    	Toast.makeText(mContext, "Call activity not FOUND FATAL error", 4000).show();
 		    }
 		}  
 		else
@@ -630,8 +564,8 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 			contact.put(People.Phones.NUMBER, numbers[0]);
 			
 			getContentResolver().insert(phoneUri, contact);
-			 
-			Toast.makeText(mContext, "Created a new contact: " + title.get(currentaddress) + " " + phonenumbers.get(currentaddress), Toast.LENGTH_SHORT).show();
+			String text = String.format(mContext.getString(R.string.create_contact), title.get(currentaddress) + " " + phonenumbers.get(currentaddress));			 
+			Toast.makeText(mContext, text, Toast.LENGTH_SHORT).show();
 	      
 	}
 	 protected Dialog onCreateDialog(int id) {  
@@ -647,7 +581,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 		  
 			String delims = "[:]";
 			String[] temp = phonenumbers.get(currentaddress).split(delims);
-			System.out.println("Phonumbers are *** "+temp[0]+"::::"+temp[1]);
+
 			delims = "[,]";
 			final String[] numbers = temp[1].split(delims);
 			   
@@ -662,7 +596,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 					        Intent callIntent = new Intent(Intent.ACTION_CALL);
 					        String numberString ="tel:";
 					        numberString+=numbers[0];
-					        System.out.println("The number is ******************* "+numberString);
 					        callIntent.setData(Uri.parse(numberString));
 					      //  startActivity(callIntent);
 					    } catch (ActivityNotFoundException e) {
@@ -732,4 +665,49 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	            TextView title;
 	            }
 	    }
+	   
+		int icons[]={ R.drawable.telephone,R.drawable.message,R.drawable.phonebook,R.drawable.twitter_icon,R.drawable.facebook,R.drawable.globe,R.drawable.favorite};
+		//String options[] = { " - Call"," - Message"," - Save to Phonebook"," - Twitter"," - Facebook"," - Get directions"," - Save to Favorites"};
+
+		private  class OptionsAdapter extends BaseAdapter {
+	        private LayoutInflater mInflater;
+
+	        public OptionsAdapter(Context context) {
+	            // Cache the LayoutInflate to avoid asking for a new one each time.
+	            mInflater = LayoutInflater.from(context);
+	        }
+
+	        public int getCount() {
+	            return options.size();
+	        }
+	        
+	        public Object getItem(int position) {
+	            return position;
+	        }
+
+	        public long getItemId(int position) {
+	            return position;
+	        }
+
+	        public View getView(int position, View convertView, ViewGroup parent) {
+	            ViewHolder holder;
+	            if (convertView == null) {
+	                convertView = mInflater.inflate(R.layout.options_item, null);
+	                holder = new ViewHolder();
+	                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+	                holder.option = (TextView) convertView.findViewById(R.id.option);
+	                convertView.setTag(holder);
+	            } else {
+	                holder = (ViewHolder) convertView.getTag();
+	            }
+	            holder.icon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), icons[position]));
+	            holder.option.setText(options.get(position));
+	            return convertView;
+	        }
+	         class ViewHolder {
+	            ImageView icon;
+	            TextView option;
+	        }
+	    }
+
 }

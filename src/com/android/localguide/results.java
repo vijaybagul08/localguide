@@ -70,7 +70,7 @@ public class results extends Activity{
         mContext = this;
         Bundle bundle= getIntent().getExtras();
         resultsArray = new ArrayList<String>();
-        mDialog = new ErrorDialog(this,"","Searching...",true);
+        mDialog = new ErrorDialog(this,"",this.getString(R.string.searching),true);
         searchString = bundle.getString("categoryString");
         searchString += " ";
         searchString += bundle.getString("locationString");
@@ -87,7 +87,7 @@ public class results extends Activity{
             public void onClick(View v) {
             	if(isMoreResults == false) {
             		 mDialog = null;
-            		 mDialog = new ErrorDialog(mContext,"","Searching...",true);
+            		 mDialog = new ErrorDialog(mContext,"",mContext.getString(R.string.searching),true);
             		 mDialog.show();
             		 startMoreResults();
 	            	isMoreResults = true;
@@ -114,7 +114,6 @@ public class results extends Activity{
         		  intent.setAction("com.mani.results");
         		  Bundle bun = new Bundle();
         		  bun.putStringArrayList("resultString", resultsArray);
-                  //bun.putString("resultString", totalresult);
                   bun.putString("location", location);
                   bun.putInt("position", position); 
                   intent.putExtras(bun);
@@ -133,7 +132,6 @@ public class results extends Activity{
 	  	HttpClient client = new DefaultHttpClient();
 		String query = "http://ajax.googleapis.com/ajax/services/search/local?hl=en&v=1.0&rsz=8&q="+searchString+"&start=";
 		query+=count;
-		System.out.println("Query is ******************* "+query);
 		try {
 			URL url = new URL(query);
 			URI uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
@@ -160,7 +158,6 @@ public class results extends Activity{
 		
 	   }
 	 public  void Userrequest(HttpResponse response){
-	    System.out.println("response is *** "+response);
 	    	try{
 	    	        InputStream in = response.getEntity().getContent();
 	    	        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -173,16 +170,13 @@ public class results extends Activity{
 	    	        
 	    	        result= str.toString();
 	    	        resultsArray.add(result);
-	    	        System.out.println("Result is ********* "+result);
 	    	        isMoreResults = false;
 	    	        mDialog.dismiss();
 	    	        updateData(result);
 	    	   }catch(Exception ex){
-	    		   System.out.println("Neetworj error + ************8 "+ex.toString()+":::");
-	    	        result = "Error";
+	    		   throw new RuntimeException(ex);
 	    	   }
-	    	    
-	    	}
+	   }
 	 public  void updateData(String result)
 	    {
 	   	 try
@@ -195,26 +189,25 @@ public class results extends Activity{
 	         int resultCount = ja.length();
 	         for (int i = 0; i < resultCount; i++)
 	           {
-	           JSONObject resultObject = ja.getJSONObject(i);
-	           title.add(resultObject.get("titleNoFormatting").toString());
-	           JSONArray addr;
-	           addr = resultObject.getJSONArray("addressLines");
-	           int count = addr.length();
-	           String addrr="";
-	           for(int j=0;j<count;j++)
-	           {
-	               addrr+=addr.getString(j);
-	               if(j==0)
-	             	  addrr+=',';
-	           }
-	           address.add(addrr);
+		           JSONObject resultObject = ja.getJSONObject(i);
+		           title.add(resultObject.get("titleNoFormatting").toString());
+		           JSONArray addr;
+		           addr = resultObject.getJSONArray("addressLines");
+		           int count = addr.length();
+		           String addrr="";
+		           for(int j=0;j<count;j++)
+		           {
+		               addrr+=addr.getString(j);
+		               if(j==0)
+		             	  addrr+=',';
+		           }
+		           address.add(addrr);
 	           }
 	         mListView.setAdapter(new EfficientAdapter(this));
 	         }
 	         catch(Exception e)
 	         {
-	         	
-	         
+	        	 throw new RuntimeException(e);
 	         }
 	    }
 	 

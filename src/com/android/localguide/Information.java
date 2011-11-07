@@ -39,17 +39,16 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		description = (TextView) findViewById(R.id.description);
 		String tmp = getString(R.string.description);
 		String tmp1 ="     "+tmp;
-		//description.setText(tmp1);
+
 		if(app.isTwitterAutheticated())
-			twitterButton.setText("Try Different User");
+			twitterButton.setText(this.getString(R.string.different_user));
 		else
-			twitterButton.setText("Sign In");
+			twitterButton.setText(this.getString(R.string.sign_in));
 			
 		
 		twitterButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				System.out.println("Twitter button click ************" );
 				mHandler.sendEmptyMessage(TWITTER);
 			}
 			
@@ -57,9 +56,9 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		facebookButton = (Button )findViewById(R.id.facebook);
 		
 		if(app.isFacebookAuthenticated())
-			facebookButton.setText("Try Different User");			
+			facebookButton.setText(this.getString(R.string.different_user));			
 		else
-			facebookButton.setText("Sign In");
+			facebookButton.setText(this.getString(R.string.sign_in));
 
 
 		facebookButton.setOnClickListener(new View.OnClickListener() {
@@ -69,16 +68,12 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			}
 			
 		});
-//		TwitterClient client = new TwitterClient(Information.this,Information.this);
-//		client.initialize();
-//		client.authenticate();	
 	}
 
 	public void onResume() {
 		super.onResume();
-		System.out.println("On Resume information ********* ");
 		if (app.isTwitterAutheticated() == true) {
-			twitterButton.setText("Try different user");
+			twitterButton.setText(this.getString(R.string.different_user));
 		}
 	}
 	class H extends Handler
@@ -87,27 +82,20 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		{
 			if(m.what == TWITTER) 
 			{
-				System.out.println("Handle message is TWITTER**************** ");
-			
-//				Intent twitterIntent= new Intent();
-//				twitterIntent.setClass(Information.this, TwitterActivity.class);
-//				startActivityForResult(twitterIntent,TWITTER_AUTHENTICATE);
             	if (app.isTwitterAutheticated() == false) {
 	
 					Intent i = new Intent(getApplicationContext(), PrepareRequestTokenActivity.class);
 					i.putExtra("tweet_msg","hello");
-					//startActivity(i);
 					startActivityForResult(i,TWITTER_AUTHENTICATE);
             	}
 		        
 			}
 			else if(m.what == FACEBOOK)
 			{
-				System.out.println("Handle message is facebook**************** ");
 				FaceBookClient client = new FaceBookClient(Information.this,Information.this);
 				client.initialize();
 			}else if(m.what == FACEBOOK_SUCCESSFUL){
-				facebookButton.setText("Try Different User");
+				facebookButton.setText(Information.this.getString(R.string.different_user));
 			}
 		}
 	}
@@ -116,14 +104,7 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
              Intent data) {
 		 if (requestCode == TWITTER_AUTHENTICATE) {
              if (resultCode == RESULT_OK) {
-            	 System.out.println("Information ************* on activity result ******* ");
-//            	 Bundle bundle= data.getExtras();
-//            	 String key = bundle.getString("AccessKey");
-//            	 String secret = bundle.getString("AccessSecret");
-//            	 String username = bundle.getString("UserName");
-//            	 System.out.println("Key and secret is "+key +":::"+secret);
-//            	 app.updateTwitterToken(key, secret);
-            	 twitterButton.setText("Try different user");
+            	 twitterButton.setText(this.getString(R.string.different_user));
              }
 		 }
 	 }
@@ -136,8 +117,6 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			text="Facebook \n";
 			app.updateFacebookToken(token);
 			text+=username;
-			System.out.println("on facebook authentication complete set token is **** "+app.getFacebookToken());
-		//	facebookText.setText(text);
 			mHandler.sendEmptyMessage(FACEBOOK_SUCCESSFUL);
 			break;
 		case FaceBookAuthenticationCallBack.AUTHENTICAION_FAILURE:

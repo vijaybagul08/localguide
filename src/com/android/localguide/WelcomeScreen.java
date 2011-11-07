@@ -2,10 +2,9 @@ package com.android.localguide;
 
 	
 
+import java.util.ArrayList;
 import java.util.List;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -55,6 +54,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	LocationIdentifier locationIdentifier;
 	boolean isLocationChkBoxChecked = true;
 	List<Address> mAddressList = null;
+	ArrayList<String> categoryContent;
 	public final static int ACTIVITY_INVOKE = 0;
 	private Handler mHandler = new Handler();
 	
@@ -69,14 +69,23 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	        setContentView(R.layout.welcome);
 	        
 	        app = (LocalGuideApplication) this.getApplication();
+	        categoryContent = new ArrayList<String>();
+	        
+	        categoryContent.add(this.getString(R.string.pubs));
+	        categoryContent.add(this.getString(R.string.restuarant));
+			categoryContent.add(this.getString(R.string.shopping));
+			categoryContent.add(this.getString(R.string.theatre));
+			categoryContent.add(this.getString(R.string.train));
+			categoryContent.add(this.getString(R.string.taxi));
+			categoryContent.add(this.getString(R.string.gas));
+			categoryContent.add(this.getString(R.string.police));
+			categoryContent.add(this.getString(R.string.hospital));
 	        
 	        if(app.isLoaded == false) {
 	        	app.loadFromDataBase();
 	        	app.isLoaded = true;
 	        }
-	        System.out.println("on facebook authentication complete set token is **** "+app.getFacebookToken());
-	        System.out.println("Accesskey for Twitter is ************* "+app.getTwitterAccessKey()+"::::"+app.getTwitterAccessSecret());
-	        mContext = getApplicationContext();
+	        mContext = this;
 	        mReverseGeoCoder = new Geocoder(getApplicationContext());
 	        locationIdentifier = new LocationIdentifier(mContext,this);
 	         categoryTextbox = (EditText)findViewById(R.id.categotytextbox);
@@ -88,13 +97,6 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	         search.setOnClickListener(new Button.OnClickListener(){
 	            public void onClick(View v) {
 
-	    	    	Account[] account = AccountManager.get(mContext).getAccounts();
-	    	    	
-	    	    	for(int i=0;i<account.length;i++)
-	    	    	{
-	    	    		System.out.println("account is ::::::::::: "+account[i].describeContents());
-	    	    	}
-	    	    	
                       if(categoryTextbox.getText().toString().length() >0)
                       {
                     	  //Check for location if location checkbox is enabled
@@ -151,10 +153,8 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	      }   
 	public void onBackPressed ()
 	{
-		System.out.println("On back key pressed ************* ");
 		 app.saveToDataBase();
 		 this.finish();
-		 
 	}
 	 
 	private void getLocation()
@@ -165,8 +165,12 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
       	
 	        if(isLocationChkBoxChecked)
 	        {
-	            showDialog(LOCATION_ID);	                    	  
-	            locationIdentifier.getLocation();
+	        	if(locationIdentifier.settingsEnabled() == true) {
+		            //showDialog(LOCATION_ID);	                    	  
+		            locationIdentifier.getLocation();
+	        	}else {
+	        		this.settingsDisabled();
+	        	}
 	        }
 	        else
 	        {
@@ -174,7 +178,6 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	 		 Intent intent = new Intent();
 	         intent.putExtra("categoryString", category);
 	         location = locationTextbox.getText().toString();
-	         System.out.println("Location is ******************** "+location);
 	         Bundle bun = new Bundle();
 	         bun.putString("categoryString", category); 
 	         bun.putString("locationString", location);
@@ -208,6 +211,15 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	 
 	  private Location mLocation;
 	  
+	   public void settingsDisabled() {
+		   mHandler.post(new Runnable() {
+			   public void run() {
+					Dialog dialog = new EnableSettingsDialog(mContext);
+					dialog.show();
+			   }
+		   });
+	   }
+	   
 	   public void gotLocation(Location aLocation)
 	   {
 		   mLocation = aLocation;
@@ -218,41 +230,44 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 		   
 		   if(mLocation != null)
 		   {
-			   System.out.println("latitude and longitude is ************ "+mLocation.getLatitude()+";;;"+ mLocation.getLongitude());
 			   //Reverse Geo coding
 			   String currlocation=null;
 			   try
 			   {
 			   mAddressList = mReverseGeoCoder.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
 			   if (mAddressList.size()> 0){
-				   currlocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
-				   System.out.println("Currlocations is *************** "+currlocation);
-	               Toast.makeText(mContext, currlocation, 4000).show();
-				   // Check fo currlocation is null... if null dont trigger start activity.
-				   Intent intent = new Intent();
-		           intent.putExtra("categoryString", category);
-		           location = locationTextbox.getText().toString();
-		           intent.putExtra("locationString", location);
-		           Bundle bun = new Bundle();
-		           bun.putString("categoryString", category); 
-		           bun.putString("locationString", currlocation);
-		           intent.putExtras(bun);
-		           intent.setClass(mContext, results.class);
-		           startActivity(intent);
-		           dialog.dismiss();
-	               
-			   	}	
+				   if(currlocation == null) {
+					   Toast.makeText(mContext, this.getString(R.string.no_location), 4000).show();
+					   dialog.dismiss();
+				   } else {
+					   currlocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
+		               Toast.makeText(mContext, currlocation, 4000).show();
+					   Intent intent = new Intent();
+			           intent.putExtra("categoryString", category);
+			           location = locationTextbox.getText().toString();
+			           intent.putExtra("locationString", location);
+			           Bundle bun = new Bundle();
+			           bun.putString("categoryString", category); 
+			           bun.putString("locationString", currlocation);
+			           intent.putExtras(bun);
+			           intent.setClass(mContext, results.class);
+			           startActivity(intent);
+			           dialog.dismiss();
+				   }
+			   	} else {
+				   Toast.makeText(mContext, this.getString(R.string.no_location), 4000).show();
+				   dialog.dismiss();
+			   	}
 			   }
 			   catch(Exception e)
 			   {
-				   System.out.println("Couldnt find the location *************");
-				   Toast.makeText(mContext, "Sorry, Couldnt fetch the current location, due to reveres geocoding error", 4000).show();
+				   Toast.makeText(mContext, this.getString(R.string.reverse_geocoding_error), 4000).show();
 				   dialog.dismiss();
 			   }
 		   }
 		   else
 		   {
-			   Toast.makeText(mContext, "Sorry, Couldnt fetch the current location, due to unavailability of network or GPS provider", 4000).show();
+			   Toast.makeText(mContext, this.getString(R.string.no_location_gps), 4000).show();
 			   dialog.dismiss();
 		   }
 	   }
@@ -271,8 +286,8 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	             gridview.setOnItemClickListener(new OnItemClickListener()   
 	          			{
 	                 public void onItemClick(AdapterView<?> parent, View v,int position, long id) {   
-	                     categoryTextbox.setText(categoryContent[position]);
-	                     category=categoryContent[position];
+	                     categoryTextbox.setText(categoryContent.get(position));
+	                     category=categoryContent.get(position);
 	                     dialog.dismiss();
 	                 	}   
 	             });
@@ -283,24 +298,20 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	            		 dialog.dismiss();
 	            	}
 	             });
-	             
-                 //builder = new AlertDialog.Builder(mContext);   
-                 //builder.setView(layout);   
-                 //dialog = builder.create();   
 	             dialog = new CustomDialog(mContext);
 	             dialog.setContentView(layout);
                  return dialog;
 	         case LOCATION_ID:
-	             dialog = new ErrorDialog(this,"No Internet Connection","Location...",true);
+	             dialog = new ErrorDialog(this,this.getString(R.string.no_internet),"Location...",true);
 	             return dialog;
 	         case INTERNET_ALERT:
-	        	 dialog = new ErrorDialog(this,"No Internet Connection","Please enable the internet connection",false);
+	        	 dialog = new ErrorDialog(this,this.getString(R.string.no_internet),this.getString(R.string.enable_internet),false);
 	        	 return dialog;
 	         case CATEGORY_ALERT:
-	        	 dialog = new ErrorDialog(this,"Category not entered","Please enter a category",false);
+	        	 dialog = new ErrorDialog(this,this.getString(R.string.no_category),this.getString(R.string.pls_enter_category),false);
 	        	 return dialog;
 	         case LOCATION_ALERT:
-	        	 dialog = new ErrorDialog(this,"Location not entered","Please enter a valid location",false);
+	        	 dialog = new ErrorDialog(this,this.getString(R.string.no_location_entered),this.getString(R.string.pls_enter_location),false);
 	        	 return dialog;	        	 
 	         default:   
 	             dialog = null;   
@@ -340,7 +351,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 					holder.icon.setAdjustViewBounds(true);
 					holder.icon.setScaleType(ImageView.ScaleType.CENTER_CROP);   
 					holder.icon.setPadding(8, 8, 8, 8);
-					holder.title.setText(categoryContent[position]);
+					holder.title.setText(categoryContent.get(position));
 					holder.icon.setImageResource(mThumbIds[position]);
 					return convertView;   
 	         }   
@@ -354,13 +365,8 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	                 R.drawable.theatre,R.drawable.train, R.drawable.taxi,   
 	                 R.drawable.gas, R.drawable.police,R.drawable.hospital
 	                 };
-	
 	     	}   
-       		private String[] categoryContent = {   
-               "Pubs", "Restuarants","shopping", 
-               "theatre","train", "taxi",   
-               "gas", "police","hospital"
-               };   
+
 	}
 	
 		

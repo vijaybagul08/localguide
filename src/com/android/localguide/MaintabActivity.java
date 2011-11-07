@@ -22,21 +22,19 @@ public class MaintabActivity extends TabActivity{
 	    // Create an Intent to launch an Activity for the tab (to be reused)
 	    intent = new Intent().setClass(this, FavoritesScreen.class);
 
-	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("Favorites").setIndicator("Favorites",
-	                      res.getDrawable(R.drawable.favorite))
+	    spec = tabHost.newTabSpec(this.getString(R.string.favorite)).setIndicator(this.getString(R.string.favorite),
+	                      res.getDrawable(R.drawable.favorite_48))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 
-	    // Do the same for the other tabs
 	    intent = new Intent().setClass(this, WelcomeScreen.class);
-	    spec = tabHost.newTabSpec("LocalGuide").setIndicator("LocalGuide",
+	    spec = tabHost.newTabSpec(this.getString(R.string.localguide)).setIndicator(this.getString(R.string.localguide),
 	                      res.getDrawable(R.drawable.find))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 
 	    intent = new Intent().setClass(this, Information.class);
-	    spec = tabHost.newTabSpec("Help").setIndicator("Help",
+	    spec = tabHost.newTabSpec(this.getString(R.string.help)).setIndicator(this.getString(R.string.help),
 	                      res.getDrawable(R.drawable.info))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
@@ -46,8 +44,6 @@ public class MaintabActivity extends TabActivity{
 	    	{
 	    	       tabHost.getTabWidget().getChildAt(i).setBackgroundDrawable(this.getResources().getDrawable(R.drawable.rowselector));
 	    	}
-	    //tabHost.getTabWidget().setDividerDrawable(R.color.tab_divider);
-	    
 	}
  
     
@@ -55,9 +51,9 @@ public class MaintabActivity extends TabActivity{
 		// TODO Auto-generated method stub
 		for(int i=0;i<tabHost.getTabWidget().getChildCount();i++)
 		{
-		tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#7392B5"));
+			tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#7392B5"));
 		}
 
-		tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#4E4E9C"));
+			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#4E4E9C"));
 		}
 }

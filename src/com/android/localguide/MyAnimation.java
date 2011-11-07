@@ -14,13 +14,12 @@ public class MyAnimation extends Animation{
 	public void initialize(int width, int height, int parentWidth,
 	int parentHeight)
 	{
-		
-	super.initialize(width, height, parentWidth, parentHeight);
-	centerX = width /2 ;
-	centerY = height /2;
-	setDuration(1200);
-	this.setRepeatMode(INFINITE);
-	setInterpolator(new LinearInterpolator());
+		super.initialize(width, height, parentWidth, parentHeight);
+		centerX = width /2 ;
+		centerY = height /2;
+		setDuration(1200);
+		this.setRepeatMode(INFINITE);
+		setInterpolator(new LinearInterpolator());
 	}
 
 	 @Override
@@ -32,7 +31,6 @@ public class MyAnimation extends Animation{
 
 	        camera.save();
          //   camera.translate(0.0f, 0.0f, 1.0f);
-            
 	       //  camera.rotateX(degrees);
 	         //camera.rotateY(degrees);
 	       // camera.rotateY(degrees1);

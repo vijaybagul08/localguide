@@ -63,7 +63,6 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		}
 	public void OnSearchCompleted(ArrayList<DirectionItem> list,int code)
 	{
-		System.out.println("on show directions search completed ****************** ");
 		if(list != null)
 		{
 			this.removeView(mNoContentDisplay);

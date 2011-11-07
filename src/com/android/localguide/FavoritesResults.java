@@ -17,6 +17,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -56,20 +57,13 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	private ArrayList<String> phonenumbers;
 	private ArrayList<String> latitude;
 	private ArrayList<String> longitude;
-	TwitterClient mTwitterClient;
+
 	FaceBookClient mFacebookClient;
 	GetDirectionsDialog mGetDirectionsDialog;
 	FacebookDialog mFacebookDialog;
 	TwitterDialog mTwitterDialog;
 	
-	Button button1;
-	Button button2;
-	Button button3;
-	Button button4;
-	Button button5;
-	Button button6;
-	Button button7;
-	
+	ListView mListView;	
 	private Handler mHandler = new Handler();
 	private final int CALL_ID = 1;
 	private final int MESSAGING_ID = 2;
@@ -91,27 +85,18 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
     
     mContext = this;
     layout1 = (TableLayout)findViewById(R.id.myTableLayout1);
-    layout2 = (TableLayout)findViewById(R.id.myTableLayout);
+    mListView = (ListView)findViewById(R.id.options_list);
     nextArrow = (ImageView)findViewById(R.id.next);
     previousArrow = (ImageView)findViewById(R.id.previous);
     layout = (OptionsAddressLayout)findViewById(R.id.addressLayout);
-    button1 = (Button)findViewById(R.id.button1);
-    button2 = (Button)findViewById(R.id.button2);
-    button3 = (Button)findViewById(R.id.button3);
-    button4 = (Button)findViewById(R.id.button4);
-    button5 = (Button)findViewById(R.id.button5);
-    button6 = (Button)findViewById(R.id.button6);
-    button7 = (Button)findViewById(R.id.button7);
     mGetDirectionsDialog = new GetDirectionsDialog(this,this);
     mFacebookDialog = new FacebookDialog(this,this);
     mTwitterDialog = new TwitterDialog(this,this);
+
     mFacebookClient  = new FaceBookClient(this,this);
-    System.out.println("Accesskey for facbook is ************* "+app.getFacebookToken());
     mFacebookClient.setAccessToken(app.getFacebookToken());
     
     
-    mTwitterClient = new TwitterClient(this,app.getTwitterAccessKey(),app.getTwitterAccessSecret());
-    System.out.println("Accesskey for Twitter is ************* "+app.getTwitterAccessKey()+"::::"+app.getTwitterAccessSecret());
     layout.setParent(this);
     animation = new MyAnimation();
     
@@ -127,39 +112,17 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
     
     if(this.getIntent().getAction().equals("com.mani.favorites") == true )
     {
-    	System.out.println("faqvoites options screen ********* ");
     	app = (LocalGuideApplication)this.getApplication();
     	mFavList = app.getFavoritesList();
     	totalcount = mFavList.size();
     	layout.setTotalCount(totalcount);
     	for(int count=0;count<mFavList.size();count++)
     	{
-    		System.out.println("title is "+mFavList.get(count).title);
-    		System.out.println("title is "+mFavList.get(count).streetAddress);
-    		System.out.println("title is "+mFavList.get(count).phoneNumber);
-    		System.out.println("title is "+mFavList.get(count).latitude);
-    		System.out.println("title is "+mFavList.get(count).longitude);
     		title.add(mFavList.get(count).title);
     		streetaddress.add(mFavList.get(count).streetAddress);
     		phonenumbers.add(mFavList.get(count).phoneNumber);
     		latitude.add(mFavList.get(count).latitude);
     		longitude.add(mFavList.get(count).longitude);
-    		button7.setText("Delete favorites");
-    		button7.setOnClickListener( new View.OnClickListener(){
-    		    public void onClick(View v)
-    		    {
-    				   if( 	app.deleteFavorites(title.get(currentaddress)) == true )
-    				   {
-    					   Toast.makeText(mContext, "Successfully delted from favorites list", 4000).show();
-    					   //moveRight();
-    					   deleteAddress();
-    				   }
-    				   else
-    				   {
-    					   Toast.makeText(mContext, "Failed to delete favorites", 4000).show();
-    				   }
-    		    }
-    	     });
     	}
     }
     currentaddress =  bundle.getInt("position");
@@ -169,12 +132,12 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	text = streetaddress.get(currentaddress);
 	text+="\n";
 	text += phonenumbers.get(currentaddress);
-	System.out.println("Position is *************************************** "+text);
+
 	layout.setTitle(title.get(currentaddress));
 	layout.setAddress(text);
 	layout.setCurrentPosition(currentaddress);
 	layout1.startAnimation(animation);
-    layout2.startAnimation(animation);
+
     
     /* Hide the previous arrow if the user selected first item in the result page */
     if(currentaddress == 0)
@@ -196,93 +159,105 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	    	moveRight();
 	    }
     });
-    
-	button1.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	showCallOptions();
-	    }
-     });
 	
-	button2.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	showMessagingDialog();
-	    }
-     });
+    mListView.setOnItemClickListener(new OnItemClickListener() { 
+        public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+        	switch(position){
+	        	case 0:
+	        		showCallOptions();	        		
+	        		break;
+	        	case 2:
+	        		saveToPhoneBook();
+	        	    break;
+	        	case 1:
+	        		showMessagingDialog();
+	        		break;
+	        	case 3:
+	        		showtwitterDialog();
+	        		break;
+	        	case 4:
+	        		showfacebookDialog();
+	        		break;
+	        	case 5:
+	    	    	if(checkInternetConnection() == true )
+	    	    	{
+	    	    		mGetDirectionsDialog.show();
+	    	    	}
+	    	    	else
+	    	    	{
+	    	    		showInternetErrorDialog();
+	    	    	}
+
+	        		break;
+	        	case 6:
+		        	{
+	    				   if( 	app.deleteFavorites(title.get(currentaddress)) == true )
+	    				   {
+	    					   Toast.makeText(mContext, "Successfully delted from favorites list", 4000).show();
+	    					   deleteAddress();
+	    				   }
+	    				   else
+	    				   {
+	    					   Toast.makeText(mContext, "Failed to delete favorites", 4000).show();
+	    				   }
+		        	}
+	        		break;
+        	}
+        }
+    });
 	
-	button3.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	saveToPhoneBook();
-	    }
-     });
-	
-	button4.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	if( app.isTwitterAutheticated() == false)
-	    	{
-	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your twitter account",false).show();
-	    	}
-	    	else
-	    	{ 
-		    	if(checkInternetConnection() == true )
-		    	{
-		    		String text;
-		    		text = title.get(currentaddress);
-		    		text+= ","+streetaddress.get(currentaddress);
-		    		mTwitterDialog.setMessage(text);
-		    		mTwitterDialog.show();
-		    	}
-		    	else
-		    	{
-		    		showInternetErrorDialog();
-		    	}
-	    	}
-	    }
-     });
-	
-	button5.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
-	    	if( app.isFacebookAuthenticated() == false)
-	    	{
-	    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your facebook account",false).show();
-	    	}
-	    	else
-	    	{
-		    	if(checkInternetConnection() == true )
-		    	{
-				  	String FBtext;
-		    		FBtext = title.get(currentaddress);
-		    		FBtext+= ","+streetaddress.get(currentaddress);
-		    		mFacebookDialog.setMessage(FBtext);
-		    		mFacebookDialog.show();
-		    	}
-		    	else
-		    	{
-		    		showInternetErrorDialog();
-		    	}
-	    	}
-	    }
-     });
+	 mHandler.post(new Runnable() {
+			public void run() {
+				mListView.setAdapter(new OptionsAdapter(FavoritesResults.this));
+			}
+	 });
 	
 	
-	button6.setOnClickListener( new View.OnClickListener(){
-	    public void onClick(View v)
-	    {
+	}
+	public void showtwitterDialog() {
+    	if( app.isTwitterAutheticated() == false)
+    	{
+    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your twitter account",false).show();
+    	}
+    	else
+    	{ 
 	    	if(checkInternetConnection() == true )
 	    	{
-	    		mGetDirectionsDialog.show();
+	    		String text;
+	    		text = title.get(currentaddress);
+	    		text+= ","+streetaddress.get(currentaddress);
+	    		mTwitterDialog.setMessage(text);
+	    		mTwitterDialog.show();
 	    	}
 	    	else
 	    	{
 	    		showInternetErrorDialog();
 	    	}
+    	}
 
-	    }
-     });
+	}
+	
+	public void showfacebookDialog() {
+    	if( app.isFacebookAuthenticated() == false)
+    	{
+    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your facebook account",false).show();
+    	}
+    	else
+    	{
+	    	if(checkInternetConnection() == true )
+	    	{
+			  	String FBtext;
+	    		FBtext = title.get(currentaddress);
+	    		FBtext+= ","+streetaddress.get(currentaddress);
+	    		mFacebookDialog.setMessage(FBtext);
+	    		mFacebookDialog.show();
+	    	}
+	    	else
+	    	{
+	    		showInternetErrorDialog();
+	    	}
+    	}
+		
 	}
 
 	public void moveLeft()
@@ -325,11 +300,32 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
  	}
 
 	public void deleteAddress() {
-		System.out.println("Delete address ****************** "+currentaddress+"::"+totalcount);
+
 		// If currentaddress > totalcount bring the next element in.
-		if(currentaddress <totalcount) {
-    		currentaddress++;
-    		totalcount = mFavList.size();
+		if(currentaddress == totalcount-1 ) {
+	
+			if(currentaddress == 0)
+				this.finish();
+			else {
+				streetaddress.remove(currentaddress);
+				phonenumbers.remove(currentaddress);
+				currentaddress--;
+	    		totalcount = mFavList.size();
+	    		String text;
+	    		text = streetaddress.get(currentaddress);
+	    		text+="\n";
+	    		text += phonenumbers.get(currentaddress);
+	    		layout.setTitle(title.get(currentaddress));
+	    		layout.setAddress(text);	
+	    		previousArrow.setVisibility(View.INVISIBLE);			
+			}
+		}
+		else if(currentaddress < totalcount) {
+			title.remove(currentaddress);
+			streetaddress.remove(currentaddress);
+			phonenumbers.remove(currentaddress);
+
+			totalcount = mFavList.size();
     		String text;
     		text = streetaddress.get(currentaddress);
     		text+="\n";
@@ -337,22 +333,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
     		layout.setTitle(title.get(currentaddress));
     		layout.setAddress(text);	
     		previousArrow.setVisibility(View.VISIBLE);			
-		} else {
-			if(totalcount < 0) {
-				currentaddress=totalcount;
-				totalcount = mFavList.size();
-	    		String text;
-	    		text = streetaddress.get(currentaddress);
-	    		text+="\n";
-	    		text += phonenumbers.get(currentaddress);
-	    		layout.setTitle(title.get(currentaddress));
-	    		layout.setAddress(text);	
-	    		previousArrow.setVisibility(View.VISIBLE);			
-			} else {
-				layout.setTitle("No elements to display ........ ");
-			}
-		}
-		// Else show the previous element.
+		} 
 	}
 
 	public void onFBButtonOkPressed(String msg) {
@@ -360,19 +341,33 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	}
 	
 	public void onTwitterButtonOkPressed(String msg) {
-    	try
-    	{
-    		mTwitterClient.postTweet("test message from sample android app");
-    	}
-    	catch (JSONException e) {
-			e.printStackTrace();
-		} catch (AuthenticationException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+    	if (TwitterUtils.isAuthenticated(app)) {
+    		sendTweet(msg);
+    	} 
+	}
+	
+	public void sendTweet(String msg) {
+		final String msgg = msg;
+		Thread t = new Thread() {
+	        public void run() {
+	        	
+	        	try {
+	        		TwitterUtils.sendTweet(app,msgg);
+	        		mHandler.post(new Runnable() {
+						public void run() {
+							 mTwitterDialog.dismiss();
+							 Toast.makeText(mContext, "Post to Twitter success", 4000).show();					
+						}
+					 });
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+	        }
+
+	    };
+	    t.start();
 	}
 
 	public void onButtonOkPressed(boolean isCurrentLocation,String alocation)
@@ -380,14 +375,13 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
     	Intent intent = new Intent();
     	Bundle bun = new Bundle();
     	bun.putString("currentaddress",streetaddress.get(currentaddress));
-    	  System.out.println("location is ********* "+location);
+
   		if(isCurrentLocation == true)
   			bun.putString("location",location);
   		else
   			bun.putString("location",alocation);
   		
     	intent.putExtras(bun);
-    	//intent.setClass(mContext, MapsActivity.class);
     	intent.setClass(mContext, MapstabActivity.class);
     	startActivity(intent);
 	}
@@ -460,7 +454,6 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 		        Intent callIntent = new Intent(Intent.ACTION_CALL);
 		        String numberString ="tel:";
 		        numberString+=numbers[0];
-		        System.out.println("The number is ******************* "+numberString);
 		        callIntent.setData(Uri.parse(numberString));
 		        startActivity(callIntent);
 		    } catch (ActivityNotFoundException e) {
@@ -531,9 +524,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 					        Intent callIntent = new Intent(Intent.ACTION_CALL);
 					        String numberString ="tel:";
 					        numberString+=numbers[0];
-					        System.out.println("The number is ******************* "+numberString);
 					        callIntent.setData(Uri.parse(numberString));
-					      //  startActivity(callIntent);
 					    } catch (ActivityNotFoundException e) {
 					        System.out.println("Call activity not FOUND FATAL error");
 					    }
@@ -600,6 +591,49 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	         class ViewHolder {
 	            TextView title;
 	            }
+	    }
+		int icons[]={ R.drawable.telephone,R.drawable.message,R.drawable.phonebook,R.drawable.twitter_icon,R.drawable.facebook,R.drawable.globe,R.drawable.favorite};
+		String options[] = { " - Call"," - Message"," - Save to Phonebook"," - Twitter"," - Facebook"," - Get directions"," - Delete Favorites"};
+
+		private  class OptionsAdapter extends BaseAdapter {
+	        private LayoutInflater mInflater;
+
+	        public OptionsAdapter(Context context) {
+	            // Cache the LayoutInflate to avoid asking for a new one each time.
+	            mInflater = LayoutInflater.from(context);
+	        }
+
+	        public int getCount() {
+	            return options.length;
+	        }
+	        
+	        public Object getItem(int position) {
+	            return position;
+	        }
+
+	        public long getItemId(int position) {
+	            return position;
+	        }
+
+	        public View getView(int position, View convertView, ViewGroup parent) {
+	            ViewHolder holder;
+	            if (convertView == null) {
+	                convertView = mInflater.inflate(R.layout.options_item, null);
+	                holder = new ViewHolder();
+	                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+	                holder.option = (TextView) convertView.findViewById(R.id.option);
+	                convertView.setTag(holder);
+	            } else {
+	                holder = (ViewHolder) convertView.getTag();
+	            }
+	            holder.icon.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), icons[position]));
+	            holder.option.setText(options[position]);
+	            return convertView;
+	        }
+	         class ViewHolder {
+	            ImageView icon;
+	            TextView option;
+	        }
 	    }
 	 
 }

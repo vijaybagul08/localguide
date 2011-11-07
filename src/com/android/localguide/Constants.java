@@ -2,8 +2,6 @@ package com.android.localguide;
 
 public class Constants {
 
-    //public static final String CONSUMER_KEY = "9rGstuoFXWINNjk10wVzQ";
-    //public static final String CONSUMER_SECRET = "NhoXr4cHOgMj7VY36FMJQiqKme2EzRAmCPcBZU18";
     public static final String CONSUMER_KEY = "nZ2qlexKQTyxmWRnoyFwbg";
     public static final String CONSUMER_SECRET = "84DrRC8QQWNovIDzwl9QbAq5xcKSiOKnbepfNwSibo";
     
