@@ -29,13 +29,13 @@ public class MapstabActivity extends TabActivity{
 	    intent = new Intent().setClass(this, MapsActivity.class);
     	intent.putExtras(bundle);
 
-    	spec = tabHost.newTabSpec("Maps").setIndicator("Maps",
+    	spec = tabHost.newTabSpec(this.getString(R.string.maps)).setIndicator(this.getString(R.string.maps),
 	                      res.getDrawable(R.drawable.find))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 
-	    TabSpec ts1 = tabHost.newTabSpec("Directions");
-	    ts1.setIndicator("Directions", res.getDrawable(R.drawable.directions));
+	    TabSpec ts1 = tabHost.newTabSpec(this.getString(R.string.directions));
+	    ts1.setIndicator(this.getString(R.string.directions), res.getDrawable(R.drawable.directions));
         ts1.setContent(new TabHost.TabContentFactory(){
         	 
             public View createTabContent(String tag)

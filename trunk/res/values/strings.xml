@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">LocalGuide</string>
-    <string name="description"><b>LocalGuide</b> provides an easy way to search for anything around you.Gives you detailed result of address,phone numbers.The search categories can be <i>(eg. pubs brimingham,theatres liverpool, hospital edinburgh)</i> </string>
+    <string name="description"><b>LocalGuide</b> provides an easy way to search for anything around you.Gives you detailed result of address,phone numbers.The search categories can be <i>(eg. pubs,theatres, hospital, citibank, schools)</i> </string>
 	<string name="description1">\n\tIf the city or country is not entered, your current location will be automitcally picked up either through GPS or with your Wifi info.Once the desired result is chosen ,it gives you an option to</string>
+	<string name="description2">Swipe left or swipe right on the detailed address view will show the previous or next result.\n</string>
 	<string name="auth">Please authenticate your twitter and facebook accounts</string>
 	<string name="location_detail">\tLocation is obtained using two ways <b>GPS </b> and <b> Wifi or CELL-ID</b>. Although GPS works only in outdoors it is accurate.But it is time consuming and eats up <i>battery power</i>.Network Location Provider uses cell tower and Wifi signals to identify location and it is faster than GPS.\n\n\tSo it is recommended to turn ON both the location providers under <b>Settings->Location  Security->My Location</b>.\n\n</string>
 	<string name="route_error">Couldn\'t find the routes to this destination</string>
@@ -53,4 +54,14 @@
 	<string name="facebook_failure">Post to Facebook failure</string>
 	<string name="create_contact">Created a new contact: %1$s</string>
 	<string name="result">Results</string>
+	<string name="maps">Maps</string>
+	<string name="directions">Directions</string>
+	<string name="no_route">No Route available to this destination</string>
+	<string name="distance">Distance</string>
+	<string name="instruction">Instruction</string>
+	<string name="find_route">Finding the routes</string>
+	<string name="load_direction">Loading the directions</string>
+	<string name="network_issues">Network problem. Please try again.</string>
+	<string name="location"><b>Location: </b></string>
+	<string name="no_location_again">Sorry,couldn\'t find the location.Please try again.</string>
 </resources>

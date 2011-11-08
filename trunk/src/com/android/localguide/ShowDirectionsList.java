@@ -27,9 +27,10 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 	private ArrayList<String> mData;
 	private EfficientAdapter mListAdapter;
 	private LinearLayout mMainLayout;
+	private Context mContext;
 	public ShowDirectionsList(Context context,Bundle bundle) {
 		super(context);
-		
+		mContext = context;
 		mNoContentDisplay = new TextView(context);
 		mData = new ArrayList<String>();
 		mListAdapter = new EfficientAdapter(context);
@@ -42,7 +43,7 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		mNoContentDisplay.setTextColor(Color.rgb(0x12, 0x10, 0x35e));
 		mNoContentDisplay.setTextSize(40);
 		mNoContentDisplay.setGravity(Gravity.CENTER);
-		mNoContentDisplay.setText("Loading the directions....");
+		mNoContentDisplay.setText(context.getString(R.string.load_direction));
 	
 		mListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
@@ -70,8 +71,8 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		    {
 		    	
 		    	String infoString;
-		    	infoString = "Distance :"+list.get(i).distance+"\n";
-		    	infoString += "Instruction :"+list.get(i).instructions;
+		    	infoString = mContext.getString(R.string.distance)+" :"+list.get(i).distance+"\n";
+		    	infoString += mContext.getString(R.string.instruction)+" :"+list.get(i).instructions;
 		    	mData.add(infoString);
 		    }
 		    LinearLayout.LayoutParams Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);

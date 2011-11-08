@@ -45,7 +45,7 @@ import com.android.localguide.LocalGuideApplication.favoriteItem;
 import android.os.Handler;
 
 public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,
-FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack ,GetDirectionsDialog.GetDirectionsDialogListener,
+FaceBookClient.FaceBookPostMessageCallBack,GetDirectionsDialog.GetDirectionsDialogListener,
 FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	
 	Context mContext;
@@ -139,16 +139,19 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
     {
     	    resultArray = bundle.getStringArrayList("resultString");
     	    updateAllDetails();
+    	    currentaddress =  bundle.getInt("position");
     }
     else if(this.getIntent().getAction().equals("com.mani.widgetprodiver") == true)
     {
-    	    result = bundle.getString("resultString");
+    		currentaddress = this.getIntent().getIntExtra("position", 0);
+    		resultArray = bundle.getStringArrayList("resultString");
     	    updateAllDetails();
     }
 
-    currentaddress =  bundle.getInt("position");
+    
     location = bundle.getString("location");
-        
+    System.out.println("POsition and location is *********** "+currentaddress+":::"+location);
+    
 	String text;
 	text = streetaddress.get(currentaddress);
 	text+="\n";
@@ -417,6 +420,8 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	
 	public void onMovementDetected(boolean isLeftMovement)
 	{
+		layout.performHapticFeedback (android.view.HapticFeedbackConstants.VIRTUAL_KEY, android.view.HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+		
 		if(isLeftMovement)
 		{
 	    	moveLeft();
@@ -459,7 +464,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 		        	  temp+=',';
 		      }
 		      streetaddress.add(temp);
-
+		      System.out.println("Title , street is ******* "+title.get(i)+"::"+streetaddress.get(i));
 		      /* Parse the phone numbers JSONobject */
 		      JSONObject phone;
 		      JSONArray numbers;
@@ -510,7 +515,8 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 		}
 	    catch(Exception e)
 	    {
-	    	System.out.println("Exception happened **************************"+e.toString());
+	    	//System.out.println("Exception happened **************************"+e.toString());
+	    	throw new RuntimeException(e); 
 	    }
     }
 	

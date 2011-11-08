@@ -208,7 +208,13 @@
 				android:text="@string/fav_description"/>
      </TableRow>
      
-
+<TextView android:id="@+id/description2"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+  android:paddingLeft="5px"
+  android:textAppearance="?android:attr/textAppearanceMedium"
+  android:textColor="#ffffff"
+  android:text="@string/description2"/> 
  
 </TableLayout>
 

@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.android.localguide.ErrorDialog;
 import com.android.localguide.OptionsScreen;
 import com.android.localguide.R;
 
@@ -61,7 +62,6 @@ public class WidgetConfigureActivity extends Activity{
 			{
 				if(editText.getText().length() != 0)
 				{
-					System.out.println("Edit text text is ******* "+editText.getText().toString()+"::"+appWidgetId);
 	            	//Store the appwidgetid and category in the shared prefs
 	            	SharedPreferences prefs = getSharedPreferences(PREFS_NAME,0);
 	            	int count = prefs.getInt("count", 0);
@@ -92,11 +92,12 @@ public class WidgetConfigureActivity extends Activity{
 		    		      public void onClick(DialogInterface dialog, int which) {
 		    		 
 		    		       //here you can add functions
+		    		    	  
 		    		 
 		    		    } });
 		    		alertDialog.setIcon(R.drawable.icon);
-		    		alertDialog.show();
-							
+		    		//alertDialog.show();
+		    		new ErrorDialog(WidgetConfigureActivity.this,WidgetConfigureActivity.this.getString(R.string.no_category),WidgetConfigureActivity.this.getString(R.string.pls_enter_category),false).show();
 			
 				}
 			}

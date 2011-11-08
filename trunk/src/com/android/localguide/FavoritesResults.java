@@ -44,7 +44,7 @@ import com.android.localguide.LocalGuideApplication.favoriteItem;
 import android.os.Handler;
 
 public class FavoritesResults extends Activity implements OptionsAddressLayout.MovementIndicator,
-FaceBookClient.FaceBookPostMessageCallBack,TwitterClient.TwitterPostMessageCallBack ,
+FaceBookClient.FaceBookPostMessageCallBack ,
 GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	
 	Context mContext;
