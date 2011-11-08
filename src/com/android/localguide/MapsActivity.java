@@ -65,7 +65,7 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 			if(code == GetDirectionsList.SearchResultCallBack.NETWORK_FAILURE) {
 				dialog.dismiss();
 				AlertDialog.Builder builder =  new AlertDialog.Builder(this);
-				builder.setMessage("Please enable the internet connection");
+				builder.setMessage(this.getString(R.string.enable_internet));
 				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	             public void onClick(DialogInterface dialog, int id) {
 	                 MapsActivity.this.finish();
@@ -75,7 +75,7 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 			} else if (code == GetDirectionsList.SearchResultCallBack.NO_ROUTE) {
 				dialog.dismiss();
 				AlertDialog.Builder builder =  new AlertDialog.Builder(this);
-				builder.setMessage("No Route available to this destination");
+				builder.setMessage(this.getString(R.string.no_route));
 				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	             public void onClick(DialogInterface dialog, int id) {
 	                 MapsActivity.this.finish();
@@ -104,8 +104,8 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 	    {
 	    	point = new GeoPoint((int)(list.get(i).latitude * 1E6),(int)(list.get(i).longitude * 1E6));
 	    	String infoString;
-	    	infoString = "Distance :"+list.get(i).distance+"\n";
-	    	infoString += "Instruction :"+list.get(i).instructions;
+	    	infoString = this.getString(R.string.distance)+" :"+list.get(i).distance+"\n";
+	    	infoString += this.getString(R.string.instruction)+" :"+list.get(i).instructions;
 	    	overlayitem = new OverlayItem(point,list.get(i).duration,infoString);
 	    	itemizedoverlay.addOverlay(overlayitem);
 	    }
@@ -131,7 +131,7 @@ public class MapsActivity extends MapActivity implements GetDirectionsList.Searc
 		case ROUTES_ID:
 		
 	     dialog = new ProgressDialog(this);
-         dialog.setMessage("Finding the routes...");
+         dialog.setMessage(this.getString(R.string.find_route));
          dialog.setIndeterminate(true);
          dialog.setCancelable(true);
          return dialog;

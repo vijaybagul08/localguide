@@ -27,8 +27,10 @@ public class CollectDataForCategory {
 	int resultCount;
 	int currentResultCount;
 	private ArrayList<DataItem> itemsList;
+	public ArrayList<String> resultsArray;
 	public boolean isResultsFound = false;
 	boolean isStarted;
+	boolean isNetworkIssue = false;
 	class DataItem {
 		String title;
 		String address;
@@ -36,10 +38,11 @@ public class CollectDataForCategory {
 	}
 	CollectDataForCategory()
 	{
-	isStarted = true;  // Assuming true	
-	count = 0;
-	currentResultCount = 0;
-    itemsList = new ArrayList<DataItem>();
+		isStarted = true;  // Assuming true	
+		count = 0;
+		currentResultCount = 0;
+	    itemsList = new ArrayList<DataItem>();
+	    resultsArray = new ArrayList<String>();
 	}
 	
 	public void setSearchString(String search)
@@ -67,6 +70,7 @@ public class CollectDataForCategory {
 		isStarted = true;
 		count=0;
 		itemsList.clear();
+		resultsArray.clear();
 		sendSearchRequest();
 		
 	}
@@ -127,7 +131,7 @@ public class CollectDataForCategory {
 		
 		HttpClient client = new DefaultHttpClient();
 		String query = "http://ajax.googleapis.com/ajax/services/search/local?hl=en&v=1.0&rsz=8&q="+searchString+"&start="+currentResultCount;
-		System.out.println("In search request is *************** "+query);
+
 		try {
 			URL url = new URL(query);
 			URI uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
@@ -148,10 +152,10 @@ public class CollectDataForCategory {
 		}
 		catch(Exception ex){
 			System.out.println("Neetworj error 1 ************8 ");
-	          //txtResult.setText("Failed!");
+			isNetworkIssue = true;
 		}
-		
-	   }
+	 }
+	
 	 public  void Userrequest(HttpResponse response){
 	    
 	    	try{
@@ -164,11 +168,11 @@ public class CollectDataForCategory {
 	    	        }
 	    	        in.close();
 	    	        result = str.toString();
-	    	       // System.out.println("update result is ********** "+result);
+	    	        resultsArray.add(result);
 	    	        updateData(result);
 	    	   }catch(Exception ex){
 	    		   System.out.println("Neetworj error 2 ************8 ");
-	    	        result = "Error";
+	    		   isNetworkIssue = true;
 	    	   }
 	    	    
 	    	}
@@ -191,7 +195,6 @@ public class CollectDataForCategory {
 	         } else
 	             isResultsFound = true;
 	         
-	         System.out.println("update result resultcount is  ********** "+resultCount);
 	         for (int i = 0; i < resultCount; i++)
 	           {
 	        	 DataItem item = new DataItem();
@@ -232,7 +235,6 @@ public class CollectDataForCategory {
 			       item.phonenumbers = phNumber;
 			       itemsList.add(item);
 		        }
-	         
 
 	         //Update isStarted boolean
 	         isStarted = false;

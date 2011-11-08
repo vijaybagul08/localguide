@@ -77,10 +77,9 @@ public class CellLocationService extends Service implements LocationIdentifierCa
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(
                         ConnectivityManager.CONNECTIVITY_ACTION)) {
-System.out.println("Network is connectivity is changed ****************** ");
+
                 if(checkInternetConnection() == true)
                 {
-                	System.out.println("Network is connectivity is changed ****************** 111");
 					// Some other widget instance is still waiting for its current location
 					if(mLocationIdentifier.isSearchingLocation() == false )
 					{
@@ -324,13 +323,14 @@ System.out.println("Network is connectivity is changed ****************** ");
 		mLooperThreadHandler.removeCallbacks(updateWidgetsRunnable);
 		
 	}
-	   public void settingsDisabled() {
+	public void settingsDisabled() {
 		   
 	   
-	   }
+	}
+	String mLocation;
 	public void gotLocation(Location location)
 	{
-		if(location !=null)
+		if(location !=null) {
 		
 		try{
 			
@@ -339,13 +339,13 @@ System.out.println("Network is connectivity is changed ****************** ");
 		   
 			if (mAddressList.size()> 0){
 			
-					String  currlocation = "Location: \n\n"+mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
-					currlocation+="\n\n";
+					String  currlocation = mContext.getString(R.string.location)+mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
+					currlocation+="\n";
 					currlocation+="Loading the results....... pls wait";
 					
 					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout3);
 					view.setTextViewText(R.id.title, currlocation);
-
+					mLocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
 						mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
@@ -379,6 +379,11 @@ System.out.println("Network is connectivity is changed ****************** ");
 		   {
 			   System.out.println("Geo reverse coding is having error");
 		   }
+		} else if(location == null){
+			String  text = mContext.getString(R.string.no_location_again);
+			RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout3);
+			view.setTextViewText(R.id.title, text);
+		}
 		
 	}
 	
@@ -421,14 +426,18 @@ System.out.println("Network is connectivity is changed ****************** ");
 				     		intent.setAction("com.mani.widgetprodiver");
 				     		
 				       		Bundle bun = new Bundle();
-				       		String result1 = appWidgetsList.get(i).mConnector.result;
-			                bun.putString("resultString",result1);
+				       		bun.putStringArrayList("resultString", appWidgetsList.get(i).mConnector.resultsArray);
 			                int position = appWidgetsList.get(i).mConnector.getCurrentCount();
-			                bun.putInt("position", position-1); 
+			                
+			                bun.putString("location", mLocation);
 			                intent.putExtras(bun);
+			                intent.putExtra("position", position-1);
 			                PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
 			                        (position*appWidgetsList.get(i).AppWidgetId) /* no requestCode */, intent,  PendingIntent.FLAG_UPDATE_CURRENT/* no flags */);
-			                view.setOnClickPendingIntent(R.id.text, pendingIntent);
+			                
+			                view.setOnClickPendingIntent(R.id.title, pendingIntent);
+			                view.setOnClickPendingIntent(R.id.address, pendingIntent);
+			                view.setOnClickPendingIntent(R.id.phonenumber, pendingIntent);
 			                
 							Intent serviceIntent = new Intent(mContext, CellLocationService.class);
 							serviceIntent.putExtra("updateAppWidgetId", appWidgetsList.get(i).AppWidgetId);
@@ -460,46 +469,41 @@ System.out.println("Network is connectivity is changed ****************** ");
 
 		                
   						    mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
+						} else if (appWidgetsList.get(i).mConnector.isNetworkIssue == true) {
+							RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout3);
+							view.setTextViewText(R.id.title, mContext.getString(R.string.network_issues));
+  						    mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
 						}
 					}
 					
-					mLooperThreadHandler.postDelayed(this, 5000);
+					mLooperThreadHandler.postDelayed(this, 6000);
 				}
 				else
 					mLooperThreadHandler.postDelayed(this, 10000);
-				
 			}
-		};
+		};				
+
 	
-		private void startUpdatingWidgetProviders()
+	private void startUpdatingWidgetProviders()
+	{
+		
+		if(mLooperThreadHandler != null)
 		{
 			
-			if(mLooperThreadHandler != null)
+			if(looperthreadStarted == false)
 			{
-				
-				if(looperthreadStarted == false)
-				{
-					mLooperThreadHandler.post(updateWidgetsRunnable ) ;
-					looperthreadStarted = true;
-				}
+				mLooperThreadHandler.post(updateWidgetsRunnable ) ;
+				looperthreadStarted = true;
 			}
-			
 		}
+		
+	}
 		
     private final PhoneStateListener phoneStateListener = new PhoneStateListener(){
 
     			@Override
                 public void onCellLocationChanged(CellLocation location)
                 {
-    			        String locationString = location.toString();
-                        TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-                        GsmCellLocation loc = (GsmCellLocation) tm.getCellLocation();
-                        
-                        int cellid = loc.getCid();
-                        int lac = loc.getLac();
-                        String cellId = "CELL-ID :"+cellid+"\n";
-                        cellId+="LAC: "+lac;
-                        
                         // Get the current location
                 		if(mLocationIdentifier.isSearchingLocation() == false )
                 		{
