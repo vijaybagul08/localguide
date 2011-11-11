@@ -55,6 +55,7 @@ public class results extends Activity{
     Context mContext;
     Dialog mDialog;
     ListView mListView;
+    TextView mErrorTextView;
     boolean isMoreResults = false;
     
 	private Runnable mDelayedTask = new Runnable() {
@@ -81,6 +82,7 @@ public class results extends Activity{
         mHandler.postDelayed(mDelayedTask, 2000);
         
         mScreenLayout = (LinearLayout) findViewById(R.id.resultsLayout);
+        mErrorTextView = (TextView)findViewById(R.id.error);
         mListView = (ListView)findViewById(R.id.result_list);
         Button header = (Button) findViewById(R.id.header);
         header.setOnClickListener(new Button.OnClickListener(){
@@ -187,6 +189,16 @@ public class results extends Activity{
 	         ja = json.getJSONArray("results");
 	         
 	         int resultCount = ja.length();
+	         
+	         if(resultCount == 0) {
+	        	 mErrorTextView.setVisibility(View.VISIBLE);
+	        	 mListView.setVisibility(View.GONE);
+	        	 return;
+	         } else {
+	        	 mErrorTextView.setVisibility(View.GONE);
+	        	 mListView.setVisibility(View.VISIBLE);
+	         }
+	         
 	         for (int i = 0; i < resultCount; i++)
 	           {
 		           JSONObject resultObject = ja.getJSONObject(i);

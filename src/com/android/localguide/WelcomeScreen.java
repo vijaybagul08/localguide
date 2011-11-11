@@ -17,10 +17,12 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -62,8 +64,8 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 		public void run() {
 			checkLocation();
 		}
-		
 	};
+	
 	public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.welcome);
@@ -88,39 +90,42 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	        mContext = this;
 	        mReverseGeoCoder = new Geocoder(getApplicationContext());
 	        locationIdentifier = new LocationIdentifier(mContext,this);
-	         categoryTextbox = (EditText)findViewById(R.id.categotytextbox);
+			categoryTextbox = (EditText)findViewById(R.id.categotytextbox);
+			categoryTextbox.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+			categoryTextbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+				
+				public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+					if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+						performSearch();			            
+			            return true;
+			        }
+					// TODO Auto-generated method stub
+					return false;
+				}
+			});
+
+	         
 	         locationTextbox = (EditText)findViewById(R.id.locationtextbox);
+	         locationTextbox.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+	         locationTextbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+				
+				public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+					if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+						performSearch();			            
+			            return true;
+			        }
+					// TODO Auto-generated method stub
+					return false;
+				}
+			});
+	         
 	         ImageView search = (ImageView)findViewById(R.id.search);
 	         
 	         CheckBox locationCheckbox =(CheckBox)findViewById(R.id.checkbox);
 	        
 	         search.setOnClickListener(new Button.OnClickListener(){
 	            public void onClick(View v) {
-
-                      if(categoryTextbox.getText().toString().length() >0)
-                      {
-                    	  //Check for location if location checkbox is enabled
-                    	  if(isLocationChkBoxChecked == false)
-                    	  {
-                    		  
-                    	     if(locationTextbox.getText().toString().length() > 0)
-                    	     { 
-		                    	  getLocation();
-		                     }
-  	                        else
-		                     {
-		                    	  showDialog(LOCATION_ALERT); 
-		                     }
-                    	  }
-                    	  else
-                    	  {
-                    		  getLocation();
-                    	  }
-                      }
-                      else
-                      {
-                    	  showDialog(CATEGORY_ALERT);
-                      }
+	            	performSearch();
 	            }
 	         });
 
@@ -151,22 +156,54 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	             }   
 	         });   
 	      }   
+	
+	public void performSearch() {
+        if(categoryTextbox.getText().toString().length() >0)
+        {
+      	  //Check for location if location checkbox is enabled
+      	  if(isLocationChkBoxChecked == false)
+      	  {
+      		   if(locationTextbox.getText().toString().length() > 0)
+      	       { 
+              	  getLocation();
+               }
+               else
+               {
+              	  showDialog(LOCATION_ALERT); 
+               }
+      	  }
+      	  else
+      	  {
+      		  getLocation();
+      	  }
+        }
+        else
+        {
+      	  showDialog(CATEGORY_ALERT);
+        }
+	}
+	
 	public void onBackPressed ()
 	{
 		 app.saveToDataBase();
+		 locationIdentifier.stopRequest();
 		 this.finish();
 	}
-	 
+	
+	public void onDestroy() {
+		super.onDestroy();
+		locationIdentifier.stopRequest();
+	}
+	
 	private void getLocation()
 	{
 		  // Check for internet connection
         if(checkInternetConnection())
         {
-      	
 	        if(isLocationChkBoxChecked)
 	        {
 	        	if(locationIdentifier.settingsEnabled() == true) {
-		            //showDialog(LOCATION_ID);	                    	  
+		            showDialog(LOCATION_ID);	                    	  
 		            locationIdentifier.getLocation();
 	        	}else {
 	        		this.settingsDisabled();
@@ -184,7 +221,6 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	         intent.putExtras(bun);
 	         intent.setClass(mContext, results.class);
 	         startActivity(intent);
-	      	  
 	        }
         }
     	else
@@ -236,11 +272,11 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 			   {
 			   mAddressList = mReverseGeoCoder.getFromLocation(mLocation.getLatitude(), mLocation.getLongitude(), 1);
 			   if (mAddressList.size()> 0){
+				   currlocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
 				   if(currlocation == null) {
 					   Toast.makeText(mContext, this.getString(R.string.no_location), 4000).show();
 					   dialog.dismiss();
 				   } else {
-					   currlocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
 		               Toast.makeText(mContext, currlocation, 4000).show();
 					   Intent intent = new Intent();
 			           intent.putExtra("categoryString", category);
@@ -271,101 +307,101 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 			   dialog.dismiss();
 		   }
 	   }
-	     protected Dialog onCreateDialog(int id) {   
-        	 AlertDialog.Builder builder;   
-             Context mContext = this;       	 
-             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-             View layout;
-	         switch(id) {   
+     protected Dialog onCreateDialog(int id) {   
+    	 AlertDialog.Builder builder;   
+         Context mContext = this;       	 
+         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+         View layout;
+         switch(id) {   
 
-	         case CATEGORY_ID:   
-                 layout  = inflater.inflate(R.layout.categorydialog,(ViewGroup) findViewById(R.id.layout_root));   
-                 GridView gridview = (GridView)layout.findViewById(R.id.gridview);   
-                 gridview.setAdapter(new ImageAdapter(this));   
-	             
-	             gridview.setOnItemClickListener(new OnItemClickListener()   
-	          			{
-	                 public void onItemClick(AdapterView<?> parent, View v,int position, long id) {   
-	                     categoryTextbox.setText(categoryContent.get(position));
-	                     category=categoryContent.get(position);
-	                     dialog.dismiss();
-	                 	}   
-	             });
-	             
-	             ImageView close = (ImageView) layout.findViewById(R.id.close);
-	             close.setOnClickListener(new View.OnClickListener() {
-					public void onClick(View v){
-	            		 dialog.dismiss();
-	            	}
-	             });
-	             dialog = new CustomDialog(mContext);
-	             dialog.setContentView(layout);
-                 return dialog;
-	         case LOCATION_ID:
-	             dialog = new ErrorDialog(this,this.getString(R.string.no_internet),"Location...",true);
-	             return dialog;
-	         case INTERNET_ALERT:
-	        	 dialog = new ErrorDialog(this,this.getString(R.string.no_internet),this.getString(R.string.enable_internet),false);
-	        	 return dialog;
-	         case CATEGORY_ALERT:
-	        	 dialog = new ErrorDialog(this,this.getString(R.string.no_category),this.getString(R.string.pls_enter_category),false);
-	        	 return dialog;
-	         case LOCATION_ALERT:
-	        	 dialog = new ErrorDialog(this,this.getString(R.string.no_location_entered),this.getString(R.string.pls_enter_location),false);
-	        	 return dialog;	        	 
-	         default:   
-	             dialog = null;   
-	         }   
-	         return null;   
-	     }   
+         case CATEGORY_ID:   
+             layout  = inflater.inflate(R.layout.categorydialog,(ViewGroup) findViewById(R.id.layout_root));   
+             GridView gridview = (GridView)layout.findViewById(R.id.gridview);   
+             gridview.setAdapter(new ImageAdapter(this));   
+             
+             gridview.setOnItemClickListener(new OnItemClickListener()   
+          			{
+                 public void onItemClick(AdapterView<?> parent, View v,int position, long id) {   
+                     categoryTextbox.setText(categoryContent.get(position));
+                     category=categoryContent.get(position);
+                     dialog.dismiss();
+                 	}   
+             });
+             
+             ImageView close = (ImageView) layout.findViewById(R.id.close);
+             close.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v){
+            		 dialog.dismiss();
+            	}
+             });
+             dialog = new CustomDialog(mContext);
+             dialog.setContentView(layout);
+             return dialog;
+         case LOCATION_ID:
+             dialog = new ErrorDialog(this,"",this.getString(R.string.find_location),true);
+             return dialog;
+         case INTERNET_ALERT:
+        	 dialog = new ErrorDialog(this,this.getString(R.string.no_internet),this.getString(R.string.enable_internet),false);
+        	 return dialog;
+         case CATEGORY_ALERT:
+        	 dialog = new ErrorDialog(this,this.getString(R.string.no_category),this.getString(R.string.pls_enter_category),false);
+        	 return dialog;
+         case LOCATION_ALERT:
+        	 dialog = new ErrorDialog(this,this.getString(R.string.no_location_entered),this.getString(R.string.pls_enter_location),false);
+        	 return dialog;	        	 
+         default:   
+             dialog = null;   
+         }   
+         return null;   
+     }   
 	     
-	   public class ImageAdapter extends BaseAdapter {   
-	         private Context mContext;
-	         private LayoutInflater mInflater;
-	         public ImageAdapter(Context c) { 
-	        	 mInflater = LayoutInflater.from(c);
-	             mContext = c;   
-	         }   
-	         public int getCount() {   
-	             return mThumbIds.length;   
-	         }   
-	         public Object getItem(int position) {   
-	             return null;   
-	         }   
-	         public long getItemId(int position) {   
-	             return 0;   
-	         }   
-	         // create a new ImageView for each item referenced by the   
-	         public View getView(int position, View convertView, ViewGroup parent) {   
-	        	 ViewHolder holder;
-	             if (convertView == null) {  // if it's not recycled,   
-	                  convertView = mInflater.inflate(R.layout.categorycontent, null);
-	             	  convertView.setLayoutParams(new GridView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-	            	  holder = new ViewHolder();
-	                  holder.title = (TextView) convertView.findViewById(R.id.categoryText);
-	                  holder.icon = (ImageView )convertView.findViewById(R.id.categoryimage);
-	                  convertView.setTag(holder);
-	              } else {
-	                  holder = (ViewHolder) convertView.getTag();
-	              }
-					holder.icon.setAdjustViewBounds(true);
-					holder.icon.setScaleType(ImageView.ScaleType.CENTER_CROP);   
-					holder.icon.setPadding(8, 8, 8, 8);
-					holder.title.setText(categoryContent.get(position));
-					holder.icon.setImageResource(mThumbIds[position]);
-					return convertView;   
-	         }   
-	         class ViewHolder {
-	             TextView title;
-	             ImageView icon;
-	         }
-	         // references to our images   
-	         private Integer[] mThumbIds = {   
-	                 R.drawable.beer, R.drawable.hotel,R.drawable.shopping, 
-	                 R.drawable.theatre,R.drawable.train, R.drawable.taxi,   
-	                 R.drawable.gas, R.drawable.police,R.drawable.hospital
-	                 };
-	     	}   
+   public class ImageAdapter extends BaseAdapter {   
+         private Context mContext;
+         private LayoutInflater mInflater;
+         public ImageAdapter(Context c) { 
+        	 mInflater = LayoutInflater.from(c);
+             mContext = c;   
+         }   
+         public int getCount() {   
+             return mThumbIds.length;   
+         }   
+         public Object getItem(int position) {   
+             return null;   
+         }   
+         public long getItemId(int position) {   
+             return 0;   
+         }   
+         // create a new ImageView for each item referenced by the   
+         public View getView(int position, View convertView, ViewGroup parent) {   
+        	 ViewHolder holder;
+             if (convertView == null) {  // if it's not recycled,   
+                  convertView = mInflater.inflate(R.layout.categorycontent, null);
+             	  convertView.setLayoutParams(new GridView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            	  holder = new ViewHolder();
+                  holder.title = (TextView) convertView.findViewById(R.id.categoryText);
+                  holder.icon = (ImageView )convertView.findViewById(R.id.categoryimage);
+                  convertView.setTag(holder);
+              } else {
+                  holder = (ViewHolder) convertView.getTag();
+              }
+				holder.icon.setAdjustViewBounds(true);
+				holder.icon.setScaleType(ImageView.ScaleType.CENTER_CROP);   
+				holder.icon.setPadding(8, 8, 8, 8);
+				holder.title.setText(categoryContent.get(position));
+				holder.icon.setImageResource(mThumbIds[position]);
+				return convertView;   
+         }   
+         class ViewHolder {
+             TextView title;
+             ImageView icon;
+         }
+         // references to our images   
+         private Integer[] mThumbIds = {   
+                 R.drawable.beer, R.drawable.hotel,R.drawable.shopping, 
+                 R.drawable.theatre,R.drawable.train, R.drawable.taxi,   
+                 R.drawable.gas, R.drawable.police,R.drawable.hospital
+                 };
+     	}   
 
 	}
 	

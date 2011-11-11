@@ -5,6 +5,10 @@
   android:layout_height="fill_parent"
   android:orientation="vertical"
   android:id="@+id/widgetlayout"
+  android:paddingLeft="5dp"
+  android:paddingRight="5dp"
+  android:paddingTop="3dp"
+  android:paddingBottom="2dp"
   android:background="@android:color/transparent"
   >
 <LinearLayout
@@ -12,7 +16,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:orientation="vertical"
-android:padding="10dp"
+android:paddingTop="3dp"
+android:paddingBottom="2dp"
+android:paddingLeft="10dip"
+android:paddingRight="10dip"
 android:background="@drawable/widgetbackground1"
 android:layoutAnimation="@anim/layout_anim"
 >
@@ -26,7 +33,7 @@ android:layoutAnimation="@anim/layout_anim"
 			  <TextView android:id="@+id/title"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
-			  android:textAppearance="?android:attr/textAppearanceLarge"
+			  android:textAppearance="?android:attr/textAppearanceMedium"
 			  android:textColor="#ffffff"
 			  android:layout_marginTop="5dip"
 			  android:text=""/>
@@ -34,14 +41,14 @@ android:layoutAnimation="@anim/layout_anim"
 			  <TextView android:id="@+id/address"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
-			  android:textAppearance="?android:attr/textAppearanceMedium"
+			  android:textAppearance="?android:attr/textAppearanceSmall"
 			  android:textColor="#ffffff"
 			  android:text=""/>
 			
 			<TextView android:id="@+id/phonenumber"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
-			  android:textAppearance="?android:attr/textAppearanceMedium"
+			  android:textAppearance="?android:attr/textAppearanceSmall"
 			  android:textColor="#ffffff"
 			  android:text=""/>
 	</LinearLayout>
@@ -51,15 +58,30 @@ android:layoutAnimation="@anim/layout_anim"
 			android:layout_height="3dip"
 			android:layout_margin="5dip"
 			android:background="#FFFFFFFF" />
-		
+
+			<FrameLayout
+			  xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_weight="0.3"
+			  >
+			  	 <TextView 
+				  android:id="@+id/category"
+				  android:layout_width="fill_parent"
+				  android:layout_height="wrap_content"
+				  android:gravity="center"
+				  android:textColor="#70ffffff"
+				  android:textSize="35px"
+				  android:text="category"
+				  />
+
 		
 			<RelativeLayout
 			  xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
-			  android:layout_marginTop="5px"
-			  android:layout_weight="0.3"
 			  >
+			  
 				  <ImageView 
 				  android:id="@+id/call"
 				  android:layout_width="wrap_content"
@@ -75,9 +97,28 @@ android:layoutAnimation="@anim/layout_anim"
 				  android:layout_toRightOf="@id/call"
 				  android:src="@drawable/message"
 				  />
+				  <Button 
+				  android:id="@+id/setting"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_marginRight="5px"
+				  android:layout_alignParentRight="true"
+				  android:text="ON"
+				  />
+				  
+				  <TextView 
+				  android:id="@+id/find_location"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:gravity="center_vertical"
+				  android:textColor="#ffffff"
+				  android:textAppearance="?android:attr/textAppearanceSmall"
+				  android:layout_toLeftOf="@id/setting"
+				  android:text="@string/movement"
+				  />
 			  
 			</RelativeLayout>   
-		
-		</LinearLayout>  
+		</FrameLayout>		
+	</LinearLayout>  
 
 </LinearLayout>

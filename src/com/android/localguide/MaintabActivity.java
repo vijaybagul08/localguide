@@ -20,16 +20,16 @@ public class MaintabActivity extends TabActivity{
 	    Intent intent;  // Reusable Intent for each tab
 
 	    // Create an Intent to launch an Activity for the tab (to be reused)
+	    intent = new Intent().setClass(this, WelcomeScreen.class);
+	    spec = tabHost.newTabSpec(this.getString(R.string.localguide)).setIndicator(this.getString(R.string.localguide),
+	                      res.getDrawable(R.drawable.find))
+	                  .setContent(intent);
+	    tabHost.addTab(spec);
+	    
 	    intent = new Intent().setClass(this, FavoritesScreen.class);
 
 	    spec = tabHost.newTabSpec(this.getString(R.string.favorite)).setIndicator(this.getString(R.string.favorite),
 	                      res.getDrawable(R.drawable.favorite_48))
-	                  .setContent(intent);
-	    tabHost.addTab(spec);
-
-	    intent = new Intent().setClass(this, WelcomeScreen.class);
-	    spec = tabHost.newTabSpec(this.getString(R.string.localguide)).setIndicator(this.getString(R.string.localguide),
-	                      res.getDrawable(R.drawable.find))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 
@@ -39,7 +39,8 @@ public class MaintabActivity extends TabActivity{
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 
-	    tabHost.setCurrentTab(1);
+	    tabHost.setCurrentTab(0);
+	    
 	    for(int i=0;i<tabHost.getTabWidget().getChildCount();i++)
 	    	{
 	    	       tabHost.getTabWidget().getChildAt(i).setBackgroundDrawable(this.getResources().getDrawable(R.drawable.rowselector));

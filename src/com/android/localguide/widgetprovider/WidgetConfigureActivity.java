@@ -10,14 +10,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AbsListView;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.localguide.ErrorDialog;
-import com.android.localguide.OptionsScreen;
 import com.android.localguide.R;
 
 public class WidgetConfigureActivity extends Activity{
@@ -54,52 +53,24 @@ public class WidgetConfigureActivity extends Activity{
 		mContext = this.getApplicationContext();
 		setContentView(R.layout.widgetconfigure);
 		editText = (EditText)findViewById(R.id.category);
+		editText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+		editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+					performSearch();
+				}
+				return false;
+			}
+        });
+        
 		goButton = (ImageView)findViewById(R.id.search);
 		
 		goButton.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				if(editText.getText().length() != 0)
-				{
-	            	//Store the appwidgetid and category in the shared prefs
-	            	SharedPreferences prefs = getSharedPreferences(PREFS_NAME,0);
-	            	int count = prefs.getInt("count", 0);
-	                Editor editor = null;
-	                editor = prefs.edit();
-	                editor.putString("category"+count, editText.getText().toString());
-	                editor.putInt("appwidgetid"+count, appWidgetId);
-	                count++;
-	                editor.putInt("count",count);
-	                editor.commit();
-	                System.out.println("Appwidget id after selecting a entry in list is **** "+appWidgetId);
-	                // tell the app widget manager that we're now configured
-	                Intent resultValue = new Intent();
-	                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-	                setResult(RESULT_OK, resultValue);
-	                
-	                Intent serviceIntent = new Intent(mContext, CellLocationService.class);
-	                serviceIntent.putExtra("appwidgetid", appWidgetId);
-	                mContext.startService(serviceIntent);
-	                finish();
-				}
-				else
-				{
-		    		AlertDialog alertDialog = new AlertDialog.Builder(WidgetConfigureActivity.this).create();
-		    		alertDialog.setTitle("Error");
-		    		alertDialog.setMessage("Please enter a category and press go");
-		    		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-		    		      public void onClick(DialogInterface dialog, int which) {
-		    		 
-		    		       //here you can add functions
-		    		    	  
-		    		 
-		    		    } });
-		    		alertDialog.setIcon(R.drawable.icon);
-		    		//alertDialog.show();
-		    		new ErrorDialog(WidgetConfigureActivity.this,WidgetConfigureActivity.this.getString(R.string.no_category),WidgetConfigureActivity.this.getString(R.string.pls_enter_category),false).show();
-			
-				}
+				performSearch();
 			}
 			
 		});
@@ -151,6 +122,50 @@ public class WidgetConfigureActivity extends Activity{
 	    	    
 	}
 	
+	public void performSearch() {
+		if(editText.getText().length() != 0)
+		{
+        	//Store the appwidgetid and category in the shared prefs
+        	SharedPreferences prefs = getSharedPreferences(PREFS_NAME,0);
+        	int count = prefs.getInt("count", 0);
+            Editor editor = null;
+            editor = prefs.edit();
+            editor.putString("category"+count, editText.getText().toString());
+            editor.putInt("appwidgetid"+count, appWidgetId);
+            count++;
+            editor.putInt("count",count);
+            editor.commit();
+            System.out.println("Appwidget id after selecting a entry in list is **** "+appWidgetId);
+            // tell the app widget manager that we're now configured
+            Intent resultValue = new Intent();
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            setResult(RESULT_OK, resultValue);
+            
+            Intent serviceIntent = new Intent(mContext, CellLocationService.class);
+            serviceIntent.putExtra("appwidgetid", appWidgetId);
+            mContext.startService(serviceIntent);
+            finish();
+		}
+		else
+		{
+    		AlertDialog alertDialog = new AlertDialog.Builder(WidgetConfigureActivity.this).create();
+    		alertDialog.setTitle("Error");
+    		alertDialog.setMessage("Please enter a category and press go");
+    		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+    		      public void onClick(DialogInterface dialog, int which) {
+    		 
+    		       //here you can add functions
+    		    	  
+    		 
+    		    } });
+    		alertDialog.setIcon(R.drawable.icon);
+    		//alertDialog.show();
+    		new ErrorDialog(WidgetConfigureActivity.this,WidgetConfigureActivity.this.getString(R.string.no_category),WidgetConfigureActivity.this.getString(R.string.pls_enter_category),false).show();
+	
+		}
+
+		
+	}
 	 /* Call List adapter to display the call icon and phone number along with it in the call list dialog */
 	 
 	   private  class ConfigureListAdapter extends BaseAdapter {

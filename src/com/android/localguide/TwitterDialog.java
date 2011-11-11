@@ -4,9 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -59,6 +61,19 @@ public class TwitterDialog extends Dialog  {
 	            	TwitterDialog.this.dismiss();
 	            }
 	         });
+ 	        
+ 			locationTextbox.setImeOptions(EditorInfo.IME_ACTION_GO);
+ 	        locationTextbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+ 				
+ 				public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+ 					if (actionId == EditorInfo.IME_ACTION_GO) {
+ 						mCB.onTwitterButtonOkPressed(locationTextbox.getText().toString());
+ 			            return true;
+ 			        }
+ 					// TODO Auto-generated method stub
+ 					return false;
+ 				}
+ 			});
 
 	         
 		}
