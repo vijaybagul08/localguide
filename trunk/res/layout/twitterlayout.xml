@@ -33,6 +33,7 @@ android:layout_width="fill_parent"
 		android:textColor="#12105E"        
         android:lines="5"
         android:capitalize="none"
+        android:inputType="textShortMessage"
         android:gravity="fill_horizontal"
         android:textAppearance="?android:attr/textAppearanceLarge" />
         

@@ -80,7 +80,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
     ImageView previousArrow;
     ArrayList<favoriteItem> mFavList;
     ArrayList<String> options;
-    
+    boolean isLaunchedFromAppWidget = false;
 	public void onCreate(Bundle savedInstanceState) {
 		
 	super.onCreate(savedInstanceState);
@@ -143,6 +143,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
     }
     else if(this.getIntent().getAction().equals("com.mani.widgetprodiver") == true)
     {
+    		isLaunchedFromAppWidget = true;
     		currentaddress = this.getIntent().getIntExtra("position", 0);
     		resultArray = bundle.getStringArrayList("resultString");
     	    updateAllDetails();
@@ -150,7 +151,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 
     
     location = bundle.getString("location");
-    System.out.println("POsition and location is *********** "+currentaddress+":::"+location);
     
 	String text;
 	text = streetaddress.get(currentaddress);
@@ -238,7 +238,14 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	 });
 	 
 	}
-	
+	public void onBackPressed ()
+	{
+		if(isLaunchedFromAppWidget == true) {
+			isLaunchedFromAppWidget = false;
+			startActivity(new Intent("com.android.localguideTabScreen"));
+		}
+		finish();
+	}
 	public void showtwitterDialog() {
     	if( app.isTwitterAutheticated() == false)
     	{
@@ -313,7 +320,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 					ex.printStackTrace();
 				}
 	        }
-
 	    };
 	    t.start();
 	}

@@ -7,6 +7,7 @@
 	<string name="auth">Please authenticate your twitter and facebook accounts</string>
 	<string name="location_detail">\tLocation is obtained using two ways <b>GPS </b> and <b> Wifi or CELL-ID</b>. Although GPS works only in outdoors it is accurate.But it is time consuming and eats up <i>battery power</i>.Network Location Provider uses cell tower and Wifi signals to identify location and it is faster than GPS.\n\n\tSo it is recommended to turn ON both the location providers under <b>Settings->Location  Security->My Location</b>.\n\n</string>
 	<string name="route_error">Couldn\'t find the routes to this destination</string>
+	<string name="find_location">Finding the location</string>
 	<string name="call">Call</string>
 	<string name="message">Send a SMS/message</string>
 	<string name="phonebook">Save to Phonebook</string>
@@ -34,6 +35,7 @@
 	<string name="train">Train</string>
 	<string name="theatre">Theatre</string>
 	<string name="searching">Searching</string>
+	<string name="no_results">No results found for the search category.</string>
 	<string name="no_location">Sorry,couldn\'t find the location</string>
 	<string name="no_location_gps">Sorry, Couldn\'t fetch the current location, due to unavailability of network or GPS provider.If using only GPS provider please consider finding the location in an open space.</string>
 	<string name="reverse_geocoding_error">Sorry, Couldn\'t fetch the current location, due to reverse geocoding error</string>
@@ -64,4 +66,6 @@
 	<string name="network_issues">Network problem. Please try again.</string>
 	<string name="location"><b>Location: </b></string>
 	<string name="no_location_again">Sorry,couldn\'t find the location.Please try again.</string>
+	<string name="try_again">Try again</string>
+	<string name="movement">Movement\n Detection</string>
 </resources>

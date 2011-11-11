@@ -4,10 +4,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
@@ -66,37 +68,22 @@ public class GetDirectionsDialog extends Dialog implements OnClickListener {
 		               }
 		    	 	}   
 		     });
- 		
+        locationTextbox.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        locationTextbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					getDirections();
+		            return true;
+		        }
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+
  			mOK.setOnClickListener(new Button.OnClickListener(){
 	            public void onClick(View v) {
-
-					if(locationCheckbox.isChecked() == true)
-					{
-						mCB.onButtonOkPressed(true,null);
-						GetDirectionsDialog.this.dismiss();
-					}
-					else
-					{
-						if(locationTextbox.getText().toString().length() > 0)
-						{
-							mCB.onButtonOkPressed(false,locationTextbox.getText().toString());
-							GetDirectionsDialog.this.dismiss();
-						}
-						else
-						{
-				    		AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-				    		alertDialog.setTitle("Error");
-				    		alertDialog.setMessage("Please enter a valid start location");
-				    		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-				    		      public void onClick(DialogInterface dialog, int which) {
-				    		 
-				    		       //here you can add functions
-				    		 
-				    		    } });
-				    		alertDialog.setIcon(R.drawable.icon);
-				    		alertDialog.show();
-						}
-					}
+	            	getDirections();
 	            }
 	         });
 
@@ -109,6 +96,37 @@ public class GetDirectionsDialog extends Dialog implements OnClickListener {
 	         
 		}
 	
+		public void getDirections() {
+			if(locationCheckbox.isChecked() == true)
+			{
+				mCB.onButtonOkPressed(true,null);
+				GetDirectionsDialog.this.dismiss();
+			}
+			else
+			{
+				if(locationTextbox.getText().toString().length() > 0)
+				{
+					mCB.onButtonOkPressed(false,locationTextbox.getText().toString());
+					GetDirectionsDialog.this.dismiss();
+				}
+				else
+				{
+		    		AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+		    		alertDialog.setTitle("Error");
+		    		alertDialog.setMessage("Please enter a valid start location");
+		    		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+		    		      public void onClick(DialogInterface dialog, int which) {
+		    		 
+		    		       //here you can add functions
+		    		 
+		    		    } });
+		    		alertDialog.setIcon(R.drawable.icon);
+		    		alertDialog.show();
+				}
+			}
+			
+			
+		}
 		public void show()
 		{
 			super.show();

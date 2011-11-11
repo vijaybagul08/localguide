@@ -31,6 +31,7 @@ public class CollectDataForCategory {
 	public boolean isResultsFound = false;
 	boolean isStarted;
 	boolean isNetworkIssue = false;
+	public boolean isLocation_scanning = true;
 	class DataItem {
 		String title;
 		String address;
@@ -54,14 +55,32 @@ public class CollectDataForCategory {
 	{
 		isStarted = started;
 	}
+	public void setLocationScanning(boolean scanning) {
+		isLocation_scanning = scanning;
+	}
+	
 	int getResultCount()
 	{
 		return resultCount;
 	}
 	
-	public int getCurrentCount()
+	public int val;
+	
+	public int getCurrentPosition() {
+		return val;
+	}
+	
+	public int incrementCount()
 	{
-		return count;
+		val = count;
+		
+		if(count == (resultCount-1)) {
+			count = 0;
+		} else if(count < (resultCount -1)) {
+			count++;
+		}
+
+		return val;
 	}
 	
 	public void updateMoreResults()
@@ -78,34 +97,14 @@ public class CollectDataForCategory {
 	public String getTitle()
 	{
 		String value="";
-		if(count <resultCount)
-		{
-			value = itemsList.get(count).title;
-			count++;
-		}
-		else
-		{
-			count = 0;
-			value = itemsList.get(count).title;
-		}
-		
+		value = itemsList.get(val).title;
 		return value;
 		
 	}
 	public String getPhoneNumbers()
 	{
 		String value="";
-		if(count <resultCount)
-		{
-			value += itemsList.get(count).phonenumbers;			
-			count++;
-		}
-		else
-		{
-			count = 0;
-			value += itemsList.get(count).phonenumbers;			
-		}
-		
+		value += itemsList.get(val).phonenumbers;			
 		return value;
 		
 	}
@@ -113,19 +112,10 @@ public class CollectDataForCategory {
 	public String getAddress()
 	{
 		String value="";
-		if(count <resultCount)
-		{
-			value += itemsList.get(count).address;
-			count++;
-		}
-		else
-		{
-			count = 0;
-			value += itemsList.get(count).address;
-		}
-		
+		value += itemsList.get(val).address;
 		return value;
 	}
+	
 	public  void sendSearchRequest()
 	   {
 		
@@ -179,7 +169,7 @@ public class CollectDataForCategory {
 	 public  void updateData(String result)
 	    {
 		 
-		 System.out.println("update result is ********** "+result);
+		// System.out.println("update result is ********** "+result);
 	   	 try
 	        {
 	         JSONObject json=new JSONObject(result);
@@ -201,6 +191,7 @@ public class CollectDataForCategory {
 		        
 		           JSONObject resultObject = ja.getJSONObject(i);
 		           item.title = resultObject.get("titleNoFormatting").toString();
+		           System.out.println("Result is **************** "+item.title);
 			       JSONArray addr;
 		           addr = resultObject.getJSONArray("addressLines");
 		           int count = addr.length();

@@ -133,6 +133,7 @@ public class LocalGuideApplication extends Application {
 		
     	favoriteItem item = new favoriteItem(title,address,phoneNumber,lat,along);
     	favoritesList.add(item);
+    	saveToDataBase();
     	return true;
 	}
 	

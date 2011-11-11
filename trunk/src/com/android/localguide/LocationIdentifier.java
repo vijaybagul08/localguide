@@ -32,6 +32,7 @@ public class LocationIdentifier{
 		mContext = context;
 		mParent = parent;
 	}
+	
 	public boolean settingsEnabled() {
 		if(locationManager == null)
 			locationManager = (LocationManager)mContext.getSystemService(mContext.LOCATION_SERVICE);
@@ -58,6 +59,7 @@ public class LocationIdentifier{
 			return true;
 		}
 	}
+	
 	public void getLocation()
 	{
 		isSearching= true;
@@ -93,7 +95,16 @@ public class LocationIdentifier{
 		}
 	}
 	
-
+	public void stopRequest() {
+		if(timer != null)
+			timer.cancel();
+		if(locationManager != null ) {
+			locationManager.removeUpdates(locationListenerNetwork);
+			locationManager.removeUpdates(locationListenerGps);
+			locationManager = null;
+		}
+	}
+	
 	LocationListener locationListenerNetwork = new LocationListener() {
 		public void onLocationChanged(Location location) {
 			System.out.println("Locaiton manager locationListenerNetwork ********** called ");
@@ -153,26 +164,31 @@ public class LocationIdentifier{
 
 		//if there are both values use the latest one
 		if(gpsLocation!=null && networkLocation!=null){
+			System.out.println("Locaiton manager GetLastLocation timertask ********** 11");
 			if(gpsLocation.getTime()>networkLocation.getTime())
 				mParent.gotLocation(gpsLocation);
 			else
 				mParent.gotLocation(networkLocation);
+			stopRequest();
 			return;
 		}
 
 		if(gpsLocation!=null){
+			System.out.println("Locaiton manager GetLastLocation timertask ********** 22");
 			mParent.gotLocation(gpsLocation);
+			stopRequest();
 			return;
 		}
 		else if(networkLocation!=null){
+			System.out.println("Locaiton manager GetLastLocation timertask **********33 ");
 			mParent.gotLocation(networkLocation);
+			stopRequest();
 			return;
 		}
-		
+		System.out.println("Locaiton manager GetLastLocation timertask ********** 444");
+		stopRequest();
 		mParent.gotLocation(null);
 		
 	    }
 	}
-    
-
 }
