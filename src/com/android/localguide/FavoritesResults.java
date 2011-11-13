@@ -19,11 +19,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Contacts.People;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +64,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	GetDirectionsDialog mGetDirectionsDialog;
 	FacebookDialog mFacebookDialog;
 	TwitterDialog mTwitterDialog;
-	
+	final String FONT_TTF = "quicksand_bold.ttf";
 	ListView mListView;	
 	private Handler mHandler = new Handler();
 	private final int CALL_ID = 1;
@@ -77,6 +79,8 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
     ImageView nextArrow;
     ImageView previousArrow;
     ArrayList<favoriteItem> mFavList;
+    static Typeface mFont;
+    
 	public void onCreate(Bundle savedInstanceState) {
 		
 	super.onCreate(savedInstanceState);
@@ -191,14 +195,36 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	        		break;
 	        	case 6:
 		        	{
+			     		   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+			    		   View layout;		        		
 	    				   if( 	app.deleteFavorites(title.get(currentaddress)) == true )
 	    				   {
-	    					   Toast.makeText(mContext, "Successfully delted from favorites list", 4000).show();
-	    					   deleteAddress();
+						   	   layout = inflater.inflate(R.layout.custom_toast, null);
+				               TextView message = (TextView)layout.findViewById(R.id.message);
+					           message.setTypeface(getTypeface(mContext,FONT_TTF));
+					           message.setText("Successfully delted from favorites list");
+					           ImageView info = (ImageView)layout.findViewById(R.id.warning);
+					           info.setImageResource(R.drawable.info_icon);
+					           Toast toastView = new Toast(mContext);
+					           toastView.setView(layout);
+					           toastView.setDuration(Toast.LENGTH_LONG);
+					           toastView.setGravity(Gravity.CENTER, 0,0);
+					           toastView.show();
+					           deleteAddress();
 	    				   }
 	    				   else
 	    				   {
-	    					   Toast.makeText(mContext, "Failed to delete favorites", 4000).show();
+						   	   layout = inflater.inflate(R.layout.custom_toast, null);
+				               TextView message = (TextView)layout.findViewById(R.id.message);
+					           message.setTypeface(getTypeface(mContext,FONT_TTF));
+					           message.setText("Failed to delete favorites");
+					           ImageView info = (ImageView)layout.findViewById(R.id.warning);
+					           info.setImageResource(R.drawable.info_icon);
+					           Toast toastView = new Toast(mContext);
+					           toastView.setView(layout);
+					           toastView.setDuration(Toast.LENGTH_LONG);
+					           toastView.setGravity(Gravity.CENTER, 0,0);
+					           toastView.show();
 	    				   }
 		        	}
 	        		break;
@@ -214,6 +240,14 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	
 	
 	}
+	
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
+	
 	public void showtwitterDialog() {
     	if( app.isTwitterAutheticated() == false)
     	{
@@ -357,7 +391,18 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	        		mHandler.post(new Runnable() {
 						public void run() {
 							 mTwitterDialog.dismiss();
-							 Toast.makeText(mContext, "Post to Twitter success", 4000).show();					
+							   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);							 
+							   View layout = inflater.inflate(R.layout.custom_toast, null);
+							   TextView message = (TextView)layout.findViewById(R.id.message);
+							   message.setTypeface(getTypeface(mContext,FONT_TTF));
+							   message.setText(mContext.getString(R.string.twitter_success));
+							   ImageView info = (ImageView)layout.findViewById(R.id.warning);
+							   info.setImageResource(R.drawable.info_icon);
+							   Toast toastView = new Toast(mContext);
+							   toastView.setView(layout);
+							   toastView.setDuration(Toast.LENGTH_LONG);
+							   toastView.setGravity(Gravity.CENTER, 0,0);
+							   toastView.show();
 						}
 					 });
 
@@ -415,7 +460,19 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 			 mHandler.post(new Runnable() {
 				public void run() {
 					mFacebookDialog.dismiss();
-					 Toast.makeText(mContext, "Successfully posted to your wall", 4000).show();					
+					
+					   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);							 
+					   View layout = inflater.inflate(R.layout.custom_toast, null);
+					   TextView message = (TextView)layout.findViewById(R.id.message);
+					   message.setTypeface(getTypeface(mContext,FONT_TTF));
+					   message.setText(mContext.getString(R.string.facebook_success));
+					   ImageView info = (ImageView)layout.findViewById(R.id.warning);
+					   info.setImageResource(R.drawable.info_icon);
+					   Toast toastView = new Toast(mContext);
+					   toastView.setView(layout);
+					   toastView.setDuration(Toast.LENGTH_LONG);
+					   toastView.setGravity(Gravity.CENTER, 0,0);
+					   toastView.show();
 				}
 			 });
 			break;
@@ -423,7 +480,16 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 			 mHandler.post(new Runnable() {
 					public void run() {
 						mFacebookDialog.dismiss();
-						 Toast.makeText(mContext, "Post to Facebook failure", 4000).show();					
+						   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);							 
+						   View layout = inflater.inflate(R.layout.custom_toast, null);
+						   TextView message = (TextView)layout.findViewById(R.id.message);
+						   message.setTypeface(getTypeface(mContext,FONT_TTF));
+						   message.setText(mContext.getString(R.string.facebook_failure));
+						   Toast toastView = new Toast(mContext);
+						   toastView.setView(layout);
+						   toastView.setDuration(Toast.LENGTH_LONG);
+						   toastView.setGravity(Gravity.CENTER, 0,0);
+						   toastView.show();						 
 					}
 				 });
 				break;
@@ -492,8 +558,19 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 			contact.put(People.Phones.NUMBER, numbers[0]);
 			
 			getContentResolver().insert(phoneUri, contact);
-			 
-			Toast.makeText(mContext, "Created a new contact: " + title.get(currentaddress) + " " + phonenumbers.get(currentaddress), Toast.LENGTH_SHORT).show();
+			String text = String.format(mContext.getString(R.string.create_contact), title.get(currentaddress) + " " + phonenumbers.get(currentaddress));
+			   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);							 
+			   View layout = inflater.inflate(R.layout.custom_toast, null);
+			   TextView message = (TextView)layout.findViewById(R.id.message);
+			   message.setTypeface(getTypeface(mContext,FONT_TTF));
+			   message.setText(text);
+			   ImageView info = (ImageView)layout.findViewById(R.id.warning);
+			   info.setImageResource(R.drawable.info_icon);
+			   Toast toastView = new Toast(mContext);
+			   toastView.setView(layout);
+			   toastView.setDuration(Toast.LENGTH_LONG);
+			   toastView.setGravity(Gravity.CENTER, 0,0);
+			   toastView.show();			
 	      
 	}
 	 protected Dialog onCreateDialog(int id) {  
@@ -579,6 +656,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	                convertView.setLayoutParams(params);
 	                holder = new ViewHolder();
 	                holder.title = (TextView) convertView.findViewById(R.id.phonenumber);
+	                holder.title.setTypeface(getTypeface(mContext,FONT_TTF));
 	                convertView.setTag(holder);
 	            } else {
 	                holder = (ViewHolder) convertView.getTag();
@@ -622,6 +700,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	                holder = new ViewHolder();
 	                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
 	                holder.option = (TextView) convertView.findViewById(R.id.option);
+	                holder.option.setTypeface(getTypeface(mContext,FONT_TTF));
 	                convertView.setTag(holder);
 	            } else {
 	                holder = (ViewHolder) convertView.getTag();

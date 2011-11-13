@@ -32,6 +32,9 @@ public class TwitterDialog extends Dialog  {
 	Button mOK;
 	Button mCancel;
 	TwitterDialogListener mCB;
+	static Typeface mFont;	
+	final String FONT_TTF = "quicksand_bold.ttf";	
+	
 	public TwitterDialog(Context context,TwitterDialogListener aCB )
 	{
 
@@ -46,6 +49,7 @@ public class TwitterDialog extends Dialog  {
 		int height = display.getHeight();
 		mTitle = (TextView) findViewById(R.id.title);
 		mTitle.setText("Send Tweet (Less than 140 characters)");
+		mTitle.setTypeface(getTypeface(context,FONT_TTF));
 		mOK = (Button) findViewById(R.id.ok);
 		mCancel = (Button) findViewById(R.id.cancel);
 		locationTextbox = (EditText)findViewById(R.id.message_edit);
@@ -75,8 +79,14 @@ public class TwitterDialog extends Dialog  {
  				}
  			});
 
-	         
+ 	       locationTextbox.setTypeface(getTypeface(context,FONT_TTF));
 		}
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
 	
 	public void setMessage(String msg) {
 		locationTextbox.setText(msg);

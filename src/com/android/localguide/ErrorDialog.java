@@ -26,6 +26,11 @@ public class ErrorDialog extends Dialog {
 	TextView mContent;
 	View mLine;
 	Spinner mSpinner;
+	static Typeface mFont;	
+	static Typeface mFont1;
+	final String FONT_TTF = "quicksand_bold.ttf";
+	final String FONT_TTF1 = "quicksand_book.ttf";
+	
 	public ErrorDialog(Context context,String title,String msg,boolean spinner)
 	{
 		super(context, R.style.getdirectionsdialog);	
@@ -40,11 +45,14 @@ public class ErrorDialog extends Dialog {
 		mTitle = (TextView) findViewById(R.id.title);
 		mContent = (TextView) findViewById(R.id.content);
 		mSpinner = (com.android.localguide.Spinner)findViewById(R.id.spinner);
+		mTitle.setTypeface(getTypeface(context,FONT_TTF));
+		mContent.setTypeface(getTypeface(context,FONT_TTF1));
 		
 		mTitle.setText(title);
 		mContent.setText(msg);
 		
 		mOK = (Button) findViewById(R.id.ok);
+		mOK.setTypeface(getTypeface(context,FONT_TTF));
 		
 		mOK.setOnClickListener(new Button.OnClickListener(){
 	            public void onClick(View v) {
@@ -57,9 +65,22 @@ public class ErrorDialog extends Dialog {
 				mLine.setVisibility(View.GONE);
 				mOK.setVisibility(View.GONE);
 				mSpinner.setVisibility(View.VISIBLE);
+				this.setCancelable(false);
 				mSpinner.start();
 			}
 		}
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
+	public static Typeface getTypeface1(Context context, String typeface) {
+	    if (mFont1 == null) {
+	        mFont1 = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont1;
+	}	
 	
 		public void show()
 		{

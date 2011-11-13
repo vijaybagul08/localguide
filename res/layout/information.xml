@@ -54,7 +54,7 @@
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/telephone"/>
 				
-				<TextView android:id="@+id/next"
+				<TextView android:id="@+id/call"
 				android:layout_width="fill_parent" 
 				android:layout_height="wrap_content"
 				android:layout_weight="0.8"
@@ -76,7 +76,8 @@
 				android:layout_weight="0.2"
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/phonebook"/>
-				<TextView android:id="@+id/next"
+				
+				<TextView android:id="@+id/phonebook"
 				android:layout_width="fill_parent" 
 				android:layout_height="wrap_content"
 				android:layout_weight="0.8"
@@ -100,7 +101,7 @@
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/mail"/>
 				
-				<TextView android:id="@+id/next"
+				<TextView android:id="@+id/message"
 				android:layout_width="fill_parent" 
 				android:layout_height="wrap_content"
 				android:layout_weight="0.8"
@@ -124,7 +125,7 @@
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/globe"/>
 				
-				<TextView android:id="@+id/next"
+				<TextView android:id="@+id/direction"
 				android:layout_width="fill_parent" 
 				android:layout_height="wrap_content"
 				android:layout_weight="0.8"
@@ -148,7 +149,7 @@
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/twitter_icon"/>
 				
-				<TextView android:id="@+id/next"
+				<TextView android:id="@+id/twitter_options"
 				android:layout_width="fill_parent" 
 				android:layout_height="wrap_content"
 				android:layout_weight="0.8"
@@ -172,7 +173,7 @@
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/facebook"/>
 				
-				<TextView android:id="@+id/next"
+				<TextView android:id="@+id/facebook_options"
 				android:layout_width="fill_parent" 
 				android:layout_height="wrap_content"
 				android:layout_weight="0.8"
@@ -198,7 +199,8 @@
 				android:layout_weight="0.2"
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/favorite"/>
-				<TextView android:id="@+id/next"
+				
+				<TextView android:id="@+id/favorites"
 				android:layout_width="fill_parent" 
 				android:layout_height="wrap_content"
 				android:layout_weight="0.8"
@@ -225,6 +227,7 @@ android:layout_width="fill_parent"
  android:background="#FFFFFFFF" />
  
  <TextView 
+ android:id="@+id/authentication"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
   android:textAppearance="?android:attr/textAppearanceMedium"
@@ -234,6 +237,7 @@ android:layout_width="fill_parent"
   android:text="Authentication"/>
  
  <TextView 
+ android:id="@+id/authenticationtext"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
   android:paddingLeft="5px"
@@ -255,14 +259,18 @@ android:layout_width="fill_parent"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
   android:layout_weight="0.4"
+  android:textStyle="bold"
   android:textAppearance="?android:attr/textAppearanceMedium"
   android:text="Twitter"/>
 				
 <Button android:id="@+id/twitter"
  android:layout_width="wrap_content"
- android:layout_height="40px"
+ android:layout_height="wrap_content"
  android:layout_weight="0.6"
- android:paddingLeft="3px"
+ android:paddingLeft="8px"
+ android:paddingRight="5px"
+ android:paddingTop="5px"
+ android:paddingBottom="5px"
  android:background="@drawable/search_button"
  android:textAppearance="?android:attr/textAppearanceMedium"
  android:drawableLeft="@drawable/twitter_icon"
@@ -279,15 +287,19 @@ android:layout_width="fill_parent"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
   android:layout_weight="0.4"
+  android:textStyle="bold"
   android:textAppearance="?android:attr/textAppearanceMedium"
   android:text="Facebook"/>
 				
 			<Button android:id="@+id/facebook"
 			 android:layout_width="wrap_content"
-			 android:layout_height="40px" 
+			 android:layout_height="wrap_content" 
 			 android:layout_weight="0.6"
-			 android:paddingLeft="3px"
-			 android:textColor="#ffffff"
+			 android:paddingLeft="8px"
+			 android:paddingRight="5px"
+			 android:paddingTop="5px"
+			 android:paddingBottom="5px"
+ 			 android:textColor="#ffffff"
 			 android:drawableLeft="@drawable/facebook"
 			 android:textAppearance="?android:attr/textAppearanceMedium"
 			 android:background="@drawable/search_button"
@@ -309,9 +321,11 @@ android:layout_width="fill_parent"
   android:textStyle="bold"
   android:paddingLeft="2px"
   android:paddingTop="10px"
+  android:id="@+id/identify_location"
   android:text="Identifying Location"/>
  
   <TextView 
+  android:id="@+id/location_detail"
   android:layout_width="fill_parent"
   android:layout_height="wrap_content"
   android:paddingLeft="5px"

@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.android.localguide.LocationIdentifier;
 import com.android.localguide.OptionsScreen;
+import com.android.localguide.FavoritesScreen;
 import com.android.localguide.R;
 import com.android.localguide.LocationIdentifier.LocationIdentifierCallBack;
 
@@ -427,6 +428,8 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			   System.out.println("Geo reverse coding is having error");
 		   }
 		} else if(location == null){
+			System.out.println("Cell location service gotlocation ********** 111");
+
 			String  text = mContext.getString(R.string.no_location_gps);
 			RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout4);
 			view.setTextViewText(R.id.title, text);
@@ -506,7 +509,6 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					        	view.setTextViewText(R.id.setting, "OFF");
 			                
 			                view.setOnClickPendingIntent(R.id.setting, pendingIntent);
-			            
 			                /* To make call options */
 			       		    Intent callIntent = new Intent(Intent.ACTION_CALL);
 			 		        String numberString ="tel:";
@@ -525,6 +527,12 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 			                        (position*appWidgetsList.get(i).AppWidgetId), sendIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
 			                view.setOnClickPendingIntent(R.id.message, pendingIntent); 
 
+			                /* To call favorite screen */
+			        		Intent favoriteIntent = new Intent();
+			        		favoriteIntent.setClass(mContext, FavoritesScreen.class);
+			                pendingIntent = PendingIntent.getActivity(mContext,
+			                        0 , favoriteIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+			                view.setOnClickPendingIntent(R.id.favorite, pendingIntent);
 		                
   						    mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
   						    
@@ -615,7 +623,13 @@ public class CellLocationService extends Service implements LocationIdentifierCa
                 (position*appWidgetsList.get(position).AppWidgetId), sendIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
         view.setOnClickPendingIntent(R.id.message, pendingIntent); 
 
-    
+        /* To call favorite screen */
+		Intent favoriteIntent = new Intent();
+		favoriteIntent.setClass(mContext, FavoritesScreen.class);
+        pendingIntent = PendingIntent.getActivity(mContext,
+                0 , favoriteIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+        view.setOnClickPendingIntent(R.id.favorite, pendingIntent);
+        
 		mAppWidgetManager.updateAppWidget(appWidgetsList.get(position).AppWidgetId, view);
 		
 	}
@@ -624,6 +638,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
     			@Override
                 public void onCellLocationChanged(CellLocation location)
                 {
+    				System.out.println("Phone state listener *********** changed ************ ");
                         // Get the current location
                 		if(mLocationIdentifier.isSearchingLocation() == false )
                 		{

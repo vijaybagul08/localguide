@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -28,6 +29,9 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 	private EfficientAdapter mListAdapter;
 	private LinearLayout mMainLayout;
 	private Context mContext;
+	static Typeface mFont;	
+	final String FONT_TTF = "quicksand_bold.ttf";	
+	
 	public ShowDirectionsList(Context context,Bundle bundle) {
 		super(context);
 		mContext = context;
@@ -44,7 +48,8 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		mNoContentDisplay.setTextSize(40);
 		mNoContentDisplay.setGravity(Gravity.CENTER);
 		mNoContentDisplay.setText(context.getString(R.string.load_direction));
-	
+		mNoContentDisplay.setTypeface(getTypeface(context,FONT_TTF));
+		
 		mListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> adapter, View view, int pos, long id) {
 				
@@ -83,6 +88,12 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 			System.out.println("on show directions search completed ******************LIST NULL "+list);
 		}
 	}
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
 	
 	   private  class EfficientAdapter extends BaseAdapter {
 	        private LayoutInflater mInflater;
@@ -115,6 +126,7 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 	            	
 	                holder = new ViewHolder();
 	                holder.direction = (TextView) convertView.findViewById(R.id.direction);
+	                holder.direction.setTypeface(getTypeface(mContext,FONT_TTF));
 	                holder.icon = (MarkerIcon)convertView.findViewById(R.id.markerIcon);
 	                
 	                convertView.setTag(holder);

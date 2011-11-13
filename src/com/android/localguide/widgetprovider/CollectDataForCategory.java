@@ -142,6 +142,7 @@ public class CollectDataForCategory {
 		}
 		catch(Exception ex){
 			System.out.println("Neetworj error 1 ************8 ");
+			ex.printStackTrace();
 			isNetworkIssue = true;
 		}
 	 }

@@ -30,9 +30,16 @@ public class GetDirectionsDialog extends Dialog implements OnClickListener {
 	CheckBox locationCheckbox;
 	EditText locationTextbox;
 	boolean isLocationChkBoxChecked;
+	TextView mTitle;
+	TextView mMessage;
+	TextView mLocation;
 	Button mOK;
 	Button mCancel;
 	GetDirectionsDialogListener mCB;
+	static Typeface mFont;	
+	final String FONT_TTF = "quicksand_bold.ttf";	
+
+	
 	public GetDirectionsDialog(Context context,GetDirectionsDialogListener aCB )
 	{
 
@@ -45,11 +52,26 @@ public class GetDirectionsDialog extends Dialog implements OnClickListener {
 		isLocationChkBoxChecked = true;
 		screenWidth = display.getWidth();  
 		int height = display.getHeight();
+		mTitle = (TextView) findViewById(R.id.title);
+		mTitle.setTypeface(getTypeface(context,FONT_TTF));
+		mMessage= (TextView) findViewById(R.id.message);
+		mMessage.setTypeface(getTypeface(context,FONT_TTF));
+
+		mLocation = (TextView) findViewById(R.id.text1);
+		mLocation.setTypeface(getTypeface(context,FONT_TTF));
+
 		mOK = (Button) findViewById(R.id.ok);
+		mOK.setTypeface(getTypeface(context,FONT_TTF));
 		mCancel = (Button) findViewById(R.id.cancel);
+		mCancel.setTypeface(getTypeface(context,FONT_TTF));
 		locationTextbox = (EditText)findViewById(R.id.locationtextbox);
+		locationTextbox.setTypeface(getTypeface(context,FONT_TTF));
 		locationTextbox.setText("");
+		locationTextbox.setTypeface(getTypeface(context,FONT_TTF));
+		
 		locationCheckbox =(CheckBox)findViewById(R.id.checkbox);
+		locationCheckbox.setTypeface(getTypeface(context,FONT_TTF));
+
 		locationCheckbox.setOnClickListener(new CheckBox.OnClickListener(){
 		    	 public void onClick(View v) {   
 		               if(((CheckBox)v).isChecked())
@@ -68,6 +90,7 @@ public class GetDirectionsDialog extends Dialog implements OnClickListener {
 		               }
 		    	 	}   
 		     });
+		
         locationTextbox.setImeOptions(EditorInfo.IME_ACTION_DONE);
         locationTextbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			
@@ -95,6 +118,13 @@ public class GetDirectionsDialog extends Dialog implements OnClickListener {
 
 	         
 		}
+	
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
 	
 		public void getDirections() {
 			if(locationCheckbox.isChecked() == true)

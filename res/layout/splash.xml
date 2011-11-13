@@ -5,16 +5,17 @@
     android:layout_height="fill_parent"
     android:gravity="center"
     android:padding="20px"
-    android:background="@color/app_background_color"
+    android:background="#006295"
     >
 	<TextView  
+		android:id ="@+id/title"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
 	    android:gravity="center"
-		android:textSize="45px"
+		android:textSize="60px"
 		android:textColor="#ffffff"
 		android:layout_weight="0.2"
-	    android:text="Local Guide"
+	    android:text="LOCALGUIDE"
 	    />
 	<ImageView android:id="@+id/logo" 
 	android:layout_gravity="center_vertical"
@@ -24,13 +25,14 @@
 	android:src="@drawable/localguide"
 	/>
 	<TextView  
+		android:id ="@+id/author"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
 	    android:gravity="center"
-		android:textSize="45px"
+		android:textSize="60px"
 		android:textColor="#ffffff"
 		android:layout_weight="0.2"
-	    android:text=" - Mani.S "
+	    android:text=" - MANI.S "
 	    />
  
 </LinearLayout>

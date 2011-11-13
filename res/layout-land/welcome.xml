@@ -20,7 +20,7 @@
               android:orientation="vertical">
 
             
-		<TextView android:id="@+id/text"
+		<TextView android:id="@+id/category"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceLarge"
@@ -64,7 +64,7 @@
 		android:src="@drawable/find"/>
 				
 </RelativeLayout>			            
-		<TextView android:id="@+id/text1"
+		<TextView android:id="@+id/location"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:visibility="gone"

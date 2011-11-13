@@ -1,7 +1,9 @@
 package com.android.localguide;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +20,7 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 	Button twitterButton;
 	Button facebookButton;
 	Handler mHandler = new H();
+	final String FONT_TTF = "quicksand_book.ttf";
 
 	private int TWITTER = 1;
 	private int FACEBOOK = 2;
@@ -27,6 +30,23 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 	TextView twitterText;
 	TextView facebookText;
 	TextView description;
+	TextView description1;
+	TextView description2;
+	TextView authentication;
+	TextView authenticationtext;
+	TextView idnetify_location;
+	TextView idnetify_locationtext;
+
+	TextView call;
+	TextView message;
+	TextView phonebook;
+	TextView direction;
+	TextView twitter_options;
+	TextView facebook_options;
+	TextView favorites;
+
+	static Typeface mFont;	
+	static Typeface mFont1;
 	
 	public void onCreate(Bundle savedState)
 	{
@@ -37,6 +57,40 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		facebookText = (TextView)findViewById(R.id.facebooktext);
 		twitterButton = (Button )findViewById(R.id.twitter);
 		description = (TextView) findViewById(R.id.description);
+		description1 = (TextView) findViewById(R.id.description1);
+		description2 = (TextView) findViewById(R.id.description2);
+		authentication = (TextView) findViewById(R.id.authentication);
+		authenticationtext = (TextView) findViewById(R.id.authenticationtext);
+		idnetify_location = (TextView) findViewById(R.id.identify_location);
+		idnetify_locationtext = (TextView) findViewById(R.id.location_detail);
+		
+		call = (TextView) findViewById(R.id.call);
+		message = (TextView) findViewById(R.id.message);
+		phonebook = (TextView) findViewById(R.id.phonebook);
+		twitter_options = (TextView) findViewById(R.id.twitter_options);
+		facebook_options = (TextView) findViewById(R.id.facebook_options);
+		direction = (TextView) findViewById(R.id.direction);
+		favorites = (TextView) findViewById(R.id.favorites);
+		
+		twitterText.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		facebookText.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		twitterButton.setTypeface(getTypeface(this,FONT_TTF));
+		description.setTypeface(getTypeface(this,FONT_TTF));
+		description1.setTypeface(getTypeface(this,FONT_TTF));
+		description2.setTypeface(getTypeface(this,FONT_TTF));
+		authentication.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		authenticationtext.setTypeface(getTypeface(this,FONT_TTF));
+		idnetify_location.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		idnetify_locationtext.setTypeface(getTypeface(this,FONT_TTF));
+		
+		call.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		message.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		phonebook.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		twitter_options.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		facebook_options.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		direction.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		favorites.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+		
 		String tmp = getString(R.string.description);
 		String tmp1 ="     "+tmp;
 
@@ -45,7 +99,8 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 		else
 			twitterButton.setText(this.getString(R.string.sign_in));
 			
-		
+		twitterButton.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+
 		twitterButton.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
@@ -54,7 +109,8 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			
 		});
 		facebookButton = (Button )findViewById(R.id.facebook);
-		
+		facebookButton.setTypeface(getTypeface1(this,"quicksand_bold.ttf"));
+
 		if(app.isFacebookAuthenticated())
 			facebookButton.setText(this.getString(R.string.different_user));			
 		else
@@ -76,6 +132,21 @@ public class Information extends Activity implements FaceBookAuthenticationCallB
 			twitterButton.setText(this.getString(R.string.different_user));
 		}
 	}
+
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
+	
+	public static Typeface getTypeface1(Context context, String typeface) {
+	    if (mFont1 == null) {
+	        mFont1 = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont1;
+	}
+		
 	class H extends Handler
 	{
 		public void handleMessage(Message m)
