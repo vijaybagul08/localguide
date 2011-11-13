@@ -22,6 +22,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -57,7 +58,9 @@ public class results extends Activity{
     ListView mListView;
     TextView mErrorTextView;
     boolean isMoreResults = false;
-    
+	final String FONT_TTF = "quicksand_bold.ttf";
+	static Typeface mFont;	
+
 	private Runnable mDelayedTask = new Runnable() {
         public void run() {
         	sendSearchRequest(mCurrentResultCount);
@@ -85,6 +88,8 @@ public class results extends Activity{
         mErrorTextView = (TextView)findViewById(R.id.error);
         mListView = (ListView)findViewById(R.id.result_list);
         Button header = (Button) findViewById(R.id.header);
+        header.setTypeface(getTypeface(this,FONT_TTF));
+        
         header.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v) {
             	if(isMoreResults == false) {
@@ -124,6 +129,13 @@ public class results extends Activity{
         	
         }); 
 	  }
+	
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
 	
 	public void startMoreResults()
 	{
@@ -255,9 +267,11 @@ public class results extends Activity{
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.title.setText(title.get(position));
+            holder.title.setTypeface(getTypeface(mContext,FONT_TTF));
             holder.title.setTextColor(Color.rgb(0xff, 0xff, 0xff));
             
             holder.address.setText(address.get(position));
+            holder.address.setTypeface(getTypeface(mContext,FONT_TTF));
             holder.address.setTextColor(Color.rgb(0xff, 0xff, 0xff));
             return convertView;
         }

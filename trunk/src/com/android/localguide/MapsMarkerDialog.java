@@ -2,6 +2,7 @@ package com.android.localguide;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.Html;
 import android.view.Display;
 import android.view.View;
@@ -17,6 +18,9 @@ public class MapsMarkerDialog extends Dialog  {
 	private TextView mMessage;
 	private int mScreenWidth;
 	private Button mOK;
+	static Typeface mFont;	
+	final String FONT_TTF = "quicksand_bold.ttf";	
+
 	
 	public MapsMarkerDialog(Context context) {
 		super(context,R.style.getdirectionsdialog);
@@ -26,14 +30,25 @@ public class MapsMarkerDialog extends Dialog  {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.markerdialog);
 		mTitle = (TextView) findViewById(R.id.title);
+		mTitle.setTypeface(getTypeface(context,FONT_TTF));
 		mMessage = (TextView) findViewById(R.id.message);
+		mMessage.setTypeface(getTypeface(context,FONT_TTF));
 		mOK = (Button) findViewById(R.id.ok);
+		mOK.setTypeface(getTypeface(context,FONT_TTF));
 		mOK.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v) {
             	MapsMarkerDialog.this.dismiss();
             }
 		});
 	}
+	
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
+	
 	public void show()
 	{
 		super.show();

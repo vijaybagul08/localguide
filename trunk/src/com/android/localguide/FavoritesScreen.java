@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,16 +27,22 @@ public class FavoritesScreen extends Activity{
 	ListView mListView;
 	BaseAdapter mAdapter;
 	TextView mNoElements;
-	
+	final String FONT_TTF = "quicksand_bold.ttf";
+	Context mContext;
+    static Typeface mFont;
+    
 	public void onCreate(Bundle savedInstance)
 	{
 		super.onCreate(savedInstance);
 		setContentView(R.layout.favorites);
 		app = (LocalGuideApplication)this.getApplication();
+		mContext = this;
 		
 		mList = app.getFavoritesList();
 		mNoElements = (TextView) findViewById(R.id.no_element);
 		mListView = (ListView)findViewById(R.id.fav_list);
+		mNoElements.setTypeface(getTypeface(this,FONT_TTF));
+
 		mAdapter = new ListAdapter(this);
 		mListView.setOnItemClickListener(new OnItemClickListener() { 
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
@@ -51,12 +58,22 @@ public class FavoritesScreen extends Activity{
         	}
         	
         }); 
+		System.out.println("ON create*************** fav screen ");
+		if(mList.size() == 0) {
+			mNoElements.setVisibility(View.VISIBLE);
+			mListView.setVisibility(View.GONE);
+		}else {
+			mNoElements.setVisibility(View.GONE);
+			mListView.setVisibility(View.VISIBLE);
+			mListView.setAdapter(mAdapter);
+		}
+
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+		System.out.println("ON Resume *************** fav screen ");
 		mList = app.getFavoritesList();
 
 		if(mList.size() == 0) {
@@ -75,6 +92,13 @@ public class FavoritesScreen extends Activity{
 		 this.finish();
 	}
 
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
+	
 	private  class ListAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
  
@@ -107,9 +131,11 @@ public class FavoritesScreen extends Activity{
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.title.setText(mList.get(position).title);
+            holder.title.setTypeface(getTypeface(mContext,FONT_TTF));
             holder.title.setTextColor(Color.rgb(0xff, 0xff, 0xff));
 
             holder.address.setText(mList.get(position).streetAddress);
+            holder.address.setTypeface(getTypeface(mContext,FONT_TTF));
             holder.address.setTextColor(Color.rgb(0xff, 0xff, 0xff));
             
             return convertView;

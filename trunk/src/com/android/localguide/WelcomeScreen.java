@@ -11,12 +11,14 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,10 +43,14 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	    
 	public final int CATEGORY_ID =0;
 	public final int LOCATION_ID =1;
-	public final int CATEGORY_ALERT = 2;
+	public final int CATEGORY_ALERT = 12;
 	public final int INTERNET_ALERT = 3;
 	public final int LOCATION_ALERT = 4;
+	final String FONT_TTF = "quicksand_bold.ttf";
 	LocalGuideApplication app;
+	TextView mCategory;
+	TextView mLocationText;
+	CheckBox mLocationCheckBox;
 	EditText categoryTextbox;
 	EditText locationTextbox;
 	Dialog dialog;
@@ -59,6 +65,8 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	ArrayList<String> categoryContent;
 	public final static int ACTIVITY_INVOKE = 0;
 	private Handler mHandler = new Handler();
+	static Typeface mFont;	
+	static Typeface mFont1;
 	
 	private Runnable mTask = new Runnable(){
 		public void run() {
@@ -90,7 +98,16 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	        mContext = this;
 	        mReverseGeoCoder = new Geocoder(getApplicationContext());
 	        locationIdentifier = new LocationIdentifier(mContext,this);
+	        mCategory = (TextView) findViewById(R.id.category);
+	        mLocationText = (TextView) findViewById(R.id.location);
+	        mLocationCheckBox = (CheckBox) findViewById(R.id.checkbox);
+	        
+	        mCategory.setTypeface(getTypeface(this,FONT_TTF));
+	        mLocationText.setTypeface(getTypeface(this,FONT_TTF));
+	        mLocationCheckBox.setTypeface(getTypeface(this,FONT_TTF));
+	        
 			categoryTextbox = (EditText)findViewById(R.id.categotytextbox);
+			categoryTextbox.setTypeface(getTypeface(this,FONT_TTF));
 			categoryTextbox.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 			categoryTextbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 				
@@ -106,6 +123,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 
 	         
 	         locationTextbox = (EditText)findViewById(R.id.locationtextbox);
+	         locationTextbox.setTypeface(getTypeface(this,FONT_TTF));	         
 	         locationTextbox.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 	         locationTextbox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 				
@@ -135,21 +153,23 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
                        if(((CheckBox)v).isChecked())
                        {
                     	   isLocationChkBoxChecked = true;
-                    	   TextView text1 = (TextView)findViewById(R.id.text1);
+                    	   TextView text1 = (TextView)findViewById(R.id.location);
                     	   text1.setVisibility(View.GONE);
                     	   locationTextbox.setVisibility(View.GONE);
                        }
                        else
                        { 
 	                   	   isLocationChkBoxChecked = false;
-	                       TextView text1 = (TextView)findViewById(R.id.text1);
+	                       TextView text1 = (TextView)findViewById(R.id.location);
 	                	   text1.setVisibility(View.VISIBLE);
 	                	   locationTextbox.setVisibility(View.VISIBLE);
                        }
 	        	 	}   
 	         });
 	         
-	         Button button = (Button)findViewById(R.id.categories);   
+	         Button button = (Button)findViewById(R.id.categories);  
+		     button.setTypeface(getTypeface(this,FONT_TTF));
+
 	         button.setOnClickListener(new Button.OnClickListener(){   
 	             public void onClick(View v) {   
                          showDialog(CATEGORY_ID);   
@@ -182,7 +202,19 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
       	  showDialog(CATEGORY_ALERT);
         }
 	}
-	
+
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
+	public static Typeface getTypeface1(Context context, String typeface) {
+	    if (mFont1 == null) {
+	        mFont1 = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont1;
+	}	
 	public void onBackPressed ()
 	{
 		 app.saveToDataBase();
@@ -263,6 +295,8 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	   }
 	   
 	   public void checkLocation() {
+		   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+		   View layout;
 		   
 		   if(mLocation != null)
 		   {
@@ -274,10 +308,33 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 			   if (mAddressList.size()> 0){
 				   currlocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
 				   if(currlocation == null) {
-					   Toast.makeText(mContext, this.getString(R.string.no_location), 4000).show();
+				   	   layout = inflater.inflate(R.layout.custom_toast, null);
+		               TextView message = (TextView)layout.findViewById(R.id.message);
+			           message.setTypeface(getTypeface(this,FONT_TTF));
+			           message.setText(this.getString(R.string.no_location));
+
+			           Toast toastView = new Toast(this);
+			           toastView.setView(layout);
+			           toastView.setDuration(Toast.LENGTH_LONG);
+			           toastView.setGravity(Gravity.BOTTOM, 0,0);
+			           toastView.show();
+
+					  // Toast.makeText(mContext, this.getString(R.string.no_location), 4000).show();
 					   dialog.dismiss();
 				   } else {
-		               Toast.makeText(mContext, currlocation, 4000).show();
+				   	   layout = inflater.inflate(R.layout.custom_toast, null);
+		               TextView message = (TextView)layout.findViewById(R.id.message);
+			           message.setTypeface(getTypeface(this,FONT_TTF));
+			           message.setText(currlocation);
+			           ImageView info = (ImageView)layout.findViewById(R.id.warning);
+			           info.setImageResource(R.drawable.info_icon);
+			           Toast toastView = new Toast(this);
+			           toastView.setView(layout);
+			           toastView.setDuration(Toast.LENGTH_LONG);
+			           toastView.setGravity(Gravity.BOTTOM, 0,0);
+			           toastView.show();
+					   
+		               //Toast.makeText(mContext, currlocation, 4000).show();
 					   Intent intent = new Intent();
 			           intent.putExtra("categoryString", category);
 			           location = locationTextbox.getText().toString();
@@ -291,19 +348,47 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 			           dialog.dismiss();
 				   }
 			   	} else {
-				   Toast.makeText(mContext, this.getString(R.string.no_location), 4000).show();
+			   	   layout = inflater.inflate(R.layout.custom_toast, null);
+	               TextView message = (TextView)layout.findViewById(R.id.message);
+		           message.setTypeface(getTypeface(this,FONT_TTF));
+		           message.setText(this.getString(R.string.no_location));
+		           Toast toastView = new Toast(this);
+		           toastView.setView(layout);
+		           toastView.setDuration(Toast.LENGTH_LONG);
+		           toastView.setGravity(Gravity.CENTER, 0,0);
+		           toastView.show();
+				   //Toast.makeText(mContext, this.getString(R.string.no_location), 4000).show();
 				   dialog.dismiss();
 			   	}
 			   }
 			   catch(Exception e)
 			   {
-				   Toast.makeText(mContext, this.getString(R.string.reverse_geocoding_error), 4000).show();
+			   	   layout = inflater.inflate(R.layout.custom_toast, null);
+	               TextView message = (TextView)layout.findViewById(R.id.message);
+	               message.setText(this.getString(R.string.reverse_geocoding_error));
+		           message.setTypeface(getTypeface(this,FONT_TTF));
+		           Toast toastView = new Toast(this);
+		           toastView.setView(layout);
+		           toastView.setDuration(Toast.LENGTH_LONG);
+		           toastView.setGravity(Gravity.CENTER, 0,0);
+		           toastView.show();
+				   
+				   //Toast.makeText(mContext, this.getString(R.string.reverse_geocoding_error), 4000).show();
 				   dialog.dismiss();
 			   }
 		   }
 		   else
 		   {
-			   Toast.makeText(mContext, this.getString(R.string.no_location_gps), 4000).show();
+		   	   layout = inflater.inflate(R.layout.custom_toast, null);
+               TextView message = (TextView)layout.findViewById(R.id.message);
+               message.setText(this.getString(R.string.no_location_gps));
+	           message.setTypeface(getTypeface(this,FONT_TTF));
+	           Toast toastView = new Toast(this);
+	           toastView.setView(layout);
+	           toastView.setDuration(Toast.LENGTH_LONG);
+	           toastView.setGravity(Gravity.CENTER, 0,0);
+	           toastView.show();			   
+			   //Toast.makeText(mContext, this.getString(R.string.no_location_gps), 4000).show();
 			   dialog.dismiss();
 		   }
 	   }
@@ -318,6 +403,8 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
              layout  = inflater.inflate(R.layout.categorydialog,(ViewGroup) findViewById(R.id.layout_root));   
              GridView gridview = (GridView)layout.findViewById(R.id.gridview);   
              gridview.setAdapter(new ImageAdapter(this));   
+             TextView title = (TextView)layout.findViewById(R.id.text1);
+             title.setTypeface(getTypeface1(mContext,"quicksand_book.ttf"));
              
              gridview.setOnItemClickListener(new OnItemClickListener()   
           			{
@@ -388,6 +475,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 				holder.icon.setScaleType(ImageView.ScaleType.CENTER_CROP);   
 				holder.icon.setPadding(8, 8, 8, 8);
 				holder.title.setText(categoryContent.get(position));
+				holder.title.setTypeface(getTypeface1(mContext,"quicksand_book.ttf"));
 				holder.icon.setImageResource(mThumbIds[position]);
 				return convertView;   
          }   

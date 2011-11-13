@@ -1,16 +1,20 @@
 package com.android.localguide;
 
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 public class MaintabActivity extends TabActivity{
-	TabHost tabHost;
+	TabHost tabHost;	
+	static Typeface mFont;	
+
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.maintab);
@@ -37,6 +41,7 @@ public class MaintabActivity extends TabActivity{
 	    spec = tabHost.newTabSpec(this.getString(R.string.help)).setIndicator(this.getString(R.string.help),
 	                      res.getDrawable(R.drawable.info))
 	                  .setContent(intent);
+	    
 	    tabHost.addTab(spec);
 
 	    tabHost.setCurrentTab(0);
@@ -44,9 +49,17 @@ public class MaintabActivity extends TabActivity{
 	    for(int i=0;i<tabHost.getTabWidget().getChildCount();i++)
 	    	{
 	    	       tabHost.getTabWidget().getChildAt(i).setBackgroundDrawable(this.getResources().getDrawable(R.drawable.rowselector));
+	    	       TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); 
+	    	       tv.setTypeface(getTypeface(this,"quicksand_bold.ttf"));
 	    	}
 	}
  
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
     
 	public void onTabChanged(String tabId) {
 		// TODO Auto-generated method stub

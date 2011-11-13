@@ -7,6 +7,7 @@
               android:orientation="vertical">
               
 <TextView 
+android:id="@+id/title"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:textColor="#ffffffff"
@@ -19,6 +20,7 @@ android:layout_width="fill_parent"
  android:background="#FFFFFFFF" />
 
 <TextView
+android:id="@+id/message"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:textColor="#ffffffff"

@@ -1,12 +1,8 @@
 package com.android.localguide;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import org.apache.http.auth.AuthenticationException;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -18,31 +14,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Contacts.People;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.localguide.FaceBookClient.FaceBookPostMessageCallBack;
 import com.android.localguide.LocalGuideApplication.favoriteItem;
-
-import android.os.Handler;
 
 public class OptionsScreen extends Activity implements OptionsAddressLayout.MovementIndicator,
 FaceBookClient.FaceBookPostMessageCallBack,GetDirectionsDialog.GetDirectionsDialogListener,
@@ -69,6 +65,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	
 	private final int CALL_ID = 1;
 	private final int MESSAGING_ID = 2;
+	final String FONT_TTF = "quicksand_bold.ttf";
 	private Handler mHandler = new Handler();
 	private Dialog dialog;
 	int totalcount = 0;
@@ -78,9 +75,19 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
     MyAnimation animation;
     ImageView nextArrow;
     ImageView previousArrow;
+    TextView call;
+    TextView message;
+    TextView phonebook;
+    TextView twitter_option;
+    TextView facebook_option;
+    TextView diection;
+    TextView favorite;
+    
     ArrayList<favoriteItem> mFavList;
     ArrayList<String> options;
     boolean isLaunchedFromAppWidget = false;
+    static Typeface mFont;
+    
 	public void onCreate(Bundle savedInstanceState) {
 		
 	super.onCreate(savedInstanceState);
@@ -213,17 +220,40 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	        		break;
 	        	case 6:
 		        	{
+		     		   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+		    		   View layout;
+		        		
 	 				   if( 	app.addToFavorites(title.get(currentaddress),
 			    				streetaddress.get(currentaddress),
 			    				phonenumbers.get(currentaddress),
 			    				latitude.get(currentaddress), 
 			    				longitude.get(currentaddress)) == false )
 					   {
-						   Toast.makeText(mContext, mContext.getString(R.string.fav_already_present), 4000).show();
+					   	   layout = inflater.inflate(R.layout.custom_toast, null);
+			               TextView message = (TextView)layout.findViewById(R.id.message);
+				           message.setTypeface(getTypeface(mContext,FONT_TTF));
+				           message.setText(mContext.getString(R.string.fav_already_present));
+				           ImageView info = (ImageView)layout.findViewById(R.id.warning);
+				           info.setImageResource(R.drawable.info_icon);
+				           Toast toastView = new Toast(mContext);
+				           toastView.setView(layout);
+				           toastView.setDuration(Toast.LENGTH_LONG);
+				           toastView.setGravity(Gravity.CENTER, 0,0);
+				           toastView.show();
 					   }
 					   else
 					   {
-						   Toast.makeText(mContext, mContext.getString(R.string.fav_added), 4000).show();
+					   	   layout = inflater.inflate(R.layout.custom_toast, null);
+			               TextView message = (TextView)layout.findViewById(R.id.message);
+				           message.setTypeface(getTypeface(mContext,FONT_TTF));
+				           message.setText(mContext.getString(R.string.fav_added));
+				           ImageView info = (ImageView)layout.findViewById(R.id.warning);
+				           info.setImageResource(R.drawable.info_icon);
+				           Toast toastView = new Toast(mContext);
+				           toastView.setView(layout);
+				           toastView.setDuration(Toast.LENGTH_LONG);
+				           toastView.setGravity(Gravity.CENTER, 0,0);
+				           toastView.show();
 					   }
 		        	}
 	        		break;
@@ -238,6 +268,14 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	 });
 	 
 	}
+	
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
+	
 	public void onBackPressed ()
 	{
 		if(isLaunchedFromAppWidget == true) {
@@ -311,8 +349,21 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	        		TwitterUtils.sendTweet(app,msgg);
 	        		mHandler.post(new Runnable() {
 						public void run() {
-							 mTwitterDialog.dismiss();
-							 Toast.makeText(mContext, mContext.getString(R.string.twitter_success), 4000).show();					
+						   mTwitterDialog.dismiss();
+						   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);							 
+						   View layout = inflater.inflate(R.layout.custom_toast, null);
+						   TextView message = (TextView)layout.findViewById(R.id.message);
+						   message.setTypeface(getTypeface(mContext,FONT_TTF));
+						   message.setText(mContext.getString(R.string.twitter_success));
+						   ImageView info = (ImageView)layout.findViewById(R.id.warning);
+						   info.setImageResource(R.drawable.info_icon);
+						   Toast toastView = new Toast(mContext);
+						   toastView.setView(layout);
+						   toastView.setDuration(Toast.LENGTH_LONG);
+						   toastView.setGravity(Gravity.CENTER, 0,0);
+						   toastView.show();
+							 
+							 //Toast.makeText(mContext, mContext.getString(R.string.twitter_success), 4000).show();					
 						}
 					 });
 
@@ -370,7 +421,18 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 			 mHandler.post(new Runnable() {
 				public void run() {
 					 mFacebookDialog.dismiss();
-					 Toast.makeText(mContext, mContext.getString(R.string.facebook_success), 4000).show();					
+					   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);							 
+					   View layout = inflater.inflate(R.layout.custom_toast, null);
+					   TextView message = (TextView)layout.findViewById(R.id.message);
+					   message.setTypeface(getTypeface(mContext,FONT_TTF));
+					   message.setText(mContext.getString(R.string.facebook_success));
+					   ImageView info = (ImageView)layout.findViewById(R.id.warning);
+					   info.setImageResource(R.drawable.info_icon);
+					   Toast toastView = new Toast(mContext);
+					   toastView.setView(layout);
+					   toastView.setDuration(Toast.LENGTH_LONG);
+					   toastView.setGravity(Gravity.CENTER, 0,0);
+					   toastView.show();
 				}
 			 });
 			break;
@@ -378,7 +440,16 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 			 mHandler.post(new Runnable() {
 					public void run() {
 						 mFacebookDialog.dismiss();
-						 Toast.makeText(mContext, mContext.getString(R.string.facebook_failure), 4000).show();					
+						   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);							 
+						   View layout = inflater.inflate(R.layout.custom_toast, null);
+						   TextView message = (TextView)layout.findViewById(R.id.message);
+						   message.setTypeface(getTypeface(mContext,FONT_TTF));
+						   message.setText(mContext.getString(R.string.facebook_failure));
+						   Toast toastView = new Toast(mContext);
+						   toastView.setView(layout);
+						   toastView.setDuration(Toast.LENGTH_LONG);
+						   toastView.setGravity(Gravity.CENTER, 0,0);
+						   toastView.show();						 
 					}
 				 });
 			break;
@@ -576,10 +647,21 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 			contact.put(People.Phones.NUMBER, numbers[0]);
 			
 			getContentResolver().insert(phoneUri, contact);
-			String text = String.format(mContext.getString(R.string.create_contact), title.get(currentaddress) + " " + phonenumbers.get(currentaddress));			 
-			Toast.makeText(mContext, text, Toast.LENGTH_SHORT).show();
-	      
+			String text = String.format(mContext.getString(R.string.create_contact), title.get(currentaddress) + " " + phonenumbers.get(currentaddress));
+			   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);							 
+			   View layout = inflater.inflate(R.layout.custom_toast, null);
+			   TextView message = (TextView)layout.findViewById(R.id.message);
+			   message.setTypeface(getTypeface(mContext,FONT_TTF));
+			   message.setText(text);
+			   ImageView info = (ImageView)layout.findViewById(R.id.warning);
+			   info.setImageResource(R.drawable.info_icon);
+			   Toast toastView = new Toast(mContext);
+			   toastView.setView(layout);
+			   toastView.setDuration(Toast.LENGTH_LONG);
+			   toastView.setGravity(Gravity.CENTER, 0,0);
+			   toastView.show();			
 	}
+	
 	 protected Dialog onCreateDialog(int id) {  
 		 AlertDialog.Builder builder;
 		 Context mContext = this; 
@@ -664,6 +746,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	                convertView.setLayoutParams(params);
 	                holder = new ViewHolder();
 	                holder.title = (TextView) convertView.findViewById(R.id.phonenumber);
+	                holder.title.setTypeface(getTypeface(mContext,FONT_TTF));
 	                convertView.setTag(holder);
 	            } else {
 	                holder = (ViewHolder) convertView.getTag();
@@ -708,6 +791,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	                holder = new ViewHolder();
 	                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
 	                holder.option = (TextView) convertView.findViewById(R.id.option);
+	                holder.option.setTypeface(getTypeface(mContext,FONT_TTF));
 	                convertView.setTag(holder);
 	            } else {
 	                holder = (ViewHolder) convertView.getTag();

@@ -30,6 +30,8 @@ public class FacebookDialog extends Dialog  {
 	Button mOK;
 	Button mCancel;
 	FacebookDialogListener mCB;
+	static Typeface mFont;	
+	final String FONT_TTF = "quicksand_bold.ttf";	
 	public FacebookDialog(Context context,FacebookDialogListener aCB )
 	{
 
@@ -43,6 +45,8 @@ public class FacebookDialog extends Dialog  {
 		screenWidth = display.getWidth();  
 		int height = display.getHeight();
 		mTitle = (TextView) findViewById(R.id.title);
+		mTitle.setTypeface(getTypeface(context,FONT_TTF));
+
 		mTitle.setText("Post to Wall");
 		mOK = (Button) findViewById(R.id.ok);
 		mCancel = (Button) findViewById(R.id.cancel);
@@ -60,13 +64,19 @@ public class FacebookDialog extends Dialog  {
 	            }
 	         });
 
-	         
+ 			locationTextbox.setTypeface(getTypeface(context,FONT_TTF));
+   
 		}
 	
 	public void setMessage(String msg) {
 		locationTextbox.setText(msg);
 	}
-
+	public static Typeface getTypeface(Context context, String typeface) {
+	    if (mFont == null) {
+	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+	    }
+	    return mFont;
+	}
 	public void show()
 	{
 		super.show();

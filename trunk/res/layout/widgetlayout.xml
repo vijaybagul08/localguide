@@ -11,6 +11,21 @@
   android:paddingBottom="2dp"
   android:background="@android:color/transparent"
   >
+			<FrameLayout
+			  xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent"
+			  android:layout_height="fill_parent"
+			  >
+			  	 <TextView 
+				  android:id="@+id/category"
+				  android:layout_width="fill_parent"
+				  android:layout_height="wrap_content"
+				  android:gravity="center"
+				  android:layout_gravity="center_vertical"
+				  android:textColor="#70ffffff"
+				  android:textSize="60px"
+				  android:text="category"
+				  />  
 <LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="fill_parent"
@@ -58,51 +73,49 @@ android:layoutAnimation="@anim/layout_anim"
 			android:layout_height="3dip"
 			android:layout_margin="5dip"
 			android:background="#FFFFFFFF" />
-
-			<FrameLayout
-			  xmlns:android="http://schemas.android.com/apk/res/android"
-			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content"
-			  android:layout_weight="0.3"
-			  >
-			  	 <TextView 
-				  android:id="@+id/category"
-				  android:layout_width="fill_parent"
-				  android:layout_height="wrap_content"
-				  android:gravity="center"
-				  android:textColor="#70ffffff"
-				  android:textSize="35px"
-				  android:text="category"
-				  />
-
 		
 			<RelativeLayout
 			  xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
-			  >
+			  android:layout_weight="0.3" >
 			  
 				  <ImageView 
 				  android:id="@+id/call"
 				  android:layout_width="wrap_content"
 				  android:layout_height="wrap_content"
 				  android:layout_alignParentLeft="true"
-				  android:src="@drawable/phone"
+				  android:layout_centerVertical="true"
+				  android:src="@drawable/telephone_48"
 				  />
 				  <ImageView 
 				  android:id="@+id/message"
 				  android:layout_width="wrap_content"
 				  android:layout_height="wrap_content"
-				  android:layout_marginLeft="5px"
+				  android:layout_marginLeft="15px"
 				  android:layout_toRightOf="@id/call"
-				  android:src="@drawable/message"
+				  android:layout_centerVertical="true"
+				  android:src="@drawable/mail"
 				  />
+				  <ImageView 
+				  android:id="@+id/favorite"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_centerVertical="true"
+				  android:layout_marginLeft="15px"
+				  android:layout_toRightOf="@id/message"
+				  android:src="@drawable/favorite_48"
+				  />
+				  
 				  <Button 
 				  android:id="@+id/setting"
 				  android:layout_width="wrap_content"
 				  android:layout_height="wrap_content"
 				  android:layout_marginRight="5px"
 				  android:layout_alignParentRight="true"
+				  android:layout_centerVertical="true"
+				  android:textColor="#ffffff"
+				  android:background="@drawable/widget_button_on"
 				  android:text="ON"
 				  />
 				  
@@ -114,11 +127,12 @@ android:layoutAnimation="@anim/layout_anim"
 				  android:textColor="#ffffff"
 				  android:textAppearance="?android:attr/textAppearanceSmall"
 				  android:layout_toLeftOf="@id/setting"
+				  android:layout_centerVertical="true"
 				  android:text="@string/movement"
 				  />
 			  
 			</RelativeLayout>   
-		</FrameLayout>		
 	</LinearLayout>  
+		</FrameLayout>		
 
 </LinearLayout>
