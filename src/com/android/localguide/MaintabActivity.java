@@ -48,9 +48,10 @@ public class MaintabActivity extends TabActivity{
 	    
 	    for(int i=0;i<tabHost.getTabWidget().getChildCount();i++)
 	    	{
-	    	       tabHost.getTabWidget().getChildAt(i).setBackgroundDrawable(this.getResources().getDrawable(R.drawable.rowselector));
+	    	       tabHost.getTabWidget().getChildAt(i).setBackgroundDrawable(this.getResources().getDrawable(R.drawable.tabhost_selector));
 	    	       TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); 
 	    	       tv.setTypeface(getTypeface(this,"quicksand_bold.ttf"));
+	    	       tv.setTextSize(17);
 	    	}
 	}
  

@@ -17,7 +17,8 @@
         
 		<activity android:name=".MaintabActivity">
           android:theme="@android:style/Theme.NoTitleBar"
-          android:configChanges="orientation">      
+          android:configChanges="orientation"
+          android:launchMode="singleTask">      
            <intent-filter>
 		        <action android:name="com.android.localguideTabScreen" />
 		        <category android:name="android.intent.category.DEFAULT" />

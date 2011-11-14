@@ -4,7 +4,7 @@
     android:layout_width="match_parent" 
     android:layout_height="match_parent"
     android:padding="5px"
-    android:background="@drawable/rowselector">
+    android:background="@drawable/tabhost_selector">
 
 		<com.android.localguide.MarkerIcon
 		     android:layout_width="32px" 
