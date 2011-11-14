@@ -5,7 +5,7 @@ android:orientation="horizontal"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:padding="10px"
-android:background="@drawable/rowselector">
+android:background="@drawable/tabhost_selector">
 
 	<ImageView 
 	android:id="@+id/categoryIcon"

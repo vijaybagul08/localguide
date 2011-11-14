@@ -11,7 +11,7 @@ android:id="@+id/myTableLayout1"
 android:padding="10px"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
-android:background="@drawable/list_normal">
+android:background="@drawable/tab_normal">
 
 	<TableRow
 	android:layout_width="fill_parent"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 	android:padding="10dip"    
-    android:background="@drawable/list_normal"
+    android:background="@drawable/tab_normal"
     android:orientation="vertical">
 
     <TextView 

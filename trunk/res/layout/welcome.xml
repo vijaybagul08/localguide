@@ -51,7 +51,7 @@
 	android:layout_gravity="right"
 	android:layout_marginTop="10dip"
 	android:layout_marginRight="10dip"
-	android:padding="5px"
+	android:padding="10px"
 	android:text="@string/choose_category"
 	android:textSize="18sp"
 	android:background="@drawable/search_button"

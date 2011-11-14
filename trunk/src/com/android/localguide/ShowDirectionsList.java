@@ -76,8 +76,8 @@ public class ShowDirectionsList extends LinearLayout implements GetDirectionsLis
 		    {
 		    	
 		    	String infoString;
-		    	infoString = mContext.getString(R.string.distance)+" :"+list.get(i).distance+"\n";
-		    	infoString += mContext.getString(R.string.instruction)+" :"+list.get(i).instructions;
+		    	infoString = mContext.getString(R.string.distance)+" : "+list.get(i).distance+"\n";
+		    	infoString += mContext.getString(R.string.instruction)+" : "+list.get(i).instructions;
 		    	mData.add(infoString);
 		    }
 		    LinearLayout.LayoutParams Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);

@@ -26,7 +26,7 @@ public final class R {
     public static final class drawable {
         public static final int a=0x7f020000;
         public static final int app_background_color=0x7f020001;
-        public static final int app_bkg_color=0x7f02004d;
+        public static final int app_bkg_color=0x7f020050;
         public static final int b=0x7f020002;
         public static final int beer=0x7f020003;
         public static final int c=0x7f020004;
@@ -58,7 +58,7 @@ public final class R {
         public static final int j=0x7f02001e;
         public static final int k=0x7f02001f;
         public static final int l=0x7f020020;
-        public static final int list_elements_color=0x7f02004e;
+        public static final int list_elements_color=0x7f020051;
         public static final int list_normal=0x7f020021;
         public static final int list_pressed=0x7f020022;
         public static final int localguide=0x7f020023;
@@ -84,25 +84,28 @@ public final class R {
         public static final int shopping=0x7f020037;
         public static final int spinner_white_48=0x7f020038;
         public static final int t=0x7f020039;
-        public static final int taxi=0x7f02003a;
-        public static final int telephone=0x7f02003b;
-        public static final int telephone_48=0x7f02003c;
-        public static final int theatre=0x7f02003d;
-        public static final int train=0x7f02003e;
-        public static final int twitter=0x7f02003f;
-        public static final int twitter_icon=0x7f020040;
-        public static final int u=0x7f020041;
-        public static final int v=0x7f020042;
-        public static final int w=0x7f020043;
-        public static final int warning=0x7f020044;
-        public static final int widget_button_off=0x7f020045;
-        public static final int widget_button_on=0x7f020046;
-        public static final int widgetbackground=0x7f020047;
-        public static final int widgetbackground1=0x7f020048;
-        public static final int widgetbuttonpress=0x7f020049;
-        public static final int x=0x7f02004a;
-        public static final int y=0x7f02004b;
-        public static final int z=0x7f02004c;
+        public static final int tab_normal=0x7f02003a;
+        public static final int tab_pressed=0x7f02003b;
+        public static final int tabhost_selector=0x7f02003c;
+        public static final int taxi=0x7f02003d;
+        public static final int telephone=0x7f02003e;
+        public static final int telephone_48=0x7f02003f;
+        public static final int theatre=0x7f020040;
+        public static final int train=0x7f020041;
+        public static final int twitter=0x7f020042;
+        public static final int twitter_icon=0x7f020043;
+        public static final int u=0x7f020044;
+        public static final int v=0x7f020045;
+        public static final int w=0x7f020046;
+        public static final int warning=0x7f020047;
+        public static final int widget_button_off=0x7f020048;
+        public static final int widget_button_on=0x7f020049;
+        public static final int widgetbackground=0x7f02004a;
+        public static final int widgetbackground1=0x7f02004b;
+        public static final int widgetbuttonpress=0x7f02004c;
+        public static final int x=0x7f02004d;
+        public static final int y=0x7f02004e;
+        public static final int z=0x7f02004f;
     }
     public static final class id {
         public static final int MainLayout=0x7f090019;
