@@ -404,6 +404,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
              GridView gridview = (GridView)layout.findViewById(R.id.gridview);   
              gridview.setAdapter(new ImageAdapter(this));   
              TextView title = (TextView)layout.findViewById(R.id.text1);
+             title.setText(mContext.getString(R.string.choose_category));
              title.setTypeface(getTypeface1(mContext,"quicksand_book.ttf"));
              
              gridview.setOnItemClickListener(new OnItemClickListener()   

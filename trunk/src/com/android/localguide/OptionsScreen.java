@@ -362,8 +362,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 						   toastView.setDuration(Toast.LENGTH_LONG);
 						   toastView.setGravity(Gravity.CENTER, 0,0);
 						   toastView.show();
-							 
-							 //Toast.makeText(mContext, mContext.getString(R.string.twitter_success), 4000).show();					
 						}
 					 });
 
