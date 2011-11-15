@@ -202,7 +202,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 						   	   layout = inflater.inflate(R.layout.custom_toast, null);
 				               TextView message = (TextView)layout.findViewById(R.id.message);
 					           message.setTypeface(getTypeface(mContext,FONT_TTF));
-					           message.setText("Successfully delted from favorites list");
+					           message.setText(mContext.getString(R.string.success_favorites));
 					           ImageView info = (ImageView)layout.findViewById(R.id.warning);
 					           info.setImageResource(R.drawable.info_icon);
 					           Toast toastView = new Toast(mContext);
@@ -217,7 +217,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 						   	   layout = inflater.inflate(R.layout.custom_toast, null);
 				               TextView message = (TextView)layout.findViewById(R.id.message);
 					           message.setTypeface(getTypeface(mContext,FONT_TTF));
-					           message.setText("Failed to delete favorites");
+					           message.setText(mContext.getString(R.string.fail_delete_favorites));					           
 					           ImageView info = (ImageView)layout.findViewById(R.id.warning);
 					           info.setImageResource(R.drawable.info_icon);
 					           Toast toastView = new Toast(mContext);
@@ -251,7 +251,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	public void showtwitterDialog() {
     	if( app.isTwitterAutheticated() == false)
     	{
-    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your twitter account",false).show();
+    		new ErrorDialog(mContext,mContext.getString(R.string.not_authenticated),mContext.getString(R.string.twitter_auth_pls),false).show();
     	}
     	else
     	{ 
@@ -274,7 +274,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 	public void showfacebookDialog() {
     	if( app.isFacebookAuthenticated() == false)
     	{
-    		new ErrorDialog(mContext,"Not authenticated","Please go to help page and authenticate with your facebook account",false).show();
+    		new ErrorDialog(mContext,mContext.getString(R.string.not_authenticated),mContext.getString(R.string.facebook_auth_pls),false).show();
     	}
     	else
     	{
@@ -433,7 +433,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 
 	public void showInternetErrorDialog()
 	{
-		new ErrorDialog(this,"No Internet Connection","Please enable the internet connection",false).show();
+		new ErrorDialog(this,mContext.getString(R.string.no_internet),mContext.getString(R.string.enable_internet),false).show();
 	}
 	
 	private boolean checkInternetConnection() {
@@ -586,7 +586,7 @@ GetDirectionsDialog.GetDirectionsDialogListener,FacebookDialog.FacebookDialogLis
 		  
 			String delims = "[:]";
 			String[] temp = phonenumbers.get(currentaddress).split(delims);
-			System.out.println("Phonumbers are *** "+temp[0]+"::::"+temp[1]);
+
 			delims = "[,]";
 			final String[] numbers = temp[1].split(delims);
 			   

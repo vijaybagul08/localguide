@@ -1,5 +1,7 @@
 package com.android.localguide.widgetprovider;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
@@ -37,14 +39,12 @@ public class WidgetConfigureActivity extends Activity{
             R.drawable.theatre,R.drawable.train, R.drawable.taxi,   
             R.drawable.gas, R.drawable.police,R.drawable.hospital
             };
-    private String[] categories = {   
-            "beer", "restaurants","shopping", 
-            "theatre","train", "taxi",   
-            "gas", "police","hospital"
-            };
+    ArrayList<String> categoryContent;
     private int appWidgetId;
     ListView listView;
     Context mContext;
+    TextView entercategory;
+    TextView selectcategory;
     EditText editText;
     ImageView goButton;
 	public void onCreate(Bundle savedInstance)
@@ -52,6 +52,10 @@ public class WidgetConfigureActivity extends Activity{
 		super.onCreate(savedInstance);
 		mContext = this.getApplicationContext();
 		setContentView(R.layout.widgetconfigure);
+		entercategory = (TextView) findViewById(R.id.text);
+		entercategory.setText(this.getString(R.string.enter_category));
+		selectcategory = (TextView) findViewById(R.id.text1);
+		selectcategory.setText(this.getString(R.string.select_category));
 		editText = (EditText)findViewById(R.id.category);
 		editText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 		editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -74,6 +78,18 @@ public class WidgetConfigureActivity extends Activity{
 			}
 			
 		});
+        categoryContent = new ArrayList<String>();
+        
+        categoryContent.add(this.getString(R.string.pubs));
+        categoryContent.add(this.getString(R.string.restuarant));
+		categoryContent.add(this.getString(R.string.shopping));
+		categoryContent.add(this.getString(R.string.theatre));
+		categoryContent.add(this.getString(R.string.train));
+		categoryContent.add(this.getString(R.string.taxi));
+		categoryContent.add(this.getString(R.string.gas));
+		categoryContent.add(this.getString(R.string.police));
+		categoryContent.add(this.getString(R.string.hospital));
+		
 		Intent launchIntent = getIntent();
 		Bundle extras = launchIntent.getExtras();
 		if (extras != null) {
@@ -101,7 +117,7 @@ public class WidgetConfigureActivity extends Activity{
 		            	int count = prefs.getInt("count", 0);
 		                Editor editor = null;
 		                editor = prefs.edit();
-		                editor.putString("category"+count, categories[position]);
+		                editor.putString("category"+count, categoryContent.get(position));
 		                editor.putInt("appwidgetid"+count, appWidgetId);
 		                count++;
 		                editor.putInt("count",count);
@@ -198,7 +214,7 @@ public class WidgetConfigureActivity extends Activity{
 	            } else {
 	                holder = (ViewHolder) convertView.getTag();
 	            }
-	            holder.title.setText(categories[position]);
+	            holder.title.setText(categoryContent.get(position));
 	            holder.title.setTextColor(Color.rgb(0xff, 0xff, 0xff));
 	            holder.image.setBackgroundResource(mThumbIds[position]);
 	            return convertView;
