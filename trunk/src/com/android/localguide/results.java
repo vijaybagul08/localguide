@@ -60,7 +60,7 @@ public class results extends Activity{
     boolean isMoreResults = false;
 	final String FONT_TTF = "quicksand_bold.ttf";
 	static Typeface mFont;	
-
+	LocalGuideApplication mApp;
 	private Runnable mDelayedTask = new Runnable() {
         public void run() {
         	sendSearchRequest(mCurrentResultCount);
@@ -72,6 +72,7 @@ public class results extends Activity{
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.results);
         mContext = this;
+        mApp = (LocalGuideApplication)this.getApplication();
         Bundle bundle= getIntent().getExtras();
         resultsArray = new ArrayList<String>();
         mDialog = new ErrorDialog(this,"",this.getString(R.string.searching),true);

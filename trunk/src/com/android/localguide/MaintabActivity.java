@@ -53,6 +53,9 @@ public class MaintabActivity extends TabActivity{
 	    	       tv.setTypeface(getTypeface(this,"quicksand_bold.ttf"));
 	    	       tv.setTextSize(17);
 	    	}
+	    Bundle bun = this.getIntent().getExtras();
+	    if(bun!= null && bun.getBoolean("widget_favorite"))
+	    	tabHost.setCurrentTab(1);
 	}
  
 	public static Typeface getTypeface(Context context, String typeface) {

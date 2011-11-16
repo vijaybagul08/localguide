@@ -69,6 +69,8 @@
 	<string name="no_location_again">Lo sentimos, no podía \'t encontrar el lugar.Por favor, inténte de nuevo.</string>
 	<string name="try_again">Vuelva a intentarlo</string>
 	<string name="movement">Movimiento \n detección</string>
+	<string name="movement_detection">Movimiento \n detección</string>
 	<string name="success_favorites">Delted éxito de la lista de favoritos</string>
 	<string name="fail_delete_favorites">No se pudo eliminar favoritos</string>
+	<string name="select_widget">Select widget style</string>
 </resources>
