@@ -268,7 +268,7 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	 });
 	 
 	}
-	
+
 	public static Typeface getTypeface(Context context, String typeface) {
 	    if (mFont == null) {
 	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
@@ -276,14 +276,15 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	    return mFont;
 	}
 	
-	public void onBackPressed ()
-	{
-		if(isLaunchedFromAppWidget == true) {
-			isLaunchedFromAppWidget = false;
-			startActivity(new Intent("com.android.localguideTabScreen"));
-		}
-		finish();
-	}
+//	public void onBackPressed ()
+//	{
+//		if(isLaunchedFromAppWidget == true) {
+//			isLaunchedFromAppWidget = false;
+//			startActivity(new Intent("com.android.localguideTabScreen"));
+//		}
+//		finish();
+//	}
+	
 	public void showtwitterDialog() {
     	if( app.isTwitterAutheticated() == false)
     	{

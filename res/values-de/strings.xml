@@ -68,8 +68,10 @@
 	<string name="location"><b>Location: </b></string>
 	<string name="no_location_again">Sorry, finden couldn\'t die Lage.Bitte versuchen Sie es erneut.</string>
 	<string name="try_again">Wiederholen</string>
-	<string name="movement">Movement \n-Erkennung</string>
+	<string name="movement">Movement \nErkennung</string>
+	<string name="movement_detection">Movement Erkennung</string>
 	<string name="success_favorites">Erfolgreich aus Favoritenliste delted</string>
 	<string name="fail_delete_favorites">Failed to Favoriten löschen</string>
+	<string name="select_widget">Select widget style</string>
 </resources>
 

@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,21 +23,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.provider.Contacts.People;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.telephony.gsm.GsmCellLocation;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import com.android.localguide.LocationIdentifier;
-import com.android.localguide.OptionsScreen;
 import com.android.localguide.FavoritesScreen;
+import com.android.localguide.LocationIdentifier;
+import com.android.localguide.MaintabActivity;
+import com.android.localguide.OptionsScreen;
 import com.android.localguide.R;
 import com.android.localguide.LocationIdentifier.LocationIdentifierCallBack;
 
@@ -67,6 +60,8 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	private final int UPDATE_ID = -101;
 	private final int TRY_AGAIN_ID = -102;
 	
+	private final int widgetType4x1 = 1;
+	private final int widgetType4x2 = 2;
 	TelephonyManager tm;
 	private boolean isFirstTimeStarting = false;
 	public static final String PREFS_NAME = "LocalguideWidgetPrefs";
@@ -75,7 +70,7 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 		CollectDataForCategory mConnector;
 		int AppWidgetId;
 		String category;
-		
+		int appWidgetType;
 	}
 	
     BroadcastReceiver mNetworkStateIntentReceiver = new BroadcastReceiver() {
@@ -281,12 +276,14 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					item.AppWidgetId = prefs.getInt("appwidgetid"+i, 0); 
 					item.mConnector= new CollectDataForCategory();
 					item.category = prefs.getString("category"+i, null);
+					item.appWidgetType = prefs.getInt("appwidgettype"+i, 1);
 					appWidgetsList.add(item);
 					}
 				}
 				
 		   		AppWidgetItem item = new AppWidgetItem();
 				item.AppWidgetId = intent.getIntExtra("appwidgetid", 0); 
+				item.appWidgetType = intent.getIntExtra("appwidgettype", 1);
 				item.mConnector= new CollectDataForCategory();
 				int currcount = prefs.getInt("count", 0);
 				if(currcount != 0)
@@ -390,14 +387,24 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 					String  currlocation = mContext.getString(R.string.location)+mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
 					currlocation+="\n";
 					currlocation+="Loading the results....... pls wait";
-					
-					RemoteViews view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout3);
-					view.setTextViewText(R.id.title, currlocation);
+
+					RemoteViews	view= new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout3);
+					RemoteViews view1= new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout5);
+
+
 					mLocation = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0);
 					for(int i =0;i<appWidgetsList.size();i++)
 					{
 						if(appWidgetsList.get(i).mConnector.isLocation_scanning == true) {
-							mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
+							
+							if(appWidgetsList.get(i).appWidgetType == 1) {
+								view1.setTextViewText(R.id.title, currlocation);
+								mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view1); 
+							}else {
+								view.setTextViewText(R.id.title, currlocation);
+								mAppWidgetManager.updateAppWidget(appWidgetsList.get(i).AppWidgetId, view);
+							}
+							
 							// Form the search String. Use the preferences to fetch the category for corresponding appWidget.
 							String searchString = mAddressList.get(0).getCountryName()+","+mAddressList.get(0).getAddressLine(0)+","+appWidgetsList.get(i).category;
 							appWidgetsList.get(i).mConnector.setSearchString(searchString);
@@ -469,8 +476,12 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 						if(appWidgetsList.get(i).mConnector.isStarted == false )
 						{
 				
-							RemoteViews view;
-							view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+							RemoteViews view = null;
+							if(appWidgetsList.get(i).appWidgetType == widgetType4x1 ) {
+								view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout4x1);
+							} else if(appWidgetsList.get(i).appWidgetType == widgetType4x2) {
+								view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+							}
 				       		appWidgetsList.get(i).mConnector.incrementCount();
 				       		view.setTextViewText(R.id.category, appWidgetsList.get(i).category);
 							view.setTextViewText(R.id.title, appWidgetsList.get(i).mConnector.getTitle());
@@ -529,7 +540,10 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 
 			                /* To call favorite screen */
 			        		Intent favoriteIntent = new Intent();
-			        		favoriteIntent.setClass(mContext, FavoritesScreen.class);
+			        		favoriteIntent.setClass(mContext, MaintabActivity.class);
+			        		bun = new Bundle();
+			        		bun.putBoolean("widget_favorite", true);
+			        		favoriteIntent.putExtras(bun);
 			                pendingIntent = PendingIntent.getActivity(mContext,
 			                        0 , favoriteIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
 			                view.setOnClickPendingIntent(R.id.favorite, pendingIntent);
@@ -569,8 +583,12 @@ public class CellLocationService extends Service implements LocationIdentifierCa
 	
 	public void udateMovmentDetection(int position,int count,boolean scanning) {
 
-		RemoteViews view;
-		view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+		RemoteViews view = null;
+		if(appWidgetsList.get(position).appWidgetType == widgetType4x1 ) {
+			view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout4x1);
+		} else if(appWidgetsList.get(position).appWidgetType == widgetType4x2) {
+			view = new RemoteViews(getApplicationContext().getPackageName(),R.layout.widgetlayout);
+		}
         		
 		view.setTextViewText(R.id.title, appWidgetsList.get(position).mConnector.getTitle());
 		view.setTextViewText(R.id.address, appWidgetsList.get(position).mConnector.getAddress());

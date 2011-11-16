@@ -1,5 +1,6 @@
 package com.android.localguide.widgetprovider;
 
+
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -29,7 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.android.localguide.ErrorDialog;
 import com.android.localguide.R;
 
-public class WidgetConfigureActivity extends Activity{
+public class WidgetConfigureActivity4x1 extends Activity{
 
 	
     public static final String PREFS_NAME = "LocalguideWidgetPrefs";
@@ -96,7 +97,7 @@ public class WidgetConfigureActivity extends Activity{
 		if (extras != null) {
 			appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
-			mAppWidgetType = 2;
+			mAppWidgetType = 1;
             Intent cancelResultValue = new Intent();
             cancelResultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             setResult(RESULT_CANCELED, cancelResultValue);
@@ -170,7 +171,7 @@ public class WidgetConfigureActivity extends Activity{
 		}
 		else
 		{
-    		AlertDialog alertDialog = new AlertDialog.Builder(WidgetConfigureActivity.this).create();
+    		AlertDialog alertDialog = new AlertDialog.Builder(WidgetConfigureActivity4x1.this).create();
     		alertDialog.setTitle("Error");
     		alertDialog.setMessage("Please enter a category and press go");
     		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
@@ -182,7 +183,7 @@ public class WidgetConfigureActivity extends Activity{
     		    } });
     		alertDialog.setIcon(R.drawable.icon);
     		//alertDialog.show();
-    		new ErrorDialog(WidgetConfigureActivity.this,WidgetConfigureActivity.this.getString(R.string.no_category),WidgetConfigureActivity.this.getString(R.string.pls_enter_category),false).show();
+    		new ErrorDialog(WidgetConfigureActivity4x1.this,WidgetConfigureActivity4x1.this.getString(R.string.no_category),WidgetConfigureActivity4x1.this.getString(R.string.pls_enter_category),false).show();
 	
 		}
 

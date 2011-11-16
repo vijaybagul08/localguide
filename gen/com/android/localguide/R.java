@@ -215,6 +215,8 @@ public final class R {
         public static final int widgetlayout=0x7f03001c;
         public static final int widgetlayout3=0x7f03001d;
         public static final int widgetlayout4=0x7f03001e;
+        public static final int widgetlayout4x1=0x7f03001f;
+        public static final int widgetlayout5=0x7f030020;
     }
     public static final class string {
         public static final int app_name=0x7f060000;
@@ -237,7 +239,7 @@ public final class R {
         public static final int facebook_auth_pls=0x7f060033;
         public static final int facebook_failure=0x7f060036;
         public static final int facebook_success=0x7f060035;
-        public static final int fail_delete_favorites=0x7f060046;
+        public static final int fail_delete_favorites=0x7f060047;
         public static final int fav_added=0x7f060030;
         public static final int fav_already_present=0x7f06002f;
         public static final int fav_description=0x7f06000e;
@@ -256,6 +258,7 @@ public final class R {
         public static final int message=0x7f060009;
         public static final int more=0x7f06002e;
         public static final int movement=0x7f060044;
+        public static final int movement_detection=0x7f060045;
         public static final int network_issues=0x7f060040;
         public static final int no_category=0x7f06002a;
         public static final int no_favorite=0x7f060016;
@@ -278,9 +281,10 @@ public final class R {
         public static final int route_error=0x7f060006;
         public static final int searching=0x7f060023;
         public static final int select_category=0x7f060012;
+        public static final int select_widget=0x7f060048;
         public static final int shopping=0x7f06001e;
         public static final int sign_in=0x7f06000f;
-        public static final int success_favorites=0x7f060045;
+        public static final int success_favorites=0x7f060046;
         public static final int taxi=0x7f06001f;
         public static final int theatre=0x7f060022;
         public static final int train=0x7f060021;
@@ -294,5 +298,6 @@ public final class R {
     }
     public static final class xml {
         public static final int widgetprovider=0x7f050000;
+        public static final int widgetprovider1=0x7f050001;
     }
 }

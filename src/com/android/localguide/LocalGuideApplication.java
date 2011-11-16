@@ -47,7 +47,6 @@ public class LocalGuideApplication extends Application {
 	public void onTerminate()
 	{
 		super.onTerminate();
-		favoritesList.clear();
 	}
 	
 	public void updateTwitterToken(String key,String secret)
@@ -136,7 +135,7 @@ public class LocalGuideApplication extends Application {
 		
     	favoriteItem item = new favoriteItem(title,address,phoneNumber,lat,along);
     	favoritesList.add(item);
-    	saveToDataBase();
+    	saveFavToDataBase();
     	return true;
 	}
 	
@@ -155,8 +154,9 @@ public class LocalGuideApplication extends Application {
 		}
 		if(position != -1)
 		{
-		favoritesList.remove(position);
-		return true;
+			favoritesList.remove(position);
+			saveFavToDataBase();
+			return true;
 		}
 		else
 			return false;
@@ -192,6 +192,41 @@ public class LocalGuideApplication extends Application {
 			
 	}
 	
+	public void saveFavToDataBase() {
+		
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = null;
+        mTwitterUserName = prefs.getString("twitterusername", null);
+        mFacebookUserName = prefs.getString("facebookusername", null);
+        mTwitterAccessKey = prefs.getString("twitteraccesskey", null);
+        mTwitterAccessSecret = prefs.getString("twitteraccesssecret", null);
+        mFacebookAccessToken = prefs.getString("facebooktoken", null);
+
+        editor = prefs.edit();
+        
+        editor.putString("twitterusername", mTwitterUserName);
+        editor.putString("twitteraccesskey", mTwitterAccessKey);
+        editor.putString("twitteraccesssecret", mTwitterAccessSecret);
+        editor.putString("facebookusername", mFacebookUserName);
+        editor.putString("facebooktoken", mFacebookAccessToken);
+       
+        int count = favoritesList.size();
+        editor.putInt("FavoritesCount", count);
+        
+        for (int i = 0; i < count; i++) {
+        	favoriteItem data = favoritesList.get(i);
+        	if(count != 0) {
+                editor.putString("title" + i, data.title);
+                editor.putString("streetaddress" + i, data.streetAddress);
+                editor.putString("phonenumber" + i, data.phoneNumber);
+                editor.putString("latitude" + i, data.latitude);
+                editor.putString("longitude" + i, data.longitude);
+        	}
+        }
+        
+        editor.commit();
+		
+	}
 	public void saveToDataBase()
 	{
 	 	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -219,6 +254,7 @@ public class LocalGuideApplication extends Application {
         } 
         
         editor.commit();
+        favoritesList.clear();
         isLoaded = false;
 	}
 }
