@@ -27,6 +27,8 @@ public class EnableSettingsDialog extends Dialog {
 		TextView mMessage;
 		Button mOK;
 		Button mCancel;
+		static Typeface mFont;	
+		final String FONT_TTF = "quicksand_bold.ttf";	
 
 		public EnableSettingsDialog(Context context )
 		{
@@ -41,6 +43,7 @@ public class EnableSettingsDialog extends Dialog {
 			int height = display.getHeight();
 			mTitle = (TextView) findViewById(R.id.title);
 			mTitle.setText("Settings");
+			this.setCancelable(false);
 			mMessage = (TextView) findViewById(R.id.message);
 			mMessage.setText("Your GPS is disabled! Would you like to enable it?");
 			
@@ -63,6 +66,13 @@ public class EnableSettingsDialog extends Dialog {
 	         });
 		         
 		}
+		public static Typeface getTypeface(Context context, String typeface) {
+		    if (mFont == null) {
+		        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
+		    }
+		    return mFont;
+		}
+
 		
 		public void show()
 		{

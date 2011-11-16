@@ -6,7 +6,7 @@
     android:layout_width="match_parent" 
     android:layout_height="match_parent"
     android:padding="10dip"
-    android:background="@drawable/list_normal">
+    android:background="@drawable/tab_normal">
             
 
 <RelativeLayout
@@ -28,7 +28,7 @@ android:paddingTop="3dip" >
               android:layout_height="wrap_content"
               android:layout_centerHorizontal="true"
               android:layout_alignParentLeft="true"
-              android:layout_marginLeft="3dp"
+              android:layout_marginLeft="5dp"
               android:textColor="#FFF"
               android:textSize="30dip"
               android:text="Call"/>

@@ -47,12 +47,14 @@ public class LocalGuideApplication extends Application {
 	public void onTerminate()
 	{
 		super.onTerminate();
+		favoritesList.clear();
 	}
 	
 	public void updateTwitterToken(String key,String secret)
 	{
 		mTwitterAccessKey = key;
 		mTwitterAccessSecret = secret;
+		saveToDataBase();
 	}
 
 	public void setLoaded(boolean load) {
@@ -71,6 +73,7 @@ public class LocalGuideApplication extends Application {
 	public void updateFacebookToken(String token)
 	{
 		mFacebookAccessToken = token;
+		saveToDataBase();
 	}
 
 	public String getFacebookToken()
@@ -133,7 +136,7 @@ public class LocalGuideApplication extends Application {
 		
     	favoriteItem item = new favoriteItem(title,address,phoneNumber,lat,along);
     	favoritesList.add(item);
-    	//saveToDataBase();
+    	saveToDataBase();
     	return true;
 	}
 	
@@ -173,9 +176,6 @@ public class LocalGuideApplication extends Application {
         mTwitterAccessKey = prefs.getString("twitteraccesskey", null);
         mTwitterAccessSecret = prefs.getString("twitteraccesssecret", null);
         mFacebookAccessToken = prefs.getString("facebooktoken", null);
-        
-        System.out.println("Facebook token in loadfromdatabase *********"+mFacebookAccessToken+"***");
-        
        
         int count = prefs.getInt("FavoritesCount", 0);
         
@@ -219,7 +219,6 @@ public class LocalGuideApplication extends Application {
         } 
         
         editor.commit();
-        favoritesList.clear();		
         isLoaded = false;
 	}
 }

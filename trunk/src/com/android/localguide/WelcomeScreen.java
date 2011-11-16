@@ -39,13 +39,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.android.localguide.LocationIdentifier.LocationIdentifierCallBack;
 
 
-public class WelcomeScreen extends Activity implements LocationIdentifierCallBack {
+public class WelcomeScreen extends Activity implements LocationIdentifierCallBack,CategoryListDialog.onCategoryItemSelected {
 	    
-	public final int CATEGORY_ID =0;
-	public final int LOCATION_ID =1;
 	public final int CATEGORY_ALERT = 12;
-	public final int INTERNET_ALERT = 3;
-	public final int LOCATION_ALERT = 4;
+	public final int INTERNET_ALERT = 13;
+	public final int LOCATION_ALERT = 14;
 	final String FONT_TTF = "quicksand_bold.ttf";
 	LocalGuideApplication app;
 	TextView mCategory;
@@ -62,7 +60,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	LocationIdentifier locationIdentifier;
 	boolean isLocationChkBoxChecked = true;
 	List<Address> mAddressList = null;
-	ArrayList<String> categoryContent;
+
 	public final static int ACTIVITY_INVOKE = 0;
 	private Handler mHandler = new Handler();
 	static Typeface mFont;	
@@ -79,18 +77,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	        setContentView(R.layout.welcome);
 	        
 	        app = (LocalGuideApplication) this.getApplication();
-	        categoryContent = new ArrayList<String>();
-	        
-	        categoryContent.add(this.getString(R.string.pubs));
-	        categoryContent.add(this.getString(R.string.restuarant));
-			categoryContent.add(this.getString(R.string.shopping));
-			categoryContent.add(this.getString(R.string.theatre));
-			categoryContent.add(this.getString(R.string.train));
-			categoryContent.add(this.getString(R.string.taxi));
-			categoryContent.add(this.getString(R.string.gas));
-			categoryContent.add(this.getString(R.string.police));
-			categoryContent.add(this.getString(R.string.hospital));
-	        
+        
 	        if(app.isLoaded == false) {
 	        	app.loadFromDataBase();
 	        	app.isLoaded = true;
@@ -172,7 +159,8 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 
 	         button.setOnClickListener(new Button.OnClickListener(){   
 	             public void onClick(View v) {   
-                         showDialog(CATEGORY_ID);   
+                        // showDialog(CATEGORY_ID);
+	            	  new CategoryListDialog(WelcomeScreen.this,WelcomeScreen.this).show();
 	             }   
 	         });   
 	      }   
@@ -227,6 +215,12 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 		locationIdentifier.stopRequest();
 	}
 	
+	public void onItemSelected(String acategory){
+        categoryTextbox.setText(acategory);
+        category = acategory;
+	}
+	
+	private Dialog mFindDialog;
 	private void getLocation()
 	{
 		  // Check for internet connection
@@ -235,7 +229,9 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	        if(isLocationChkBoxChecked)
 	        {
 	        	if(locationIdentifier.settingsEnabled() == true) {
-		            showDialog(LOCATION_ID);	                    	  
+		            //showDialog(LOCATION_ID);
+	        		mFindDialog = new ErrorDialog(this,"",this.getString(R.string.find_location),true);
+	        		mFindDialog.show();
 		            locationIdentifier.getLocation();
 	        	}else {
 	        		this.settingsDisabled();
@@ -295,6 +291,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	   }
 	   
 	   public void checkLocation() {
+		   
 		   LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
 		   View layout;
 		   
@@ -318,9 +315,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 			           toastView.setDuration(Toast.LENGTH_LONG);
 			           toastView.setGravity(Gravity.BOTTOM, 0,0);
 			           toastView.show();
-
-					  // Toast.makeText(mContext, this.getString(R.string.no_location), 4000).show();
-					   dialog.dismiss();
+			           mFindDialog.dismiss();
 				   } else {
 				   	   layout = inflater.inflate(R.layout.custom_toast, null);
 		               TextView message = (TextView)layout.findViewById(R.id.message);
@@ -334,7 +329,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 			           toastView.setGravity(Gravity.BOTTOM, 0,0);
 			           toastView.show();
 					   
-		               //Toast.makeText(mContext, currlocation, 4000).show();
+			           mFindDialog.dismiss();
 					   Intent intent = new Intent();
 			           intent.putExtra("categoryString", category);
 			           location = locationTextbox.getText().toString();
@@ -345,7 +340,6 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 			           intent.putExtras(bun);
 			           intent.setClass(mContext, results.class);
 			           startActivity(intent);
-			           dialog.dismiss();
 				   }
 			   	} else {
 			   	   layout = inflater.inflate(R.layout.custom_toast, null);
@@ -357,8 +351,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 		           toastView.setDuration(Toast.LENGTH_LONG);
 		           toastView.setGravity(Gravity.CENTER, 0,0);
 		           toastView.show();
-				   //Toast.makeText(mContext, this.getString(R.string.no_location), 4000).show();
-				   dialog.dismiss();
+		           mFindDialog.dismiss();
 			   	}
 			   }
 			   catch(Exception e)
@@ -372,9 +365,7 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 		           toastView.setDuration(Toast.LENGTH_LONG);
 		           toastView.setGravity(Gravity.CENTER, 0,0);
 		           toastView.show();
-				   
-				   //Toast.makeText(mContext, this.getString(R.string.reverse_geocoding_error), 4000).show();
-				   dialog.dismiss();
+		           mFindDialog.dismiss();
 			   }
 		   }
 		   else
@@ -388,46 +379,12 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
 	           toastView.setDuration(Toast.LENGTH_LONG);
 	           toastView.setGravity(Gravity.CENTER, 0,0);
 	           toastView.show();			   
-			   //Toast.makeText(mContext, this.getString(R.string.no_location_gps), 4000).show();
-			   dialog.dismiss();
+	           mFindDialog.dismiss();
 		   }
 	   }
      protected Dialog onCreateDialog(int id) {   
-    	 AlertDialog.Builder builder;   
-         Context mContext = this;       	 
-         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-         View layout;
-         switch(id) {   
 
-         case CATEGORY_ID:   
-             layout  = inflater.inflate(R.layout.categorydialog,(ViewGroup) findViewById(R.id.layout_root));   
-             GridView gridview = (GridView)layout.findViewById(R.id.gridview);   
-             gridview.setAdapter(new ImageAdapter(this));   
-             TextView title = (TextView)layout.findViewById(R.id.text1);
-             title.setText(mContext.getString(R.string.choose_category));
-             title.setTypeface(getTypeface1(mContext,"quicksand_book.ttf"));
-             
-             gridview.setOnItemClickListener(new OnItemClickListener()   
-          			{
-                 public void onItemClick(AdapterView<?> parent, View v,int position, long id) {   
-                     categoryTextbox.setText(categoryContent.get(position));
-                     category=categoryContent.get(position);
-                     dialog.dismiss();
-                 	}   
-             });
-             
-             ImageView close = (ImageView) layout.findViewById(R.id.close);
-             close.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v){
-            		 dialog.dismiss();
-            	}
-             });
-             dialog = new CustomDialog(mContext);
-             dialog.setContentView(layout);
-             return dialog;
-         case LOCATION_ID:
-             dialog = new ErrorDialog(this,"",this.getString(R.string.find_location),true);
-             return dialog;
+         switch(id) {   
          case INTERNET_ALERT:
         	 dialog = new ErrorDialog(this,this.getString(R.string.no_internet),this.getString(R.string.enable_internet),false);
         	 return dialog;
@@ -442,55 +399,6 @@ public class WelcomeScreen extends Activity implements LocationIdentifierCallBac
          }   
          return null;   
      }   
-	     
-   public class ImageAdapter extends BaseAdapter {   
-         private Context mContext;
-         private LayoutInflater mInflater;
-         public ImageAdapter(Context c) { 
-        	 mInflater = LayoutInflater.from(c);
-             mContext = c;   
-         }   
-         public int getCount() {   
-             return mThumbIds.length;   
-         }   
-         public Object getItem(int position) {   
-             return null;   
-         }   
-         public long getItemId(int position) {   
-             return 0;   
-         }   
-         // create a new ImageView for each item referenced by the   
-         public View getView(int position, View convertView, ViewGroup parent) {   
-        	 ViewHolder holder;
-             if (convertView == null) {  // if it's not recycled,   
-                  convertView = mInflater.inflate(R.layout.categorycontent, null);
-             	  convertView.setLayoutParams(new GridView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-            	  holder = new ViewHolder();
-                  holder.title = (TextView) convertView.findViewById(R.id.categoryText);
-                  holder.icon = (ImageView )convertView.findViewById(R.id.categoryimage);
-                  convertView.setTag(holder);
-              } else {
-                  holder = (ViewHolder) convertView.getTag();
-              }
-				holder.icon.setAdjustViewBounds(true);
-				holder.icon.setScaleType(ImageView.ScaleType.CENTER_CROP);   
-				holder.icon.setPadding(8, 8, 8, 8);
-				holder.title.setText(categoryContent.get(position));
-				holder.title.setTypeface(getTypeface1(mContext,"quicksand_book.ttf"));
-				holder.icon.setImageResource(mThumbIds[position]);
-				return convertView;   
-         }   
-         class ViewHolder {
-             TextView title;
-             ImageView icon;
-         }
-         // references to our images   
-         private Integer[] mThumbIds = {   
-                 R.drawable.beer, R.drawable.hotel,R.drawable.shopping, 
-                 R.drawable.theatre,R.drawable.train, R.drawable.taxi,   
-                 R.drawable.gas, R.drawable.police,R.drawable.hospital
-                 };
-     	}   
 
 	}
 	
