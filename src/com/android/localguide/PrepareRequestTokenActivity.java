@@ -61,7 +61,6 @@ public class PrepareRequestTokenActivity extends Activity {
 		final Uri uri = intent.getData();
 		if (uri != null && uri.getScheme().equals(Constants.OAUTH_CALLBACK_SCHEME)) {
 			Log.i(TAG, "Callback received : " + uri);
-			Log.i(TAG, "Retrieving Access Token");
 			new RetrieveAccessTokenTask(this,consumer,provider,prefs).execute(uri);
 			//finish();	
 		}
@@ -94,25 +93,12 @@ public class PrepareRequestTokenActivity extends Activity {
 			try {
 				provider.retrieveAccessToken(consumer, oauth_verifier);
 
-//				final Editor edit = prefs.edit();
-//				edit.putString(OAuth.OAUTH_TOKEN, consumer.getToken());
-//				edit.putString(OAuth.OAUTH_TOKEN_SECRET, consumer.getTokenSecret());
-//				edit.commit();
-				
 				app.updateTwitterToken(consumer.getToken(), consumer.getTokenSecret());
-				
-//				String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
-//				String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
 				String token = app.getTwitterAccessKey();
 				String secret = app.getTwitterAccessSecret();
 				
 				consumer.setTokenWithSecret(token, secret);
-
-				//context.startActivity(new Intent(context,Information.class));
-
-				//executeAfterAccessTokenRetrieval();
 				finish();
-				Log.i(TAG, "OAuth - Access Token Retrieved");
 				
 			} catch (Exception e) {
 				Log.e(TAG, "OAuth - Access Token Retrieval Error", e);

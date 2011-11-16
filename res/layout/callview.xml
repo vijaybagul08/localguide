@@ -5,18 +5,20 @@ android:orientation="horizontal"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:padding="10dip"
-android:background="@drawable/call_row_selector">
+android:background="@drawable/error_dialog_button">
 
 	<ImageView 
 	android:id="@+id/callimage"
-	android:layout_width="30px" 
-	android:layout_height="30px"
+	android:layout_width="35px" 
+	android:layout_height="35px"
 	android:layout_alignParentLeft="true" 
 	android:src="@drawable/telephone"/> 
 	
 	<TextView android:id="@+id/phonenumber" 
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	android:layout_marginLeft="5px"
+	android:textAppearance="?android:attr/textAppearanceLarge"
 	android:layout_toRightOf="@+id/callimage" />
 
 </RelativeLayout>

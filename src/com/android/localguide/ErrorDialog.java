@@ -59,22 +59,24 @@ public class ErrorDialog extends Dialog {
 	            	ErrorDialog.this.dismiss();
 	            }
 	         });
-			if(spinner)
-			{
-				mTitle.setVisibility(View.GONE);
-				mLine.setVisibility(View.GONE);
-				mOK.setVisibility(View.GONE);
-				mSpinner.setVisibility(View.VISIBLE);
-				this.setCancelable(false);
-				mSpinner.start();
-			}
+		if(spinner)
+		{
+			mTitle.setVisibility(View.GONE);
+			mLine.setVisibility(View.GONE);
+			mOK.setVisibility(View.GONE);
+			mSpinner.setVisibility(View.VISIBLE);
+			mSpinner.start();
 		}
+		this.setCancelable(false);
+	}
+
 	public static Typeface getTypeface(Context context, String typeface) {
 	    if (mFont == null) {
 	        mFont = Typeface.createFromAsset(context.getAssets(), typeface);
 	    }
 	    return mFont;
 	}
+	
 	public static Typeface getTypeface1(Context context, String typeface) {
 	    if (mFont1 == null) {
 	        mFont1 = Typeface.createFromAsset(context.getAssets(), typeface);
@@ -82,24 +84,23 @@ public class ErrorDialog extends Dialog {
 	    return mFont1;
 	}	
 	
-		public void show()
-		{
-			super.show();
-		    WindowManager.LayoutParams lp = this.getWindow().getAttributes();
-		    lp.width = screenWidth-10;
-		    this.getWindow().setAttributes(lp);
-		    mOK.setWidth((int) (screenWidth*0.7));
-	    }		
-		
-		public void dismiss()
-		{
-			super.dismiss();
-			mTitle.setVisibility(View.VISIBLE);
-			mLine.setVisibility(View.VISIBLE);
-			mOK.setVisibility(View.VISIBLE);
-			mSpinner.setVisibility(View.GONE);
-			mSpinner.stop();
-			
-		}
+	public void show()
+	{
+		super.show();
+	    WindowManager.LayoutParams lp = this.getWindow().getAttributes();
+	    lp.width = screenWidth-10;
+	    this.getWindow().setAttributes(lp);
+	    mOK.setWidth((int) (screenWidth*0.7));
+    }		
+	
+	public void dismiss()
+	{
+		super.dismiss();
+		mTitle.setVisibility(View.VISIBLE);
+		mLine.setVisibility(View.VISIBLE);
+		mOK.setVisibility(View.VISIBLE);
+		mSpinner.setVisibility(View.GONE);
+		mSpinner.stop();
+	}
 	    
 }

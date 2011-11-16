@@ -539,7 +539,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 		        	  temp+=',';
 		      }
 		      streetaddress.add(temp);
-		      System.out.println("Title , street is ******* "+title.get(i)+"::"+streetaddress.get(i));
 		      /* Parse the phone numbers JSONobject */
 		      JSONObject phone;
 		      JSONArray numbers;
@@ -590,7 +589,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 		}
 	    catch(Exception e)
 	    {
-	    	//System.out.println("Exception happened **************************"+e.toString());
 	    	throw new RuntimeException(e); 
 	    }
     }
@@ -689,7 +687,8 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 					        String numberString ="tel:";
 					        numberString+=numbers[0];
 					        callIntent.setData(Uri.parse(numberString));
-					      //  startActivity(callIntent);
+					        startActivity(callIntent);
+					        dialog.dismiss();
 					    } catch (ActivityNotFoundException e) {
 					        System.out.println("Call activity not FOUND FATAL error");
 					    }
@@ -751,7 +750,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	            }
 	            holder.title.setText(phoneNumbers[position]);
 	            holder.title.setTextColor(Color.rgb(0xff, 0xff, 0xff));
-	            holder.title.setTextSize(22);                          	            
 	            return convertView;
 	        }
 	         class ViewHolder {
@@ -760,7 +758,6 @@ FacebookDialog.FacebookDialogListener,TwitterDialog.TwitterDialogListener{
 	    }
 	   
 		int icons[]={ R.drawable.telephone,R.drawable.message,R.drawable.phonebook,R.drawable.twitter_icon,R.drawable.facebook,R.drawable.globe,R.drawable.favorite};
-		//String options[] = { " - Call"," - Message"," - Save to Phonebook"," - Twitter"," - Facebook"," - Get directions"," - Save to Favorites"};
 
 		private  class OptionsAdapter extends BaseAdapter {
 	        private LayoutInflater mInflater;
