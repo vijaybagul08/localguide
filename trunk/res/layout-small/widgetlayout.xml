@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:id="@+id/widgetlayout"
+  android:paddingLeft="5dp"
+  android:paddingRight="5dp"
+  android:paddingTop="3dp"
+  android:paddingBottom="2dp"
+  android:background="@android:color/transparent"
+  >
+			<FrameLayout
+			  xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent"
+			  android:layout_height="fill_parent"
+			  >
+			  	 <TextView 
+				  android:id="@+id/category"
+				  android:layout_width="fill_parent"
+				  android:layout_height="wrap_content"
+				  android:gravity="center"
+				  android:layout_gravity="center_vertical"
+				  android:textColor="#A0ffffff"
+				  android:textSize="60px"
+				  android:text="category"
+				  />  
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical"
+android:paddingTop="3dp"
+android:paddingBottom="2dp"
+android:paddingLeft="10dip"
+android:paddingRight="10dip"
+android:background="@drawable/widgetbackground1"
+android:layoutAnimation="@anim/layout_anim"
+>
+	  <LinearLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_weight="0.7"
+	  android:orientation="vertical"
+	  >
+			  <TextView android:id="@+id/title"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:textAppearance="?android:attr/textAppearanceSmall"
+			  android:textStyle="bold"
+			  android:textColor="#ffffff"
+			  android:layout_marginTop="5dip"
+			  android:text=""/>
+			  
+			  <TextView android:id="@+id/address"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:textAppearance="?android:attr/textAppearanceSmall"
+			  android:textColor="#ffffff"
+			  android:text=""/>
+			
+			<TextView android:id="@+id/phonenumber"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:textAppearance="?android:attr/textAppearanceSmall"
+			  android:textColor="#ffffff"
+			  android:text=""/>
+	</LinearLayout>
+		 
+			<RelativeLayout
+			  xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_weight="0.3" >
+			  
+				  <ImageView 
+				  android:id="@+id/call"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_alignParentLeft="true"
+				  android:layout_centerVertical="true"
+				  android:src="@drawable/telephone_48"
+				  />
+				  <ImageView 
+				  android:id="@+id/message"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_marginLeft="10px"
+				  android:layout_toRightOf="@id/call"
+				  android:layout_centerVertical="true"
+				  android:src="@drawable/mail"
+				  />
+				  <ImageView 
+				  android:id="@+id/favorite"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_centerVertical="true"
+				  android:layout_marginLeft="12px"
+				  android:layout_toRightOf="@id/message"
+				  android:src="@drawable/favorite_48"
+				  />
+				  
+				  <Button 
+				  android:id="@+id/setting"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_marginRight="5px"
+				  android:layout_alignParentRight="true"
+				  android:layout_centerVertical="true"
+				  android:textColor="#ffffff"
+				  android:padding="5px"
+				  android:background="@drawable/widget_button_on"
+				  android:text="ON"
+				  />
+				  
+				  <TextView 
+				  android:id="@+id/find_location"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:gravity="center_vertical"
+				  android:textColor="#ffffff"
+				  android:textAppearance="?android:attr/textAppearanceSmall"
+				  android:layout_toLeftOf="@id/setting"
+				  android:layout_centerVertical="true"
+				  android:text="@string/movement"
+				  />
+			  
+			</RelativeLayout>   
+	</LinearLayout>  
+		</FrameLayout>		
+
+</LinearLayout>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:padding="10dip"
+              android:background="@drawable/tab_normal"
+              android:orientation="vertical">
+              
+<TextView 
+android:id="@+id/title"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:textColor="#ffffffff"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:text="Select from location" />
+
+<View
+android:layout_width="fill_parent"
+ android:layout_height="2dip"
+ android:background="#FFFFFFFF" />
+
+<TextView
+android:id="@+id/message"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:textColor="#ffffffff"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:text="Select location from where you want to get get directions" />
+
+<CheckBox android:id="@+id/checkbox"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:layout_marginLeft="3dip"
+android:checked="true"
+android:text="Current Location"/>
+              
+<TextView android:id="@+id/text1"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:visibility="gone"
+android:textColor="#ffffffff"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:padding="3dip"
+android:text="Enter from Location:" />
+			
+<EditText android:id="@+id/locationtextbox"
+android:hint="eg. Liverpool,uk "
+android:layout_width="250dip"
+android:layout_height="wrap_content"
+android:textColor="#12105E"
+android:textColorHint="#AA12105E"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:paddingLeft="3dip"
+android:background="@color/edittext_bkg"
+android:visibility="gone"
+android:singleLine="true"
+android:maxLines="1"/>
+ 
+<LinearLayout
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:orientation="horizontal"
+   android:paddingTop="4dip"
+   android:paddingLeft="2dip"
+   android:paddingRight="2dip"
+   >
+<Button android:id="@+id/ok"
+android:layout_width="0dip"
+android:layout_gravity="left"
+android:layout_weight="1"
+android:layout_height="wrap_content"
+android:layout_alignParentLeft="true"
+android:padding="5px"
+android:text="OK"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:background="@drawable/error_dialog_button"
+android:textColor="#ffffff"/>
+
+<Button android:id="@+id/cancel"
+android:layout_width="0dip"
+android:layout_gravity="right"
+android:layout_weight="1"
+android:layout_height="wrap_content"
+android:text="CANCEL"
+android:padding="5px"
+android:layout_marginLeft="5px"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:layout_alignParentRight="true"
+android:background="@drawable/error_dialog_button"
+android:textColor="#ffffff"/>
+
+</LinearLayout>
+                           
+</LinearLayout>              
