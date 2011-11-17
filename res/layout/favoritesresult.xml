@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:padding="3dip"
+              android:background="#e4bebf"
+              android:orientation="vertical">
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/myTableLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#a22a2c">
+    
+    <TableRow
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+				<ImageView android:id="@+id/previous"
+				android:layout_width="30dip" 
+				android:layout_height="30dip" 
+				android:layout_weight="0.2"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/previous_arrow"/>
+				
+				<com.android.localguide.OptionsAddressLayout
+				android:id="@+id/addressLayout"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="0.8"
+				/>	
+				
+				<ImageView android:id="@+id/next"
+				android:layout_width="30dip" 
+				android:layout_height="30dip"
+				android:layout_weight="0.2"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/next_arrow"/>
+     </TableRow>
+
+</TableLayout>
+
+</LinearLayout>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:id="@+id/widgetlayout"
+  android:paddingLeft="3dp"
+  android:paddingRight="3dp"
+  android:background="@android:color/transparent">
+
+<FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:layoutAnimation="@anim/layout_anim">
+  	 <TextView 
+	  android:id="@+id/category"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:gravity="center"
+	  android:layout_gravity="center_vertical"
+	  android:textColor="#A0ffffff"
+	  android:textSize="60px"
+	  android:text="category"/>
+	    
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical"
+android:paddingLeft="5px"
+android:background="@drawable/widgetbackground1">
+
+	  <RelativeLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_alignParentLeft="true"
+	  android:paddingLeft="5px"
+	  android:orientation="vertical">
+	  	  
+			  <TextView android:id="@+id/title"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:textAppearance="?android:attr/textAppearanceMedium"
+			  android:textStyle="bold"
+			  android:textColor="#ffffff"
+			  android:layout_marginTop="5dip"
+			  android:text=""/>
+			  
+			  <TextView android:id="@+id/address"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_below="@id/title"
+			  android:singleLine="true"
+			  android:ellipsize="end"
+			  android:textAppearance="?android:attr/textAppearanceSmall"
+			  android:textColor="#ffffff"
+			  android:text=""/>
+			
+			<TextView android:id="@+id/phonenumber"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content"
+			  android:visibility="gone"
+			  android:textAppearance="?android:attr/textAppearanceSmall"
+			  android:textColor="#ffffff"
+			  android:text=""/>
+			  
+	  <LinearLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_alignParentBottom="true"
+	  android:layout_below="@id/address"
+	  android:layout_marginTop="5px"
+	  android:orientation="horizontal">
+	  
+				  <TextView 
+				  android:id="@+id/find_location"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:gravity="center_vertical"
+				  android:textColor="#ffffff"
+				  android:textAppearance="?android:attr/textAppearanceSmall"
+				  android:text="@string/movement_detection"/>
+				<Button 
+				  android:id="@+id/setting"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:padding="8px"
+				  android:layout_marginLeft="5px"
+				  android:textColor="#ffffff"
+				  android:background="@drawable/widget_button_on"
+				  android:text="ON"/>
+		</LinearLayout>
+			  
+	</RelativeLayout>
+		 
+		
+			<RelativeLayout
+			  xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  android:layout_marginRight="3px"
+			  android:layout_alignParentRight="true">
+			  
+				  <ImageView 
+				  android:id="@+id/call"
+				  android:layout_marginTop="5px"
+				  android:layout_width="48px"
+				  android:layout_height="38px"
+				  android:layout_alignParentTop="true"
+				  android:layout_centerVertical="true"
+				  android:src="@drawable/telephone_48"
+				  />
+				  <ImageView 
+				  android:id="@+id/message"
+				  android:layout_width="48px"
+				  android:layout_height="38px"
+				  android:layout_marginTop="5px"
+				  android:layout_below="@id/call"
+				  android:layout_centerVertical="true"
+				  android:src="@drawable/mail"
+				  />
+				  <ImageView 
+				  android:id="@+id/favorite"
+				  android:layout_width="48px"
+				  android:layout_height="38px"
+				  android:layout_centerVertical="true"
+				  android:layout_below="@id/message"
+				  android:layout_marginTop="3px"
+				  android:src="@drawable/favorite_48"
+				  />
+			</RelativeLayout>   
+			
+	</RelativeLayout>  
+
+</FrameLayout>		
+
+</LinearLayout>

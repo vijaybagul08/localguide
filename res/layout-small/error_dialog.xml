@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:padding="5dip"
+              android:background="@drawable/tab_normal"
+              android:orientation="vertical">
+              
+<TextView 
+android:id="@+id/title"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:textColor="#ffffffff"
+android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<View
+android:id="@+id/line"
+android:layout_marginTop="5px"
+android:layout_width="fill_parent"
+android:layout_height="2dip"
+android:background="#FFFFFFFF" />
+
+<com.android.localguide.Spinner
+    android:id="@+id/spinner"
+    android:layout_width="28px" 
+    android:layout_height="28px" 
+    android:layout_gravity="center_horizontal"
+    android:visibility="gone"/>
+
+<TextView
+android:id="@+id/content"
+android:layout_marginTop="5px"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:textColor="#ffffffff"
+android:gravity="center_horizontal"
+android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<Button android:id="@+id/ok"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginTop="5px"
+android:layout_marginBottom="2px"
+android:padding="5px"
+android:layout_gravity="center_horizontal"
+android:textAppearance="?android:attr/textAppearanceMedium"
+android:background="@drawable/error_dialog_button"
+android:text="OK"
+android:textColor="#ffffff"/>
+
+</LinearLayout>
