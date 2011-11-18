@@ -5,7 +5,7 @@
               android:layout_height="fill_parent"
               android:background="#e4bebf"
               >
-	<com.android.localguide.Spinner
+	<com.mani.localguide.Spinner
 	    android:id="@+id/spinner"
 	    android:layout_width="30dip" 
 	    android:layout_height="30dip" 

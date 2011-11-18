@@ -23,7 +23,7 @@
 				android:layout_gravity="center_vertical"
 				android:src="@drawable/previous_arrow"/>
 				
-				<com.android.localguide.OptionsAddressLayout
+				<com.mani.localguide.OptionsAddressLayout
 				android:id="@+id/addressLayout"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"

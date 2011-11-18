@@ -6,7 +6,7 @@
     android:padding="5px"
     android:background="@drawable/tabhost_selector">
 
-		<com.android.localguide.MarkerIcon
+		<com.mani.localguide.MarkerIcon
 		     android:layout_width="32px" 
 		     android:id="@+id/markerIcon" 
 		     android:layout_height="32px"
