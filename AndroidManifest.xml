@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.android.localguide"
-      android:versionCode="1"
-      android:versionName="1.0">
+      package="com.mani.localguide"
+      android:versionCode="2"
+      android:versionName="1.1">
     <application android:icon="@drawable/icon" android:label="@string/app_name" 
     android:debuggable="true" 
     android:theme="@android:style/Theme.NoTitleBar"
@@ -95,8 +95,6 @@
 		        <category android:name="android.intent.category.DEFAULT" />
 		    </intent-filter>
 		</activity> 
-		 <activity android:name="com.google.ads.AdActivity"
-          android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 		    
 			<activity android:name=".widgetprovider.WidgetConfigureActivity"
      				android:theme="@android:style/Theme.NoTitleBar">	
@@ -130,7 +128,7 @@
 			</intent-filter>
 		</receiver>
 		
-	<service android:name="com.android.localguide.widgetprovider.CellLocationService"/>							
+	<service android:name=".widgetprovider.CellLocationService"/>							
 	<uses-library android:name="com.google.android.maps" />
 </application>
 	<uses-permission android:name="android.permission.INTERNET"/>

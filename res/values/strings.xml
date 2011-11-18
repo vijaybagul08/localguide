@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LocalGuide</string>
+    <string name="app_name">Local Guide</string>
     <string name="description"><b>LocalGuide</b> provides an easy way to search for anything around you.Gives you detailed result of address,phone numbers.The search categories can be <i>(eg. pubs,theatres, hospital, citibank, schools)</i> </string>
 	<string name="description1">\n\tIf the city or country is not entered, your current location will be automitcally picked up either through GPS or with your Wifi info.Once the desired result is chosen ,it gives you an option to</string>
 	<string name="description2">Swipe left or swipe right on the detailed address view will show the previous or next result.\n</string>

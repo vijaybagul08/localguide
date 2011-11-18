@@ -86,13 +86,4 @@ android:padding="3px"
 android:layout_weight="1"
 android:cacheColorHint="#00000000"/>
 
-<com.google.ads.AdView android:id="@+id/adView"
-                         android:layout_width="fill_parent"
-                         android:layout_height="wrap_content"
-                         android:gravity="bottom"
-                         android:layout_gravity="bottom"
-                         ads:adUnitId="a14ec4712fbe1de"
-                         ads:adSize="BANNER"
-                         ads:loadAdOnCreate="true"/>  
-                                
 </LinearLayout>

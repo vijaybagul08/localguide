@@ -330,19 +330,20 @@ android:layout_width="fill_parent"
   android:paddingLeft="5px"
   android:textAppearance="?android:attr/textAppearanceLarge"
   android:text="@string/location_detail"/>
-  
+<Button android:id="@+id/rate"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:paddingLeft="25px"
+ android:paddingRight="25px"
+ android:paddingTop="15px"
+ android:paddingBottom="15px"
+ android:layout_marginBottom="65dp"
+ android:layout_gravity="center"
+ android:background="@drawable/search_button"
+ android:textAppearance="?android:attr/textAppearanceLarge"
+ android:textColor="#ffffff"
+ android:textStyle="bold"
+ android:text="Rate it"/>   
  </LinearLayout>
-
- 
 </ScrollView>
-<com.google.ads.AdView android:id="@+id/adView"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_alignParentBottom="true"
-                         android:gravity="bottom"
-                         android:layout_gravity="bottom"
-                         ads:adUnitId="a14ec4712fbe1de"
-                         ads:adSize="BANNER"
-                         ads:loadAdOnCreate="true"/>
-  
 </RelativeLayout>

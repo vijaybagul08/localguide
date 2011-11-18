@@ -2,5 +2,5 @@
 android:minWidth="294dp"
 android:minHeight="144dp"
 android:updatePeriodMillis="0"
-android:configure="com.android.localguide.widgetprovider.WidgetConfigureActivity"
+android:configure="com.mani.localguide.widgetprovider.WidgetConfigureActivity"
 android:initialLayout="@layout/widgetlayout" />
